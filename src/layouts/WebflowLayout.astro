@@ -14,6 +14,11 @@ const { wfPage, wfSite = '69f3c988b21ed48b5a87eddd' } = Astro.props;
     <slot name="head" />
     <!-- Phone styles: loaded last so they win over Webflow CSS -->
     <link rel="stylesheet" href={mobileCss} />
+    <!-- Night-sky effects (self-contained, inject their own CSS): twinkling stars + one shooting star in hero and footer -->
+    <script is:inline defer src="/js/hero-stars.js"></script>
+    <script is:inline defer src="/js/hero-shooting-star.js"></script>
+    <script is:inline defer src="/js/footer-stars.js"></script>
+    <script is:inline defer src="/js/footer-shooting-star.js"></script>
   </head>
   <body class="body">
     <!-- Shutter page transition: must stay first in <body> so the page starts covered -->

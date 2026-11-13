@@ -9,6 +9,7 @@
 
 /* Phone-only pieces are hidden on desktop */
 @media (min-width: 900px) {
+  .svc-nav { display: none !important; }
   .m-menu-btn,
   .m-menu,
   .m-hero-cta { display: none !important; }
@@ -246,12 +247,34 @@
   html body .content_service_container:not(#_z),
   html body .content_blocks:not(#_z) { width: auto; gap: 16px; text-align: center; }
   html body .service_descri-ption:not(#_z) { width: auto; max-width: none; }
-  html body .div-block-2:not(#_z) { height: auto; padding: 32px 20px 0; }
-  html body .card-stack:not(#_z) { display: flex; flex-direction: column; gap: 16px; height: auto; }
+  html body .div-block-2:not(#_z) { height: auto; padding: 32px 0 0; }
+  /* Swipe slider: one card per view with the next one peeking in */
+  html body .card-stack:not(#_z) {
+    display: flex; flex-direction: row; align-items: stretch; gap: 12px; height: auto;
+    padding: 0 20px 4px; overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+    overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  html body .card-stack:not(#_z)::-webkit-scrollbar { display: none; }
   html body .card-stack__item:not(#_z) {
     position: static !important; height: auto; min-height: 0;
     padding: 0; transform: none !important;
+    flex: 0 0 86%; display: flex; scroll-snap-align: start; scroll-snap-stop: always;
+    animation: none !important; filter: none !important;
   }
+  html body .card-stack__item > .card_containers:not(#_z) { flex: 1; justify-content: flex-start; gap: 20px; padding: 24px 20px 20px; }
+  html body .card-stack__item ._48_heading:not(#_z) { font-size: 26px; line-height: 1.15; }
+  html body .card-stack__item .service_card_image:not(#_z) { flex: 1 1 auto; min-height: 180px; display: flex; align-items: flex-end; justify-content: center; }
+  html body .card-stack__item .service_image:not(#_z) { width: 100%; height: 100%; max-height: 300px; aspect-ratio: auto; object-fit: contain; object-position: center bottom; }
+  /* Slider controls (added by ServicesStack script) */
+  html body .svc-nav:not(#_z) { display: flex; align-items: center; justify-content: flex-start; gap: 20px; padding: 20px 20px 0; }
+  html body .svc-arrows:not(#_z) { order: -1; } /* arrows on the left so the chat bubble never covers them */
+  html body .svc-dots:not(#_z) { display: flex; gap: 6px; }
+  html body .svc-dot:not(#_z) { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 99px; background: #c9d1dc; cursor: pointer; transition: width .3s, background-color .3s; }
+  html body .svc-dot.is-active:not(#_z) { width: 24px; background: #04091a; }
+  html body .svc-arrows:not(#_z) { display: flex; gap: 8px; }
+  html body .svc-arrow:not(#_z) { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer; background: #04091a; color: #fff; transition: opacity .2s; }
+  html body .svc-arrow:disabled:not(#_z) { opacity: .25; cursor: default; }
   html body .card_containers:not(#_z) {
     position: static !important; top: auto;
     flex-direction: column; gap: 24px;

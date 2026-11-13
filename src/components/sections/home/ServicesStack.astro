@@ -48,3 +48,58 @@
   }
 }
 </style></div></div>
+
+
+<script>
+  // Phone slider controls for the service cards (dots + arrows). Hidden on desktop via mobile.css.
+  const track = document.querySelector<HTMLElement>('.card-stack');
+  if (track && !track.parentElement?.querySelector('.svc-nav')) {
+    const items = Array.from(track.querySelectorAll<HTMLElement>('.card-stack__item'));
+    const titles = items.map((it) => it.querySelector('._48_heading')?.textContent?.trim() || 'Service');
+    const nav = document.createElement('div');
+    nav.className = 'svc-nav';
+    nav.innerHTML = `<div class="svc-dots" role="tablist" aria-label="Services"></div>
+      <div class="svc-arrows">
+        <button type="button" class="svc-arrow" data-dir="-1" aria-label="Previous service"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="svc-arrow" data-dir="1" aria-label="Next service"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>`;
+    track.after(nav);
+    const dotsBox = nav.querySelector<HTMLElement>('.svc-dots')!;
+    const dots = items.map((_, i) => {
+      const d = document.createElement('button');
+      d.type = 'button';
+      d.className = 'svc-dot';
+      d.setAttribute('aria-label', `${i + 1}. ${titles[i]}`);
+      d.addEventListener('click', () => go(i));
+      dotsBox.appendChild(d);
+      return d;
+    });
+    const [prev, next] = Array.from(nav.querySelectorAll<HTMLButtonElement>('.svc-arrow'));
+    let current = 0;
+
+    const go = (i: number) => {
+      i = Math.max(0, Math.min(items.length - 1, i));
+      const left = items[i].offsetLeft - items[0].offsetLeft;
+      track.scrollTo({ left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    };
+    const update = () => {
+      const x = track.scrollLeft;
+      let best = 0, dist = Infinity;
+      items.forEach((it, i) => {
+        const d = Math.abs(it.offsetLeft - items[0].offsetLeft - x);
+        if (d < dist) { dist = d; best = i; }
+      });
+      if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) best = items.length - 1;
+      current = best;
+      dots.forEach((d, i) => { d.classList.toggle('is-active', i === best); d.setAttribute('aria-current', String(i === best)); });
+      prev.disabled = best === 0;
+      next.disabled = best === items.length - 1;
+    };
+    prev.addEventListener('click', () => go(current - 1));
+    next.addEventListener('click', () => go(current + 1));
+    let raf = 0;
+    track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+</script>

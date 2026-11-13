@@ -1,0 +1,37 @@
+{
+  "title": "Green Thumb – Static Display",
+  "client": "Green Thumb",
+  "summary": "Static tablet display creative for a spring plant sale.",
+  "description": "Sample static display creative (1024 × 768) for tablet placements.",
+  "device": "Tablet",
+  "adType": [
+    "Rich Media Ads"
+  ],
+  "platform": [
+    "Tablet"
+  ],
+  "industry": [
+    "Home & Garden"
+  ],
+  "features": [],
+  "technology": [
+    "JPG"
+  ],
+  "adSize": [
+    "1024x768"
+  ],
+  "tags": [
+    "STATIC",
+    "DISPLAY",
+    "Tablet"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-green-thumb/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "image",
+    "src": "/work/samples/sample-green-thumb/demo.jpg"
+  },
+  "date": "2026-11-03",
+  "draft": true
+}

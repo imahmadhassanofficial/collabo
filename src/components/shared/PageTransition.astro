@@ -1,0 +1,119 @@
+---
+// Shutter page transition (no Barba — works with normal page loads, so Webflow IX2 / GSAP / Lenis are untouched).
+// 1. Click an internal link → bars close down over the page (staggered), then the browser navigates.
+// 2. The new page starts covered and the bars open downwards once it has loaded.
+// Settings: COLORS = one shutter strip per Collabo logo colour (left → right), timings in the script.
+const COLORS = ['#26AEEE', '#306BE7', '#5A4FE0', '#864EE3', '#9B2EC2', '#ED6673', '#F98670'];
+---
+<div class="shutter" aria-hidden="true">
+  {COLORS.map((c) => <div class="shutter__bar" style={`background:${c}`}></div>)}
+</div>
+
+<script is:inline>
+  // Runs before the page paints: if we arrived via a shutter click, start fully covered.
+  try {
+    if (sessionStorage.getItem('shutter') === '1') document.documentElement.classList.add('shutter-covered');
+  } catch (e) {}
+</script>
+
+<style is:global>
+  .shutter {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: flex;
+    pointer-events: none;
+  }
+  .shutter__bar {
+    flex: 1 1 0;
+    height: 100%;
+    margin-left: -1px; /* no hairline gaps between bars */
+    background: #5a4fe0; /* overridden per bar by the logo colours */
+    transform: scaleY(0);
+    transform-origin: 50% 0%;
+    will-change: transform;
+  }
+  html.shutter-covered .shutter__bar { transform: scaleY(1); }
+  html.shutter-covered .shutter,
+  html.shutter-busy .shutter { pointer-events: auto; }
+</style>
+
+<script is:inline>
+  (function () {
+    var root = document.documentElement;
+    var bars = Array.prototype.slice.call(document.querySelectorAll('.shutter__bar'));
+    if (!bars.length) return;
+
+    var DURATION = 600; // ms per bar
+    var STAGGER = 60;   // ms between bars
+    var EASE = 'cubic-bezier(0.76, 0, 0.24, 1)';
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var busy = false;
+
+    function store(v) { try { v ? sessionStorage.setItem('shutter', '1') : sessionStorage.removeItem('shutter'); } catch (e) {} }
+
+    // from/to: 0 = open, 1 = closed. origin: where the bars grow from / shrink to.
+    function run(from, to, origin) {
+      var total = DURATION + STAGGER * (bars.length - 1);
+      bars.forEach(function (bar, i) {
+        bar.style.transformOrigin = '50% ' + origin;
+        bar.animate(
+          [{ transform: 'scaleY(' + from + ')' }, { transform: 'scaleY(' + to + ')' }],
+          { duration: DURATION, delay: i * STAGGER, easing: EASE, fill: 'forwards' }
+        );
+      });
+      return new Promise(function (r) { setTimeout(r, total); });
+    }
+
+    function clearAnims() { bars.forEach(function (b) { b.getAnimations().forEach(function (a) { a.cancel(); }); }); }
+
+    // ---- Reveal on arrival ----
+    function reveal() {
+      if (!root.classList.contains('shutter-covered')) return;
+      store(false);
+      run(1, 0, '100%').then(function () {
+        root.classList.remove('shutter-covered');
+        clearAnims();
+      });
+    }
+    if (root.classList.contains('shutter-covered')) {
+      if (reduced) { root.classList.remove('shutter-covered'); store(false); }
+      else {
+        var revealed = false;
+        var go = function () { if (!revealed) { revealed = true; reveal(); } };
+        window.addEventListener('load', go);
+        setTimeout(go, 2500); // never keep the page covered too long
+      }
+    }
+
+    // ---- Back/forward cache: page restored covered → open it ----
+    window.addEventListener('pageshow', function (e) {
+      if (!e.persisted) return;
+      busy = false;
+      root.classList.remove('shutter-busy', 'shutter-covered');
+      clearAnims();
+      store(false);
+    });
+
+    // ---- Close on internal link click ----
+    document.addEventListener('click', function (e) {
+      if (reduced || busy || e.defaultPrevented) return;
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a || a.target === '_blank' || a.hasAttribute('download') || a.hasAttribute('data-no-shutter')) return;
+      var url = new URL(a.href, location.href);
+      if (url.origin !== location.origin) return;
+      if (!/^https?:$/.test(url.protocol)) return;
+      // same page (incl. #anchor links and href="#") → let it through
+      if (url.pathname.replace(/\/$/, '') === location.pathname.replace(/\/$/, '') && url.search === location.search) return;
+
+      e.preventDefault();
+      busy = true;
+      root.classList.add('shutter-busy');
+      run(0, 1, '0%').then(function () {
+        store(true);
+        location.href = url.href;
+      });
+    });
+  })();
+</script>

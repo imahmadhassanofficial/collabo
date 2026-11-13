@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Voltz Energy – sample ad</title><style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:Poppins,system-ui,-apple-system,Segoe UI,Arial,sans-serif;-webkit-user-select:none;user-select:none}
+.tag{position:absolute;top:8px;right:8px;font-size:9px;letter-spacing:.08em;border:1px solid currentColor;border-radius:99px;padding:2px 7px;opacity:.85;z-index:9}
+.brand{font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.cta{display:inline-block;border:0;border-radius:99px;font-weight:600;cursor:pointer;font-family:inherit}
+body{width:320px;height:480px}
+body{background:linear-gradient(160deg,#0e0e2c,#1fd1f9);color:#fff}
+.wrap{position:relative;width:320px;height:480px;padding:22px;text-align:center}
+.brand{font-size:13px;text-align:left}.h{font:600 26px/1.1 Georgia,serif;margin-top:14px;text-align:left}
+.wheelbox{position:relative;width:230px;height:230px;margin:28px auto 0}
+.wheel{width:100%;height:100%;border-radius:50%;border:6px solid #fff;background:conic-gradient(#f9f871 0 60deg,#1fd1f9 0 120deg,#ff5e8a 0 180deg,#f9f871 0 240deg,#1fd1f9 0 300deg,#ff5e8a 0);transition:transform 3.5s cubic-bezier(.15,.85,.2,1)}
+.ptr{position:absolute;left:50%;top:-14px;transform:translateX(-50%);border:12px solid transparent;border-top:22px solid #fff;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+.cta{margin-top:22px;background:#f9f871;color:#0e0e2c;padding:12px 26px;font-size:15px}.res{margin-top:12px;font-size:14px;min-height:20px}</style></head><body><div class="wrap"><span class="tag">SAMPLE</span><div class="brand">Voltz Energy</div><div class="h">Spin to win a free charge</div>
+<div class="wheelbox"><div class="ptr"></div><div class="wheel" id="w"></div></div><button class="cta" id="b">Spin now</button><div class="res" id="r"></div></div><script>let spun=false;document.getElementById('b').onclick=()=>{if(spun)return;spun=true;const w=document.getElementById('w');w.style.transform='rotate('+(360*6+30)+'deg)';
+setTimeout(()=>{document.getElementById('r').textContent='⚡ You won a free 30-min charge!';document.getElementById('b').textContent='Claim prize'},3600)};</script></body></html>

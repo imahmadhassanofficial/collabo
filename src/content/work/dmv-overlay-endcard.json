@@ -1,0 +1,33 @@
+{
+  "title": "DMV – Overlay + Endcard",
+  "client": "DMV",
+  "summary": "A brief overview describing the campaign, its goals, interaction model, and supported environments.",
+  "device": "Desktop",
+  "adType": [
+    "Rich Media Ads"
+  ],
+  "platform": [
+    "Desktop"
+  ],
+  "industry": [
+    "Government"
+  ],
+  "features": [
+    "Overlay",
+    "Endcard"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [],
+  "tags": [
+    "HTML5",
+    "INTERACTIVE",
+    "VAST",
+    "Mobile",
+    "CTV"
+  ],
+  "thumbnails": [],
+  "date": "2026-10-28",
+  "draft": true
+}

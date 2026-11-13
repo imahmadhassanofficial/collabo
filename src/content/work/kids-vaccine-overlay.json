@@ -1,0 +1,33 @@
+{
+  "title": "Kids Vaccine – Overlay",
+  "client": "Kids Vaccine",
+  "summary": "A brief overview describing the campaign, its goals, interaction model, and supported environments.",
+  "device": "Mobile",
+  "adType": [
+    "Gamified Ads"
+  ],
+  "platform": [
+    "Mobile"
+  ],
+  "industry": [
+    "Healthcare"
+  ],
+  "features": [
+    "Overlay"
+  ],
+  "technology": [
+    "HTML5",
+    "VAST"
+  ],
+  "adSize": [],
+  "tags": [
+    "HTML5",
+    "INTERACTIVE",
+    "VAST",
+    "Mobile",
+    "CTV"
+  ],
+  "thumbnails": [],
+  "date": "2026-10-05",
+  "draft": true
+}

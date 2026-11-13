@@ -1,0 +1,382 @@
+<!-- Collabo chat assistant: bubble + panel. Talks to /api/chat; leads go to /api/lead.
+     Styles are global (cw- prefix) because messages are created by JS and Astro's scoped styles would not reach them.
+     Visual language follows the site's cookie card: white card, Zodiak titles, Be Vietnam Pro text, pill buttons. -->
+<div class="cw" data-cw>
+  <section id="cw-panel" class="cw-panel" role="dialog" aria-modal="false" aria-labelledby="cw-title" hidden>
+    <header class="cw-head">
+      <span class="cw-avatar"><img src="/webflow/images/6a6a7fc1cb3e6ea1b27a98f4_logo-icon.svg" alt="" width="32" height="32" /></span>
+      <div class="cw-head__text">
+        <p id="cw-title" class="cw-title">Collabo Assistant</p>
+        <p class="cw-sub"><i class="cw-dot"></i>Online · replies in seconds</p>
+      </div>
+      <button type="button" class="cw-icon-btn" data-cw-close aria-label="Close chat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+
+    <div class="cw-body">
+      <div class="cw-log" aria-live="polite"></div>
+      <div class="cw-quick" data-cw-quick></div>
+
+      <form class="cw-lead" data-cw-lead hidden novalidate>
+        <p class="cw-lead__title">Leave your details</p>
+        <p class="cw-lead__text">Our team will get back to you by email.</p>
+        <input class="cw-field" name="name" placeholder="Your name" autocomplete="name" required maxlength="100" />
+        <input class="cw-field" name="email" type="email" placeholder="Your email" autocomplete="email" required maxlength="200" />
+        <textarea class="cw-field" name="note" placeholder="What do you want to create? (optional)" maxlength="2000" rows="3"></textarea>
+        <input name="website" class="cw-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <p class="cw-status" role="status"></p>
+        <div class="cw-lead__actions">
+          <button type="button" class="cw-btn is-ghost" data-cw-back>Back to chat</button>
+          <button type="submit" class="cw-btn is-accent">Send details</button>
+        </div>
+      </form>
+    </div>
+
+    <footer class="cw-foot" data-cw-foot>
+      <form class="cw-input" data-cw-form>
+        <input class="cw-input__field" name="msg" placeholder="Ask about our work…" autocomplete="off" maxlength="1000" aria-label="Your message" />
+        <button type="submit" class="cw-send" aria-label="Send message">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </form>
+      <button type="button" class="cw-leadlink" data-cw-leadlink>Prefer email? Leave your details</button>
+    </footer>
+  </section>
+
+  <button type="button" class="cw-bubble" aria-label="Chat with Collabo" aria-expanded="false" aria-controls="cw-panel" hidden>
+    <svg class="cw-bubble__logo" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.2A.5.5 0 0 1 5 19.8V17h-.5A.5.5 0 0 1 4 16.5v-10Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    <svg class="cw-bubble__close" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+  </button>
+</div>
+
+<style is:global>
+  .cw { --cw-ink: #04091a; --cw-navy: #1c3a60; --cw-muted: #677b94; --cw-soft: #f4f5f7; --cw-violet: #5a4fe0;
+        --cw-accent: linear-gradient(90deg, #f78071, #f2a74b); font: 400 15px/1.5 'Be Vietnam Pro', sans-serif; }
+  .cw *, .cw *::before, .cw *::after { box-sizing: border-box; }
+  .cw [hidden] { display: none !important; }
+  .cw p { margin: 0; }
+
+  /* Bubble */
+  .cw-bubble { position: fixed; right: 24px; bottom: 24px; z-index: 2147481000; width: 62px; height: 62px; padding: 0; border: 0;
+    border-radius: 50%; cursor: pointer; display: grid; place-items: center; background: #fff; color: var(--cw-ink);
+    box-shadow: 0 18px 40px -12px rgba(4, 9, 26, .5), 0 0 0 1px rgba(28, 58, 96, .08);
+    transition: transform .25s cubic-bezier(.2,.8,.2,1), background-color .2s; animation: cw-pop .5s cubic-bezier(.2,.8,.2,1); }
+  .cw-bubble:hover { transform: translateY(-2px) scale(1.04); }
+  .cw-bubble__close { display: none; }
+  .cw-bubble[aria-expanded="true"] { background: var(--cw-ink); color: #fff; }
+  .cw-bubble[aria-expanded="true"] .cw-bubble__logo { display: none; }
+  .cw-bubble[aria-expanded="true"] .cw-bubble__close { display: block; }
+  @keyframes cw-pop { from { opacity: 0; transform: scale(.6); } }
+
+  /* Panel */
+  .cw-panel { position: fixed; right: 24px; bottom: 100px; z-index: 2147481000; width: 400px; max-width: calc(100vw - 48px);
+    height: min(620px, calc(100dvh - 140px)); display: flex; flex-direction: column; overflow: hidden;
+    background: #fff; color: var(--cw-ink); border-radius: 18px;
+    box-shadow: 0 30px 70px -20px rgba(4, 9, 26, .55), 0 0 0 1px rgba(28, 58, 96, .08);
+    transform-origin: bottom right; animation: cw-in .4s cubic-bezier(.2,.8,.2,1); }
+  @keyframes cw-in { from { opacity: 0; transform: translateY(16px) scale(.97); } }
+
+  .cw-head { display: flex; align-items: center; gap: 12px; padding: 18px 18px 18px 20px; color: #fff;
+    background: #131313 radial-gradient(circle at 20% -40%, #5a4fe0, #131313 75%); }
+  .cw-avatar { flex: none; width: 44px; height: 44px; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+  .cw-head__text { flex: 1; min-width: 0; }
+  .cw-title { font: 400 22px/1.15 Zodiak, Arial, sans-serif; }
+  .cw-sub { margin-top: 3px !important; font-size: 13px; color: rgba(255,255,255,.72); display: flex; align-items: center; gap: 6px; }
+  .cw-dot { width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 0 3px rgba(61,220,132,.2); }
+  .cw-icon-btn { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center;
+    background: rgba(255,255,255,.1); color: #fff; transition: background-color .2s; }
+  .cw-icon-btn:hover { background: rgba(255,255,255,.2); }
+
+  .cw-body { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--cw-soft); overflow-y: auto; overscroll-behavior: contain; }
+  .cw-log { display: flex; flex-direction: column; gap: 10px; padding: 20px 18px 8px; }
+  .cw-msg { max-width: 85%; padding: 11px 15px; border-radius: 16px; font-size: 15px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere;
+    animation: cw-msg .3s ease-out; }
+  @keyframes cw-msg { from { opacity: 0; transform: translateY(6px); } }
+  .cw-msg.is-bot { align-self: flex-start; background: #fff; color: var(--cw-ink); border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 2px rgba(4, 9, 26, .06), 0 0 0 1px rgba(28, 58, 96, .06); }
+  .cw-msg.is-me { align-self: flex-end; background: var(--cw-ink); color: #fff; border-bottom-right-radius: 4px; }
+  .cw-msg.is-err { align-self: flex-start; background: #fff1f0; color: #9b2c2c; box-shadow: 0 0 0 1px #f7c9c4; }
+  .cw-msg a { color: var(--cw-violet); text-decoration: underline; text-underline-offset: 2px; }
+  .cw-msg.is-me a { color: #fff; }
+  .cw-typing { display: inline-flex; gap: 4px; padding: 15px 16px; }
+  .cw-typing span { width: 7px; height: 7px; border-radius: 50%; background: #9aa7b8; animation: cw-blink 1.2s infinite ease-in-out; }
+  .cw-typing span:nth-child(2) { animation-delay: .15s; }
+  .cw-typing span:nth-child(3) { animation-delay: .3s; }
+  @keyframes cw-blink { 0%, 80%, 100% { opacity: .3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+
+  .cw-quick { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 18px 18px; }
+  .cw-chip { height: 36px; padding: 0 14px; border: 0; border-radius: 99px; cursor: pointer; background: #fff; color: var(--cw-navy);
+    box-shadow: inset 0 0 0 1.5px var(--cw-navy); font: 400 13px/1 'Be Vietnam Pro', sans-serif; transition: background-color .2s, color .2s; }
+  .cw-chip:hover { background: var(--cw-navy); color: #fff; }
+
+  /* Lead form */
+  .cw-lead { margin: 4px 18px 18px; padding: 18px; background: #fff; border-radius: 16px; display: flex; flex-direction: column; gap: 10px;
+    box-shadow: 0 0 0 1px rgba(28, 58, 96, .08); }
+  .cw-lead__title { font: 400 20px/1.2 Zodiak, Arial, sans-serif; }
+  .cw-lead__text { font-size: 13px; color: var(--cw-muted); margin-bottom: 4px !important; }
+  .cw-field { width: 100%; margin: 0; padding: 12px 14px; border: 1px solid #dde3ea; border-radius: 12px; background: var(--cw-soft);
+    color: var(--cw-ink); font: 400 15px/1.4 'Be Vietnam Pro', sans-serif; resize: vertical; }
+  .cw-field:focus { outline: none; border-color: var(--cw-violet); background: #fff; }
+  .cw-field.is-invalid { border-color: #e05a4f; }
+  .cw-hp { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0; }
+  .cw-status { font-size: 13px; min-height: 18px; color: #c0392b; }
+  .cw-status.is-ok { color: #1f8a4c; }
+  .cw-lead__actions { display: flex; gap: 8px; }
+  .cw-btn { flex: 1; height: 44px; padding: 0 16px; border: 0; border-radius: 99px; cursor: pointer; white-space: nowrap;
+    font: 400 14px/1 'Be Vietnam Pro', sans-serif; transition: transform .15s; }
+  .cw-btn:hover { transform: translateY(-1px); }
+  .cw-btn:disabled { opacity: .55; cursor: default; transform: none; }
+  .cw-btn.is-ghost { background: #fff; color: var(--cw-navy); box-shadow: inset 0 0 0 1.5px var(--cw-navy); }
+  .cw-btn.is-accent { background: var(--cw-accent); color: var(--cw-ink); }
+
+  /* Composer */
+  .cw-foot { flex: none; padding: 12px 14px 8px; background: #fff; border-top: 1px solid #e8ecf1; }
+  .cw-input { display: flex; align-items: center; gap: 8px; margin: 0; }
+  .cw-input__field { flex: 1; min-width: 0; height: 48px; margin: 0; padding: 0 18px; border: 1px solid #dde3ea; border-radius: 99px;
+    background: var(--cw-soft); color: var(--cw-ink); font: 400 15px/1 'Be Vietnam Pro', sans-serif; }
+  .cw-input__field:focus { outline: none; border-color: var(--cw-violet); background: #fff; }
+  .cw-send { flex: none; width: 48px; height: 48px; border: 0; border-radius: 50%; cursor: pointer; display: grid; place-items: center;
+    background: var(--cw-accent); color: var(--cw-ink); transition: transform .15s, opacity .2s; }
+  .cw-send:hover { transform: translateX(2px); }
+  .cw-send:disabled { opacity: .5; cursor: default; transform: none; }
+  .cw-leadlink { display: block; margin: 8px auto 2px; padding: 4px 8px; border: 0; background: none; cursor: pointer;
+    color: var(--cw-muted); font: 400 13px/1.3 'Be Vietnam Pro', sans-serif; text-decoration: underline; text-underline-offset: 2px; }
+  .cw-leadlink:hover { color: var(--cw-ink); }
+
+  .cw button:focus-visible, .cw a:focus-visible { outline: 2px solid var(--cw-violet); outline-offset: 2px; }
+
+  @media (max-width: 599px) {
+    .cw-bubble { right: 16px; bottom: 16px; width: 56px; height: 56px; }
+    .cw-panel { right: 0; left: 0; bottom: 0; width: 100%; max-width: none; height: 100dvh; border-radius: 0; }
+    .cw-panel ~ .cw-bubble[aria-expanded="true"] { display: none; }
+    .cw-input__field { font-size: 16px; } /* stops iOS zoom on focus */
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cw-bubble, .cw-panel, .cw-msg { animation: none; }
+    .cw-typing span { animation: none; opacity: .6; }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-cw]');
+  if (root) {
+    const bubble = root.querySelector<HTMLButtonElement>('.cw-bubble')!;
+    const panel = root.querySelector<HTMLElement>('.cw-panel')!;
+    const body = root.querySelector<HTMLElement>('.cw-body')!;
+    const log = root.querySelector<HTMLElement>('.cw-log')!;
+    const quick = root.querySelector<HTMLElement>('[data-cw-quick]')!;
+    const foot = root.querySelector<HTMLElement>('[data-cw-foot]')!;
+    const chatForm = root.querySelector<HTMLFormElement>('[data-cw-form]')!;
+    const chatInput = chatForm.querySelector<HTMLInputElement>('input')!;
+    const sendBtn = chatForm.querySelector<HTMLButtonElement>('button')!;
+    const leadForm = root.querySelector<HTMLFormElement>('[data-cw-lead]')!;
+    const status = leadForm.querySelector<HTMLElement>('.cw-status')!;
+
+    const WELCOME = 'Hi, I’m the Collabo Assistant. Ask me about our ad formats, demos, or how a project starts.';
+    const QUICK = ['See CTV demos', 'What do you build?', 'How does a project start?', 'Request a quote'];
+    const STORE = 'collabo-chat';
+    type Msg = { role: 'user' | 'assistant'; content: string };
+
+    // Conversation survives page changes within the visit.
+    let history: Msg[] = [];
+    try { history = JSON.parse(sessionStorage.getItem(STORE) || '[]'); } catch {}
+    const save = () => { try { sessionStorage.setItem(STORE, JSON.stringify(history.slice(-20))); } catch {} };
+    let busy = false;
+
+    const scrollDown = () => { body.scrollTop = body.scrollHeight; };
+
+    // Plain text in, safe DOM out. Only internal paths (/work, /work#slug, /contact) become links.
+    const fill = (el: HTMLElement, text: string) => {
+      text = text.replace(/\*\*(.+?)\*\*/g, '$1');
+      const re = /(\/(?:work|contact)(?:#[a-z0-9-]+)?)(?=[\s.,!?)]|$)/gi;
+      let last = 0;
+      for (const m of text.matchAll(re)) {
+        el.append(text.slice(last, m.index));
+        const a = document.createElement('a');
+        a.href = m[1];
+        a.textContent = m[1].startsWith('/work#') ? 'View demo' : m[1] === '/contact' ? 'Contact page' : 'Work page';
+        el.append(a);
+        last = (m.index ?? 0) + m[0].length;
+      }
+      el.append(text.slice(last));
+    };
+
+    const add = (text: string, who: 'bot' | 'me' | 'err') => {
+      const el = document.createElement('div');
+      el.className = `cw-msg is-${who}`;
+      fill(el, text);
+      log.appendChild(el);
+      scrollDown();
+      return el;
+    };
+
+    const renderQuick = () => {
+      quick.replaceChildren(...QUICK.map((q) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'cw-chip';
+        b.textContent = q;
+        b.addEventListener('click', () => send(q));
+        return b;
+      }));
+      quick.hidden = history.length > 0;
+    };
+
+    const renderLog = () => {
+      log.replaceChildren();
+      add(WELCOME, 'bot');
+      history.forEach((m) => add(m.content, m.role === 'user' ? 'me' : 'bot'));
+      renderQuick();
+    };
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      bubble.setAttribute('aria-expanded', String(open));
+      bubble.setAttribute('aria-label', open ? 'Close chat' : 'Chat with Collabo');
+      const lenis = (window as any).lenis;
+      try { sessionStorage.setItem(STORE + '-open', open ? '1' : '0'); } catch {}
+      if (open) {
+        if (!log.childElementCount) renderLog();
+        scrollDown();
+        if (matchMedia('(min-width: 600px)').matches) chatInput.focus();
+        if (matchMedia('(max-width: 599px)').matches) lenis?.stop?.();
+      } else {
+        lenis?.start?.();
+      }
+    };
+
+    const send = async (raw: string) => {
+      const text = raw.trim();
+      if (!text || busy) return;
+      busy = true;
+      sendBtn.disabled = true;
+      quick.hidden = true;
+      add(text, 'me');
+      history.push({ role: 'user', content: text });
+      const typing = document.createElement('div');
+      typing.className = 'cw-msg is-bot cw-typing';
+      typing.setAttribute('aria-label', 'Assistant is typing');
+      typing.innerHTML = '<span></span><span></span><span></span>';
+      log.appendChild(typing);
+      scrollDown();
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ messages: history }),
+        });
+        const data = await res.json().catch(() => ({}));
+        typing.remove();
+        if (res.ok && data.reply) {
+          history.push({ role: 'assistant', content: data.reply });
+          add(data.reply, 'bot');
+        } else {
+          history.pop();
+          add(data.error || 'Something went wrong. Please try again.', 'err');
+        }
+      } catch {
+        typing.remove();
+        history.pop();
+        add('Connection problem. Please check your internet and try again.', 'err');
+      } finally {
+        save();
+        busy = false;
+        sendBtn.disabled = false;
+      }
+    };
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = chatInput.value;
+      chatInput.value = '';
+      send(v);
+    });
+
+    const showLead = (show: boolean) => {
+      leadForm.hidden = !show;
+      foot.hidden = show;
+      quick.hidden = show || history.length > 0;
+      log.hidden = show;
+      status.textContent = '';
+      if (show) leadForm.querySelector<HTMLInputElement>('input[name=name]')!.focus();
+      else chatInput.focus();
+      body.scrollTop = 0;
+    };
+    root.querySelector('[data-cw-leadlink]')!.addEventListener('click', () => showLead(true));
+    root.querySelector('[data-cw-back]')!.addEventListener('click', () => showLead(false));
+
+    leadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = leadForm.elements.namedItem('name') as HTMLInputElement;
+      const email = leadForm.elements.namedItem('email') as HTMLInputElement;
+      name.classList.toggle('is-invalid', !name.value.trim());
+      email.classList.toggle('is-invalid', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()));
+      if (leadForm.querySelector('.is-invalid')) {
+        status.className = 'cw-status';
+        status.textContent = 'Please add your name and a valid email.';
+        return;
+      }
+      const fd = new FormData(leadForm);
+      const transcript = history.map((m) => `${m.role === 'user' ? 'Visitor' : 'Assistant'}: ${m.content}`).join('\n');
+      const btn = leadForm.querySelector<HTMLButtonElement>('button[type=submit]')!;
+      btn.disabled = true;
+      status.className = 'cw-status';
+      status.textContent = 'Sending…';
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ name: fd.get('name'), email: fd.get('email'), note: fd.get('note'), website: fd.get('website'), transcript }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok) {
+          status.className = 'cw-status is-ok';
+          status.textContent = 'Thanks! Our team will be in touch.';
+          leadForm.reset();
+          setTimeout(() => {
+            showLead(false);
+            const msg = 'Thanks, we have your details and will reply by email.';
+            history.push({ role: 'assistant', content: msg });
+            add(msg, 'bot');
+            save();
+          }, 1200);
+        } else {
+          status.textContent = data.error || 'Could not send. Please use the contact page.';
+        }
+      } catch {
+        status.textContent = 'Connection problem. Please try again.';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    bubble.addEventListener('click', () => setOpen(panel.hidden));
+    root.querySelector('[data-cw-close]')!.addEventListener('click', () => setOpen(false));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) setOpen(false); });
+
+    // Clicking a "View demo" link while already on /work: close chat so the popup is visible.
+    log.addEventListener('click', (e) => {
+      const a = (e.target as HTMLElement).closest('a');
+      if (!a) return;
+      try { sessionStorage.setItem(STORE + '-open', '0'); } catch {} // let the demo popup have the screen
+      if (a.pathname === location.pathname && a.hash) setOpen(false);
+    });
+
+    // Show the bubble only after the intro loader and while the cookie banner is not on screen.
+    let loaderDone = !document.documentElement.classList.contains('cl-loading');
+    const ck = document.querySelector<HTMLElement>('.ck');
+    const update = () => {
+      const hide = !loaderDone || (!!ck && !ck.hidden);
+      if (bubble.hidden !== hide) bubble.hidden = hide; // only touch the attribute when it changes
+    };
+    window.addEventListener('collabo:loader-done', () => { loaderDone = true; update(); }, { once: true });
+    setTimeout(() => { loaderDone = true; update(); }, 7000); // safety net if the loader event never fires
+    if (ck) new MutationObserver(update).observe(ck, { attributes: true, attributeFilter: ['hidden'] });
+    update();
+
+    // Reopen the panel after a page change if it was open.
+    try { if (sessionStorage.getItem(STORE + '-open') === '1' && !bubble.hidden) setOpen(true); } catch {}
+
+  }
+</script>

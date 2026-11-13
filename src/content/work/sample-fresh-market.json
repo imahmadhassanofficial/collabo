@@ -1,0 +1,44 @@
+{
+  "title": "Fresh Market – Scratch Card",
+  "client": "Fresh Market",
+  "summary": "Scratch-to-reveal coupon game in a 300×250 unit.",
+  "description": "Sample gamified HTML5 unit (300 × 250). Users scratch the card with mouse or finger to reveal a coupon code.",
+  "device": "Tablet",
+  "adType": [
+    "Gamified Ads",
+    "Interactive Ads"
+  ],
+  "platform": [
+    "Tablet",
+    "Mobile Web"
+  ],
+  "industry": [
+    "Retail"
+  ],
+  "features": [
+    "Scratch to Reveal",
+    "Gamification"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [
+    "300x250"
+  ],
+  "tags": [
+    "HTML5",
+    "GAMIFIED",
+    "Tablet"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-fresh-market/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "html5",
+    "src": "/work/samples/sample-fresh-market/index.html",
+    "width": 300,
+    "height": 250
+  },
+  "date": "2026-11-07",
+  "draft": true
+}

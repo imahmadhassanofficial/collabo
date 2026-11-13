@@ -1,0 +1,44 @@
+{
+  "title": "Brand – Format",
+  "client": "Brand name",
+  "summary": "One or two lines shown on the card.",
+  "description": "Longer text shown in the popup: the brief, what we built, results.",
+  "device": "Mobile",
+  "adType": [
+    "Interactive Ads"
+  ],
+  "platform": [
+    "Mobile"
+  ],
+  "industry": [
+    "Retail"
+  ],
+  "features": [
+    "Overlay",
+    "Endcard"
+  ],
+  "technology": [
+    "HTML5",
+    "VAST"
+  ],
+  "adSize": [
+    "300x250"
+  ],
+  "tags": [
+    "HTML5",
+    "INTERACTIVE",
+    "VAST",
+    "Mobile"
+  ],
+  "thumbnails": [
+    "/work/brand-format/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "video",
+    "src": "https://your-ad-server-cdn.com/brand-format.mp4",
+    "poster": "/work/brand-format/thumb-1.jpg",
+    "audio": true
+  },
+  "date": "2026-11-13",
+  "draft": false
+}

@@ -1,0 +1,44 @@
+{
+  "title": "Pulse Music – Swipe Carousel",
+  "client": "Pulse Music",
+  "summary": "Swipeable album carousel that auto-advances and links to listen.",
+  "description": "Sample HTML5 mobile unit (320 × 480) with a swipe/tap carousel of three playlists.",
+  "device": "Mobile",
+  "adType": [
+    "Interactive Ads",
+    "Rich Media Ads"
+  ],
+  "platform": [
+    "In-App",
+    "Mobile Web"
+  ],
+  "industry": [
+    "Entertainment"
+  ],
+  "features": [
+    "Carousel",
+    "Swipe"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [
+    "320x480"
+  ],
+  "tags": [
+    "HTML5",
+    "INTERACTIVE",
+    "Mobile"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-pulse-music/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "html5",
+    "src": "/work/samples/sample-pulse-music/index.html",
+    "width": 320,
+    "height": 480
+  },
+  "date": "2026-11-02",
+  "draft": true
+}

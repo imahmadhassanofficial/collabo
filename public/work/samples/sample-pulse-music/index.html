@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pulse Music – sample ad</title><style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:Poppins,system-ui,-apple-system,Segoe UI,Arial,sans-serif;-webkit-user-select:none;user-select:none}
+.tag{position:absolute;top:8px;right:8px;font-size:9px;letter-spacing:.08em;border:1px solid currentColor;border-radius:99px;padding:2px 7px;opacity:.85;z-index:9}
+.brand{font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.cta{display:inline-block;border:0;border-radius:99px;font-weight:600;cursor:pointer;font-family:inherit}
+body{width:320px;height:480px}
+body{background:linear-gradient(160deg,#000,#8e2de2);color:#fff}
+.wrap{position:relative;width:320px;height:480px;padding:22px 0;overflow:hidden}
+.brand{font-size:13px;padding:0 22px}.h{font:600 24px/1.1 Georgia,serif;margin:12px 22px 0}
+.track{display:flex;gap:14px;padding:22px;transition:transform .45s cubic-bezier(.2,.8,.2,1);touch-action:pan-y}
+.s{flex:0 0 220px;height:250px;border-radius:18px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 18px 30px -12px rgba(0,0,0,.6)}
+.s b{font-size:20px}.s span{font-size:12px;opacity:.85}
+.dots{display:flex;justify-content:center;gap:6px}.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4)}.dots i.on{background:#ff2e88}
+.cta{display:block;margin:16px auto 0;background:#ff2e88;color:#fff;padding:11px 24px;font-size:14px}</style></head><body><div class="wrap"><span class="tag">SAMPLE</span><div class="brand">Pulse Music</div><div class="h">Swipe through this week’s drops</div>
+<div class="track" id="t"><div class="s" style="background:linear-gradient(160deg,#ff2e88,#8e2de2)"><b>Neon Nights</b><span>Synthwave · 12 tracks</span></div>
+<div class="s" style="background:linear-gradient(160deg,#00c9ff,#3a1c71)"><b>Low Tide</b><span>Lo-fi · 18 tracks</span></div>
+<div class="s" style="background:linear-gradient(160deg,#f9d423,#ff4e50)"><b>Sunburst</b><span>Pop · 10 tracks</span></div></div>
+<div class="dots" id="d"><i class="on"></i><i></i><i></i></div><button class="cta">Listen free</button></div><script>let i=0,x0=null;const t=document.getElementById('t'),d=[...document.querySelectorAll('#d i')];const go=n=>{i=Math.max(0,Math.min(2,n));t.style.transform='translateX('+(-234*i)+'px)';d.forEach((e,k)=>e.classList.toggle('on',k===i))};
+t.addEventListener('pointerdown',e=>x0=e.clientX);addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0;if(Math.abs(dx)>30)go(i+(dx<0?1:-1));else go(i+1>2?0:i+1);x0=null});
+setInterval(()=>{if(x0==null)go(i+1>2?0:i+1)},3500);</script></body></html>

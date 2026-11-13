@@ -1,0 +1,17 @@
+---
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import ContactHead from '../components/heads/ContactHead.astro';
+import PageScripts from '../components/scripts/PageScripts.astro';
+import Header from '../components/shared/Header.astro';
+import Footer from '../components/shared/Footer.astro';
+import ContactHero from '../components/sections/contact/ContactHero.astro';
+import ContactForm from '../components/sections/contact/ContactForm.astro';
+---
+<WebflowLayout wfPage="69ff5598dafef17a3d137118">
+  <ContactHead slot="head" />
+  <Header current="contact" />
+  <ContactHero />
+  <ContactForm />
+  <Footer />
+  <PageScripts slot="scripts" />
+</WebflowLayout>

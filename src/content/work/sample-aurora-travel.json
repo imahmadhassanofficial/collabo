@@ -1,0 +1,40 @@
+{
+  "title": "Aurora Travel – Interactive CTV",
+  "client": "Aurora Travel",
+  "summary": "Remote-friendly CTV experience where viewers pick a destination.",
+  "description": "Sample interactive CTV unit served from a test URL. Viewers choose a destination and get a tailored offer.",
+  "device": "CTV",
+  "adType": [
+    "Interactive Ads"
+  ],
+  "platform": [
+    "CTV"
+  ],
+  "industry": [
+    "Travel"
+  ],
+  "features": [
+    "Choose Your Path"
+  ],
+  "technology": [
+    "HTML5",
+    "SIMID"
+  ],
+  "adSize": [
+    "1920x1080"
+  ],
+  "tags": [
+    "INTERACTIVE",
+    "SIMID",
+    "CTV"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-aurora-travel/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "url",
+    "src": "/work/samples/sample-aurora-travel/index.html"
+  },
+  "date": "2026-11-06",
+  "draft": true
+}

@@ -1,0 +1,41 @@
+{
+  "title": "BrightSmile – Animated MPU",
+  "client": "BrightSmile Dental",
+  "summary": "Animated 300×250 with rotating messages and a booking button.",
+  "description": "Sample HTML5 medium rectangle (300 × 250) with three rotating messages and a looping animated illustration.",
+  "device": "Desktop",
+  "adType": [
+    "Rich Media Ads"
+  ],
+  "platform": [
+    "Desktop Web"
+  ],
+  "industry": [
+    "Healthcare"
+  ],
+  "features": [
+    "Animation"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [
+    "300x250"
+  ],
+  "tags": [
+    "HTML5",
+    "RICH MEDIA",
+    "Desktop"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-brightsmile/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "html5",
+    "src": "/work/samples/sample-brightsmile/index.html",
+    "width": 300,
+    "height": 250
+  },
+  "date": "2026-11-10",
+  "draft": true
+}

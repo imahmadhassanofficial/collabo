@@ -1,0 +1,42 @@
+{
+  "title": "Coastal Bank – Leaderboard",
+  "client": "Coastal Bank",
+  "summary": "728×90 leaderboard with a live-counting savings rate and wave animation.",
+  "description": "Sample HTML5 leaderboard (728 × 90). The rate counts up on load and a subtle wave animates along the bottom.",
+  "device": "Desktop",
+  "adType": [
+    "Rich Media Ads"
+  ],
+  "platform": [
+    "Desktop Web"
+  ],
+  "industry": [
+    "Finance"
+  ],
+  "features": [
+    "Animation",
+    "Dynamic Content"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [
+    "728x90"
+  ],
+  "tags": [
+    "HTML5",
+    "RICH MEDIA",
+    "Desktop"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-coastal-bank/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "html5",
+    "src": "/work/samples/sample-coastal-bank/index.html",
+    "width": 728,
+    "height": 90
+  },
+  "date": "2026-11-08",
+  "draft": true
+}

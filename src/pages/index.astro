@@ -1,0 +1,39 @@
+---
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import HomeHead from '../components/heads/HomeHead.astro';
+import HomeScripts from '../components/scripts/HomeScripts.astro';
+import ProgressiveBlur from '../components/ProgressiveBlur.astro';
+import Header from '../components/shared/Header.astro';
+import FooterWithForm from '../components/shared/FooterWithForm.astro';
+import Hero from '../components/sections/home/Hero.astro';
+import About from '../components/sections/home/About.astro';
+import WhoWeWorkWith from '../components/sections/home/WhoWeWorkWith.astro';
+import OneAdEverywhere from '../components/sections/home/OneAdEverywhere.astro';
+import ServicesHead from '../components/sections/home/ServicesHead.astro';
+import Services from '../components/sections/home/Services.astro';
+import ServicesStack from '../components/sections/home/ServicesStack.astro';
+import Platforms from '../components/sections/home/Platforms.astro';
+import Process from '../components/sections/home/Process.astro';
+import Compare from '../components/sections/home/Compare.astro';
+
+const wfPage = '69f3c989b21ed48b5a87ee0c';
+---
+<WebflowLayout wfPage={wfPage}>
+  <HomeHead slot="head" />
+  <div class="page_containers">
+    <Header />
+    <Hero />
+    <About />
+    <WhoWeWorkWith />
+    <OneAdEverywhere />
+    <ServicesHead />
+    <Services />
+    <ServicesStack />
+    <Platforms />
+    <Process />
+    <Compare />
+    <FooterWithForm wfPage={wfPage} />
+  </div>
+  <ProgressiveBlur />
+  <HomeScripts slot="scripts" />
+</WebflowLayout>

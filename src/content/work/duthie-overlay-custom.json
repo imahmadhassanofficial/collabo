@@ -1,0 +1,32 @@
+{
+  "title": "Duthie – Overlay + Custom",
+  "client": "Duthie Power Services",
+  "summary": "A brief overview describing the campaign, its goals, interaction model, and supported environments.",
+  "device": "Tablet",
+  "adType": [
+    "Interactive Ads"
+  ],
+  "platform": [
+    "Tablet"
+  ],
+  "industry": [
+    "Energy"
+  ],
+  "features": [
+    "Overlay"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [],
+  "tags": [
+    "HTML5",
+    "INTERACTIVE",
+    "VAST",
+    "Mobile",
+    "CTV"
+  ],
+  "thumbnails": [],
+  "date": "2026-10-12",
+  "draft": true
+}

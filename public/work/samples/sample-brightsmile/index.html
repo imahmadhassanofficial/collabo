@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BrightSmile Dental – sample ad</title><style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:Poppins,system-ui,-apple-system,Segoe UI,Arial,sans-serif;-webkit-user-select:none;user-select:none}
+.tag{position:absolute;top:8px;right:8px;font-size:9px;letter-spacing:.08em;border:1px solid currentColor;border-radius:99px;padding:2px 7px;opacity:.85;z-index:9}
+.brand{font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.cta{display:inline-block;border:0;border-radius:99px;font-weight:600;cursor:pointer;font-family:inherit}
+body{width:300px;height:250px}
+body{background:linear-gradient(135deg,#e8f6ff,#7cc8f2);color:#0b2a40}
+.wrap{position:relative;width:300px;height:250px;padding:16px;overflow:hidden}
+.brand{font-size:11px}.f{position:absolute;left:16px;right:16px;top:50px;font:600 24px/1.15 Georgia,serif;opacity:0;transform:translateY(12px);transition:.5s}
+.f.on{opacity:1;transform:none}.cta{position:absolute;left:16px;bottom:16px;background:#0b4f7a;color:#fff;padding:9px 18px;font-size:12px}
+.tooth{position:absolute;right:-10px;bottom:-14px;width:110px;height:110px;border-radius:50% 50% 40% 40%;background:#fff;box-shadow:0 10px 30px rgba(11,79,122,.3);animation:sp 3s ease-in-out infinite}
+.tooth:after{content:'✦';position:absolute;right:18px;top:12px;color:#7cc8f2;font-size:22px;animation:tw 1s infinite alternate}
+@keyframes sp{50%{transform:translateY(-6px) rotate(-4deg)}}@keyframes tw{to{opacity:.2;transform:scale(.6)}}</style></head><body><div class="wrap"><span class="tag">SAMPLE</span><div class="brand">BrightSmile Dental</div>
+<div class="f on">Smile brighter this spring</div><div class="f">Whitening from $99</div><div class="f">New patients welcome</div>
+<div class="tooth"></div><button class="cta">Book a visit</button></div><script>let i=0;const f=[...document.querySelectorAll('.f')];setInterval(()=>{f[i].classList.remove('on');i=(i+1)%f.length;f[i].classList.add('on')},2000);</script></body></html>

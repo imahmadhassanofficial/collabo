@@ -1,0 +1,312 @@
+/* ------------------------- Hide Scrollbar -------------------------------------------------- */
+
+body ::-webkit-scrollbar,
+body::-webkit-scrollbar {display: none;} /* Chrome, Safari, Opera */
+body {-ms-overflow-style: none;} /* IE & Edge */
+html {scrollbar-width: none;} /* Firefox */
+
+/* ------------------------- Reset -------------------------------------------------- */
+
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: initial;
+}
+
+html,
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+}
+
+/* ------------------------- Reset Webflow -------------------------------------------------- */
+
+html {
+  -webkit-text-size-adjust: revert;
+  -ms-text-size-adjust: revert;
+  height: revert;
+  font-family: revert;
+}
+
+/*body {*/
+/*  color: revert;*/
+/*  background-color: revert;*/
+/*  min-height: revert;*/
+/*  margin: 0;*/
+/*  font-family: revert;*/
+/*  font-size: revert;*/
+/*  line-height: revert;*/
+/*}*/
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: revert;
+}
+
+audio,
+canvas,
+progress,
+video {
+  vertical-align: revert;
+  display: revert;
+}
+
+audio:not([controls]) {
+  height: revert;
+  display: revert;
+}
+
+[hidden],
+template {
+  display: revert;
+}
+
+a {
+  background-color: revert;
+}
+
+a:active,
+a:hover {
+  outline: revert;
+}
+
+abbr[title] {
+  border-bottom: revert;
+}
+
+b,
+strong {
+  font-weight: revert;
+}
+
+dfn {
+  font-style: revert;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: revert;
+  margin-bottom: revert;
+  font-weight: revert;
+  line-height: revert;
+}
+
+h1 {
+  margin-right: revert;
+  margin-left: revert;
+  font-size: revert;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: revert;
+}
+
+mark {
+  color: revert;
+  background: revert;
+}
+
+small {
+  font-size: revert;
+}
+
+sub,
+sup {
+  vertical-align: revert;
+  font-size: revert;
+  line-height: revert;
+  position: revert;
+}
+
+sup {
+  top: revert;
+}
+
+sub {
+  bottom: revert;
+}
+
+img {
+  border: revert;
+  vertical-align: revert;
+  max-width: revert;
+  display: revert;
+}
+
+svg:not(:root) {
+  overflow: revert;
+}
+
+hr {
+  height: revert;
+}
+
+pre {
+  overflow: revert;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: revert;
+  font-size: revert;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: revert;
+  font: revert;
+  margin: revert;
+}
+
+button {
+  overflow: revert;
+}
+
+button,
+select {
+  text-transform: revert;
+}
+
+button,
+html input[type="button"],
+input[type="reset"] {
+  -webkit-appearance: revert;
+  cursor: revert;
+}
+
+button[disabled],
+html input[disabled] {
+  cursor: revert;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: revert;
+  padding: revert;
+}
+
+input {
+  line-height: revert;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  padding: revert;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: revert;
+}
+
+input[type="search"] {
+  -webkit-appearance: revert;
+}
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: revert;
+}
+
+legend {
+  border: revert;
+  padding: revert;
+}
+
+textarea {
+  overflow: revert;
+}
+
+optgroup {
+  font-weight: revert;
+}
+
+table {
+  border-collapse: revert;
+  border-spacing: revert;
+}
+
+td,
+th {
+  padding: revert;
+}
+
+p {
+  margin-top: revert;
+  margin-bottom: revert;
+}
+
+blockquote {
+  border-left: revert;
+  margin: revert;
+  padding: revert;
+  font-size: revert;
+  line-height: revert;
+}
+
+figure {
+  margin: revert;
+}
+
+figcaption {
+  text-align: revert;
+  margin-top: revert;
+}
+
+ul,
+ol {
+  margin-top: revert;
+  margin-bottom: revert;
+  padding-left: revert;
+}
+
+fieldset {
+  border: revert;
+  margin: revert;
+  padding: revert;
+}
+
+button {
+  cursor: revert;
+  -webkit-appearance: revert;
+  border: revert;
+}
+
+label {
+  margin-bottom: revert;
+  font-weight: revert;
+  display: revert;
+}

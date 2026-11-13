@@ -1,0 +1,43 @@
+{
+  "title": "Harbor Insurance – OTT Spot",
+  "client": "Harbor Insurance",
+  "summary": "Silent-friendly OTT spot with bold supers and a quote CTA.",
+  "description": "Sample OTT video (16:9) designed to work without sound, with three supers and a quote call to action.",
+  "device": "CTV",
+  "adType": [
+    "Video Ads"
+  ],
+  "platform": [
+    "OTT",
+    "CTV"
+  ],
+  "industry": [
+    "Insurance"
+  ],
+  "features": [
+    "Overlay"
+  ],
+  "technology": [
+    "VAST",
+    "MP4"
+  ],
+  "adSize": [
+    "1920x1080"
+  ],
+  "tags": [
+    "VAST",
+    "VIDEO",
+    "CTV"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-harbor-insurance/thumb-1.jpg",
+    "/work/samples/sample-harbor-insurance/thumb-2.jpg"
+  ],
+  "demo": {
+    "type": "video",
+    "src": "/work/samples/sample-harbor-insurance/demo.mp4",
+    "poster": "/work/samples/sample-harbor-insurance/demo-poster.jpg"
+  },
+  "date": "2026-11-01",
+  "draft": true
+}

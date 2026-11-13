@@ -1,0 +1,20 @@
+---
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import WorkHead from '../components/heads/WorkHead.astro';
+import PageScripts from '../components/scripts/PageScripts.astro';
+import Header from '../components/shared/Header.astro';
+import FooterWithForm from '../components/shared/FooterWithForm.astro';
+import WorkGallery from '../components/sections/work/WorkGallery.astro';
+import WorkModal from '../components/sections/work/WorkModal.astro';
+
+// Work isn't a Webflow page, so it borrows the Privacy page id (same header + footer form) to keep Webflow interactions/forms wired.
+const wfPage = '6a0aac72b53390297518fb4b';
+---
+<WebflowLayout wfPage={wfPage}>
+  <WorkHead slot="head" />
+  <Header current="work" />
+  <WorkGallery />
+  <FooterWithForm wfPage={wfPage} />
+  <WorkModal />
+  <PageScripts slot="scripts" />
+</WebflowLayout>

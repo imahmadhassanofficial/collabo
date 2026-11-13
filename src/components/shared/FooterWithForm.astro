@@ -1,0 +1,9 @@
+---
+import FooterContactForm from './FooterContactForm.astro';
+import SiteFooter from './SiteFooter.astro';
+const { wfPage } = Astro.props;
+---
+<div class="footer_sectio">
+<FooterContactForm wfPage={wfPage} />
+<SiteFooter />
+</div>

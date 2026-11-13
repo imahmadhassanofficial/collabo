@@ -1,0 +1,43 @@
+{
+  "title": "City College – Pre-roll",
+  "client": "City College",
+  "summary": "16:9 pre-roll for online video with an apply-now endcard.",
+  "description": "Sample pre-roll video (16:9) for desktop and CTV, ending on the application call to action.",
+  "device": "Desktop",
+  "adType": [
+    "Video Ads"
+  ],
+  "platform": [
+    "Desktop Web",
+    "CTV"
+  ],
+  "industry": [
+    "Education"
+  ],
+  "features": [
+    "Endcard"
+  ],
+  "technology": [
+    "VAST",
+    "MP4"
+  ],
+  "adSize": [
+    "1920x1080"
+  ],
+  "tags": [
+    "VAST",
+    "VIDEO",
+    "Desktop"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-city-college/thumb-1.jpg",
+    "/work/samples/sample-city-college/thumb-2.jpg"
+  ],
+  "demo": {
+    "type": "video",
+    "src": "/work/samples/sample-city-college/demo.mp4",
+    "poster": "/work/samples/sample-city-college/demo-poster.jpg"
+  },
+  "date": "2026-11-04",
+  "draft": true
+}

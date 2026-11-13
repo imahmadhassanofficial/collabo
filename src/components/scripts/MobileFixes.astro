@@ -1,0 +1,13 @@
+---
+// Phone-only: switch off GSAP Draggable on the "One Ad. Everywhere" cards so they scroll natively as a swipe row.
+// Runs after the page scripts; does nothing at 900px and wider.
+---
+<script is:inline>
+window.addEventListener('load', () => {
+  if (!matchMedia('(max-width: 899px)').matches || !window.Draggable) return;
+  document.querySelectorAll('.radial-gsap-slider__item, .radial-gsap-slider__list').forEach((el) => {
+    const d = window.Draggable.get(el);
+    if (d) d.kill();
+  });
+});
+</script>

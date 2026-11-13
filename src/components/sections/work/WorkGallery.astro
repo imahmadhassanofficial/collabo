@@ -1,0 +1,427 @@
+---
+// Work page: purple filter hero + grid of demo cards. Data comes from src/content/work/*.json.
+// Clicking a card opens <WorkModal /> (same page). Filtering/sorting/search run in the browser.
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('work', ({ data }) => import.meta.env.DEV || !data.draft);
+const items = all
+  .map(({ id, data }) => ({ slug: id, ...data, date: data.date.toISOString() }))
+  .sort((a, b) => b.date.localeCompare(a.date));
+
+const uniq = (key) => [...new Set(items.flatMap((i) => (Array.isArray(i[key]) ? i[key] : [i[key]])))].filter(Boolean).sort();
+const filters = [
+  { key: 'adType', label: 'Ad Type' },
+  { key: 'platform', label: 'Platform' },
+  { key: 'industry', label: 'Industry' },
+  { key: 'features', label: 'Features' },
+  { key: 'technology', label: 'Technology' },
+  { key: 'device', label: 'Device' },
+  { key: 'adSize', label: 'Ad Size' },
+].map((f) => ({ ...f, options: uniq(f.key) }));
+
+const quickPicks = ['Interactive Ads', 'Video Ads', 'Rich Media Ads', 'Gamified Ads'];
+const sorts = [
+  { value: 'newest', label: 'Newest' },
+  { value: 'oldest', label: 'Oldest' },
+  { value: 'az', label: 'A–Z' },
+  { value: 'za', label: 'Z–A' },
+];
+---
+<section class="head_block wk-hero" aria-label="Filter work">
+  <div class="wk-wrap">
+    <h1 class="wk-sr">Our Work</h1>
+    <div class="wk-search-row">
+      <label class="wk-search">
+        <img src="/work/_icons/search.svg" alt="" width="19.3887" height="19.3887" />
+        <span class="wk-sr">Search</span>
+        <input type="search" id="wk-q" placeholder="Search by campaign name, ad format, industry, or platform..." autocomplete="off" />
+      </label>
+      <div class="wk-picks" role="group" aria-label="Quick picks">
+        <span class="wk-picks__label">Quick Picks:</span>
+        <div class="wk-picks__list">
+          {quickPicks.map((p) => <button type="button" class="wk-pill" data-pick={p} aria-pressed="false">{p}</button>)}
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="wk-filters-toggle" aria-expanded="false" aria-controls="wk-filters">
+      Filters <span class="wk-filters-toggle__count" hidden></span>
+      <img src="/work/_icons/chevron.svg" alt="" width="15" height="9" />
+    </button>
+    <div class="wk-filters" id="wk-filters">
+      {filters.map((f) => (
+        <div class="wk-dd" data-key={f.key}>
+          <button type="button" class="wk-dd__btn" aria-expanded="false" disabled={f.options.length === 0}>
+            <span class="wk-dd__label">{f.label}</span>
+            <span class="wk-dd__count" hidden></span>
+            <img src="/work/_icons/chevron.svg" alt="" width="15" height="9" />
+          </button>
+          <div class="wk-dd__panel" hidden>
+            {f.options.map((o) => (
+              <label class="wk-dd__opt"><input type="checkbox" value={o} /><span>{o}</span></label>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="wk-bar">
+      <button type="button" class="wk-clear">Clear All Filters</button>
+      <span class="wk-count" aria-live="polite"></span>
+      <div class="wk-sort">
+        <button type="button" class="wk-sort__btn" aria-expanded="false">Sort By<span class="wk-sort__cur"></span><img src="/work/_icons/chevron-white.svg" alt="" width="15" height="9" /></button>
+        <div class="wk-sort__panel" hidden>
+          {sorts.map((s, i) => <button type="button" data-sort={s.value} aria-pressed={i === 0 ? 'true' : 'false'}>{s.label}</button>)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wk-gallery" aria-label="Work">
+  <div class="wk-grid" id="wk-grid">
+    {items.map((it) => (
+      <article
+        class="wk-card"
+        id={`work-${it.slug}`}
+        data-slug={it.slug}
+        data-title={it.title}
+        data-date={it.date}
+        data-search={[it.title, it.client, it.summary, it.device, ...it.adType, ...it.platform, ...it.industry, ...it.features, ...it.technology, ...it.adSize, ...it.tags].filter(Boolean).join(' ').toLowerCase()}
+        data-adType={JSON.stringify(it.adType)}
+        data-platform={JSON.stringify(it.platform)}
+        data-industry={JSON.stringify(it.industry)}
+        data-features={JSON.stringify(it.features)}
+        data-technology={JSON.stringify(it.technology)}
+        data-device={JSON.stringify([it.device])}
+        data-adSize={JSON.stringify(it.adSize)}
+      >
+        <div class="wk-card__inner">
+          <div class="wk-card__media">
+            {it.thumbnails.length ? (
+              <div class="wk-card__track">
+                {it.thumbnails.map((src, i) => (
+                  <img src={src} alt={i === 0 ? it.title : ''} loading="lazy" decoding="async" />
+                ))}
+              </div>
+            ) : (
+              <div class="wk-card__placeholder"><span>{it.client || it.title}</span><small>Demo coming soon</small></div>
+            )}
+            {it.thumbnails.length > 1 && (
+              <div class="wk-card__nav">
+                <button type="button" class="wk-card__arrow is-prev" aria-label="Previous image"><img src="/work/_icons/arrow.svg" alt="" width="25.1143" height="25.1143" /></button>
+                <div class="wk-card__dots">{it.thumbnails.map((_, i) => <span class:list={{ 'is-on': i === 0 }}></span>)}</div>
+                <button type="button" class="wk-card__arrow is-next" aria-label="Next image"><img src="/work/_icons/arrow.svg" alt="" width="25.1143" height="25.1143" /></button>
+              </div>
+            )}
+            {it.draft && !it.slug.startsWith('sample-') && <span class="wk-card__draft">Draft</span>}
+          </div>
+          <div class="wk-card__head">
+            <div class="wk-card__headbox">
+              <div class="wk-card__row">
+                <span class="wk-card__pill">{it.device}</span>
+                <button type="button" class="wk-card__share" aria-label={`Share ${it.title}`}><img src="/work/_icons/share.svg" alt="" width="13.5908" height="13.5908" /></button>
+              </div>
+              <h2 class="wk-card__title">
+                <button type="button" class="wk-card__open">{it.title}</button>
+              </h2>
+            </div>
+          </div>
+          <div class="wk-card__body">
+            <p class="wk-card__summary">{it.summary}</p>
+            {it.tags.length > 0 && <ul class="wk-card__tags">{it.tags.map((t) => <li>{t}</li>)}</ul>}
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+  <div class="wk-empty" hidden>
+    <p>No work matches these filters.</p>
+    <button type="button" class="wk-empty__clear">Clear All Filters</button>
+  </div>
+  {items.length === 0 && <p class="wk-empty-all">New work is on its way — check back soon.</p>}
+  <div class="wk-toast" role="status" hidden>Link copied</div>
+</section>
+
+<script type="application/json" id="wk-data" set:html={JSON.stringify(items)}></script>
+
+<style is:global>
+  .wk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- Hero / filters (Figma 1110:2320) ---------- */
+  .wk-hero { position: relative; z-index: 5; }
+  .wk-wrap { width: min(94.792vw, 1820px); margin: 0 auto; padding: clamp(40px, 4.85vw, 93px) 0 clamp(28px, 2.6vw, 50px); }
+  .wk-search-row { display: flex; align-items: center; gap: clamp(20px, 1.875vw, 36px); }
+  .wk-search {
+    flex: 1 1 0; min-width: 0; height: clamp(56px, 3.65vw, 70px);
+    display: flex; align-items: center; gap: 20px; padding: 0 24px 0 clamp(24px, 2.5vw, 48px);
+    background: #fff; border-radius: 12px; cursor: text;
+  }
+  .wk-search img { flex: none; }
+  .wk-search input {
+    flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 0;
+    font-family: Zodiak, Arial, sans-serif; font-size: 16px; line-height: 1.4; color: rgba(0, 0, 0, 0.85);
+    text-overflow: ellipsis;
+  }
+  .wk-search input::placeholder { color: rgba(0, 0, 0, 0.85); opacity: 1; }
+  .wk-search:focus-within { box-shadow: 0 0 0 3px rgba(247, 128, 113, 0.6); }
+
+  .wk-picks { display: flex; align-items: center; gap: 18px; flex: none; }
+  .wk-picks__label { font-family: Zodiak, Arial, sans-serif; font-weight: 700; font-size: clamp(16px, 1.094vw, 21px); line-height: 30px; color: rgba(255, 255, 255, 0.51); padding-right: 12px; white-space: nowrap; }
+  .wk-picks__list { display: flex; gap: 18px; }
+  .wk-pill {
+    border: 0; cursor: pointer; white-space: nowrap; border-radius: 999px; padding: 12px 24px;
+    background: #fff; color: #000; font-family: Zodiak, Arial, sans-serif; font-size: clamp(15px, 0.9375vw, 18px); line-height: 30px;
+    transition: background-color .2s, transform .2s;
+  }
+  .wk-pill:hover { transform: translateY(-1px); }
+  .wk-pill[aria-pressed="true"] { background: #f78071; }
+
+  .wk-filters-toggle { display: none; }
+  .wk-filters { display: flex; gap: 16px; margin-top: clamp(32px, 3.33vw, 64px); }
+  .wk-dd { position: relative; flex: 1 1 0; min-width: 0; }
+  .wk-dd__btn {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: #fff; border: 0; border-radius: 8px; padding: 16px clamp(16px, 1.5625vw, 30px); cursor: pointer;
+    font-family: Zodiak, Arial, sans-serif; font-size: clamp(15px, 0.9375vw, 18px); line-height: 30px; color: #000; text-align: left;
+  }
+  .wk-dd__btn:disabled { opacity: .55; cursor: default; }
+  .wk-dd__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .wk-dd__count, .wk-filters-toggle__count {
+    margin-left: auto; min-width: 22px; height: 22px; border-radius: 99px; background: #f78071; color: #000;
+    font: 600 12px/22px 'Be Vietnam Pro', sans-serif; text-align: center; padding: 0 6px;
+  }
+  .wk-dd__btn img, .wk-sort__btn img { flex: none; transition: transform .2s; }
+  .wk-dd__btn[aria-expanded="true"] img, .wk-sort__btn[aria-expanded="true"] img { transform: rotate(180deg); }
+  .wk-dd__panel, .wk-sort__panel {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 20; min-width: 100%; max-height: 300px; overflow: auto;
+    background: #fff; border-radius: 8px; padding: 8px; box-shadow: 0 18px 40px -12px rgba(4, 9, 26, 0.45);
+  }
+  .wk-dd__opt { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; cursor: pointer; font: 400 15px/1.3 'Be Vietnam Pro', sans-serif; color: #04091a; white-space: nowrap; }
+  .wk-dd__opt:hover { background: #f4f5f7; }
+  .wk-dd__opt input { width: 16px; height: 16px; accent-color: #5a4fe0; margin: 0; }
+
+  .wk-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: clamp(40px, 5vw, 96px); padding-top: 12px; }
+  .wk-clear { background: none; border: 0; padding: 0; cursor: pointer; font: italic 400 clamp(16px, 1.04vw, 20px)/1.4 'Be Vietnam Pro', sans-serif; color: rgba(255, 255, 255, 0.6); }
+  .wk-clear:hover { color: #fff; }
+  .wk-count { margin-right: auto; font: 400 14px/1.4 'Be Vietnam Pro', sans-serif; color: rgba(255, 255, 255, 0.6); }
+  .wk-sort { position: relative; }
+  .wk-sort__btn { display: flex; align-items: center; gap: 18px; background: none; border: 0; padding: 0; cursor: pointer; font: 700 clamp(17px, 1.04vw, 20px)/30px Zodiak, Arial, sans-serif; color: #fff; }
+  .wk-sort__cur { font-weight: 400; opacity: .7; margin-left: -10px; }
+  .wk-sort__cur:not(:empty)::before { content: ': '; }
+  .wk-sort__panel { left: auto; right: 0; min-width: 160px; }
+  .wk-sort__panel button { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 9px 12px; border-radius: 6px; cursor: pointer; font: 400 15px/1.3 'Be Vietnam Pro', sans-serif; color: #04091a; }
+  .wk-sort__panel button:hover, .wk-sort__panel button[aria-pressed="true"] { background: #f4f5f7; }
+
+  /* ---------- Grid + cards (Figma 1105:25382) ---------- */
+  .wk-gallery { width: min(94.792vw, 1820px); margin: 0 auto; padding: clamp(40px, 4.17vw, 80px) 0 clamp(60px, 7vw, 140px); position: relative; }
+  .wk-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 1599px) { .wk-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (max-width: 1279px) { .wk-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 899px)  { .wk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 599px)  { .wk-grid { grid-template-columns: minmax(0, 1fr); } }
+
+  .wk-card { border: 0.929px solid rgba(0, 0, 0, 0.21); border-radius: 22.285px; padding: 6.5px; background: #fff; cursor: pointer; transition: transform .25s ease, box-shadow .25s ease; }
+  .wk-card[hidden] { display: none; }
+  .wk-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -24px rgba(28, 58, 96, 0.45); }
+  .wk-card__inner { background: #fff; border-radius: 14.856px; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
+  .wk-card__media { position: relative; aspect-ratio: 337.982 / 232.307; border-radius: 18.57px; overflow: hidden; background: #e9ebf0; }
+  .wk-card__track { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .wk-card__track::-webkit-scrollbar { display: none; }
+  .wk-card__track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: start; display: block; }
+  .wk-card__placeholder { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 16px; text-align: center; color: #fff; background: linear-gradient(160deg, #5a4fe0, #131313); }
+  .wk-card__placeholder span { font: 400 clamp(20px, 1.4vw, 26px)/1.15 Zodiak, Arial, sans-serif; }
+  .wk-card__placeholder small { font: 400 12px/1.3 'Be Vietnam Pro', sans-serif; opacity: .7; letter-spacing: .04em; text-transform: uppercase; }
+  .wk-card__draft { position: absolute; top: 10px; left: 10px; background: #f78071; color: #000; font: 600 11px/1 'Be Vietnam Pro', sans-serif; padding: 5px 8px; border-radius: 99px; }
+  .wk-card__nav { position: absolute; left: 12.5px; right: 12.5px; bottom: 12.5px; display: flex; align-items: center; justify-content: space-between; opacity: 0; transition: opacity .25s; }
+  .wk-card:hover .wk-card__nav, .wk-card:focus-within .wk-card__nav { opacity: 1; }
+  @media (hover: none) { .wk-card__nav { opacity: 1; } }
+  .wk-card__arrow { border: 0; background: none; padding: 0; cursor: pointer; display: flex; }
+  .wk-card__arrow.is-prev img { transform: rotate(180deg); }
+  .wk-card__dots { display: flex; align-items: center; gap: 7px; }
+  .wk-card__dots span { width: 6.3px; height: 6.3px; border-radius: 50%; background: rgba(255, 255, 255, .6); transition: all .2s; }
+  .wk-card__dots span.is-on { width: 9.4px; height: 9.4px; background: #fff; }
+
+  .wk-card__head { padding: 12.049px; }
+  .wk-card__headbox { background: #f4f5f7; border: 0.88px solid rgba(28, 58, 96, 0.05); border-radius: 13.591px; padding: 13.591px; display: flex; flex-direction: column; gap: 13.591px; }
+  .wk-card__row { display: flex; align-items: flex-start; justify-content: space-between; }
+  .wk-card__pill { background: #1c3a60; border: 0.795px solid #1c3a60; border-radius: 39.767px; height: 25.483px; min-width: 59.58px; padding: 3.977px 9.544px; display: inline-flex; align-items: center; justify-content: center; font: 400 11.135px/1.3 'Be Vietnam Pro', sans-serif; color: #fff; }
+  .wk-card__share { width: 25.488px; height: 25.488px; border: 1.193px solid #1c3a60; border-radius: 39.767px; background: none; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color .2s; }
+  .wk-card__share:hover { background: #fff; }
+  .wk-card__title { margin: 0; font: 500 18.57px/1.3 'Be Vietnam Pro', sans-serif; color: #1c3a60; }
+  .wk-card__open { all: unset; cursor: pointer; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+  .wk-card__open:focus-visible { outline: 2px solid #5a4fe0; outline-offset: 3px; border-radius: 4px; }
+  .wk-card__body { padding: 6.025px 24.1px 18px; display: flex; flex-direction: column; gap: 18.893px; }
+  .wk-card__summary {
+    margin: 0; font: 400 14.856px/1.3 'Be Vietnam Pro', sans-serif; color: #677b94;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 20%, transparent 100%); mask-image: linear-gradient(to bottom, #000 20%, transparent 100%);
+  }
+  .wk-card__tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; row-gap: 6px; }
+  .wk-card__tags li { font: 400 10.214px/1.4 Zodiak, Arial, sans-serif; color: #04091a; padding: 0 11.142px; border-left: 0.752px solid rgba(28, 58, 96, 0.29); }
+  .wk-card__tags li:first-child { padding-left: 0; border-left: 0; }
+
+  .wk-empty, .wk-empty-all { text-align: center; padding: 60px 20px; font: 400 18px/1.4 'Be Vietnam Pro', sans-serif; color: #1c3a60; }
+  .wk-empty__clear { margin-top: 12px; border: 0; border-radius: 99px; background: #04091a; color: #fff; padding: 12px 24px; font: 400 16px/1 'Be Vietnam Pro', sans-serif; cursor: pointer; }
+  .wk-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 9999; background: #04091a; color: #fff; padding: 10px 18px; border-radius: 99px; font: 400 14px/1.3 'Be Vietnam Pro', sans-serif; }
+
+  /* ---------- Tablet ---------- */
+  @media (max-width: 1279px) {
+    .wk-search-row { flex-direction: column; align-items: stretch; }
+    .wk-search { flex: none; }
+    .wk-picks { flex-wrap: wrap; }
+    .wk-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  /* ---------- Phone ---------- */
+  @media (max-width: 899px) {
+    .wk-wrap, .wk-gallery { width: auto; padding-left: 20px; padding-right: 20px; }
+    .wk-wrap { padding-top: 32px; }
+    .wk-search { height: 52px; padding: 0 16px; gap: 12px; }
+    .wk-search input { font-size: 16px; }
+    .wk-picks { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .wk-picks__label { font-size: 15px; line-height: 1; }
+    .wk-picks__list { width: calc(100% + 20px); overflow-x: auto; gap: 10px; padding-bottom: 4px; scrollbar-width: none; }
+    .wk-picks__list::-webkit-scrollbar { display: none; }
+    .wk-pill { padding: 8px 16px; font-size: 15px; line-height: 24px; }
+    .wk-filters-toggle {
+      display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 20px; background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .35); border-radius: 8px; padding: 13px 16px; color: #fff; cursor: pointer;
+      font: 400 16px/1 Zodiak, Arial, sans-serif;
+    }
+    .wk-filters-toggle img { filter: invert(1); margin-left: auto; transition: transform .2s; }
+    .wk-filters-toggle__count { margin-left: 0; }
+    .wk-filters-toggle[aria-expanded="true"] img { transform: rotate(180deg); }
+    .wk-filters { display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
+    .wk-filters.is-open { display: grid; }
+    .wk-dd__btn { padding: 11px 14px; font-size: 15px; line-height: 24px; }
+    .wk-dd__panel { position: fixed; left: 20px; right: 20px; top: auto; bottom: 20px; max-height: 55vh; min-width: 0; z-index: 1000; }
+    .wk-bar { margin-top: 24px; flex-wrap: wrap; }
+    .wk-count { order: 3; width: 100%; }
+    .wk-card__title { font-size: 17px; }
+  }
+</style>
+
+<script is:inline>
+(() => {
+  const grid = document.getElementById('wk-grid');
+  if (!grid) return;
+  const cards = [...grid.querySelectorAll('.wk-card')];
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const state = { q: '', sort: 'newest', sel: {} };
+  const keys = ['adType', 'platform', 'industry', 'features', 'technology', 'device', 'adSize'];
+  keys.forEach((k) => (state.sel[k] = new Set()));
+  const parsed = new Map(cards.map((c) => [c, Object.fromEntries(keys.map((k) => [k, JSON.parse(c.dataset[k] || c.getAttribute('data-' + k.toLowerCase()) || '[]')]))]));
+
+  function apply() {
+    const q = state.q.trim().toLowerCase();
+    let shown = 0;
+    cards.forEach((c) => {
+      const d = parsed.get(c);
+      const okQ = !q || q.split(/\s+/).every((w) => c.dataset.search.includes(w));
+      const okF = keys.every((k) => state.sel[k].size === 0 || d[k].some((v) => state.sel[k].has(v)));
+      c.hidden = !(okQ && okF);
+      if (!c.hidden) shown++;
+    });
+    const sorted = cards.slice().sort((a, b) => {
+      if (state.sort === 'az') return a.dataset.title.localeCompare(b.dataset.title);
+      if (state.sort === 'za') return b.dataset.title.localeCompare(a.dataset.title);
+      if (state.sort === 'oldest') return a.dataset.date.localeCompare(b.dataset.date);
+      return b.dataset.date.localeCompare(a.dataset.date);
+    });
+    sorted.forEach((c) => grid.appendChild(c));
+    $('.wk-empty').hidden = shown > 0 || cards.length === 0;
+    $('.wk-count').textContent = cards.length ? `${shown} of ${cards.length} ${cards.length === 1 ? 'demo' : 'demos'}` : '';
+    // counts on dropdowns + quick picks
+    let total = 0;
+    $$('.wk-dd').forEach((dd) => {
+      const n = state.sel[dd.dataset.key].size; total += n;
+      const el = $('.wk-dd__count', dd); el.hidden = !n; el.textContent = n;
+      $$('input', dd).forEach((i) => (i.checked = state.sel[dd.dataset.key].has(i.value)));
+    });
+    const tc = $('.wk-filters-toggle__count'); tc.hidden = !total; tc.textContent = total;
+    $$('.wk-pill').forEach((p) => p.setAttribute('aria-pressed', String(state.sel.adType.has(p.dataset.pick))));
+    window.dispatchEvent(new CustomEvent('work:filtered', { detail: { visible: sorted.filter((c) => !c.hidden).map((c) => c.dataset.slug) } }));
+  }
+
+  // search
+  const qEl = $('#wk-q');
+  let t; qEl.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { state.q = qEl.value; apply(); }, 120); });
+
+  // quick picks (= Ad Type)
+  $$('.wk-pill').forEach((p) => p.addEventListener('click', () => {
+    const s = state.sel.adType; s.has(p.dataset.pick) ? s.delete(p.dataset.pick) : s.add(p.dataset.pick); apply();
+  }));
+
+  // dropdowns
+  function closeAll(except) {
+    $$('.wk-dd, .wk-sort').forEach((dd) => {
+      if (dd === except) return;
+      const b = $('button', dd), p = $('.wk-dd__panel, .wk-sort__panel', dd);
+      b.setAttribute('aria-expanded', 'false'); p.hidden = true;
+    });
+  }
+  $$('.wk-dd, .wk-sort').forEach((dd) => {
+    const btn = $('button', dd), panel = $('.wk-dd__panel, .wk-sort__panel', dd);
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); const open = panel.hidden; closeAll(dd);
+      panel.hidden = !open; btn.setAttribute('aria-expanded', String(open));
+    });
+    panel.addEventListener('click', (e) => e.stopPropagation());
+  });
+  document.addEventListener('click', () => closeAll());
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
+  $$('.wk-dd').forEach((dd) => $$('input', dd).forEach((i) => i.addEventListener('change', () => {
+    const s = state.sel[dd.dataset.key]; i.checked ? s.add(i.value) : s.delete(i.value); apply();
+  })));
+
+  // sort
+  $$('.wk-sort__panel button').forEach((b) => b.addEventListener('click', () => {
+    state.sort = b.dataset.sort;
+    $$('.wk-sort__panel button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    $('.wk-sort__cur').textContent = state.sort === 'newest' ? '' : b.textContent;
+    closeAll(); apply();
+  }));
+
+  // clear
+  const clear = () => { keys.forEach((k) => state.sel[k].clear()); state.q = ''; qEl.value = ''; apply(); };
+  $('.wk-clear').addEventListener('click', clear);
+  $('.wk-empty__clear').addEventListener('click', clear);
+
+  // phone filters toggle
+  const ft = $('.wk-filters-toggle');
+  ft.addEventListener('click', () => { const o = ft.getAttribute('aria-expanded') !== 'true'; ft.setAttribute('aria-expanded', String(o)); $('#wk-filters').classList.toggle('is-open', o); });
+
+  // card image sliders
+  $$('.wk-card').forEach((card) => {
+    const track = $('.wk-card__track', card); const dots = $$('.wk-card__dots span', card);
+    if (!track || !dots.length) return;
+    const go = (dir) => track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+    $('.is-prev', card).addEventListener('click', (e) => { e.stopPropagation(); go(-1); });
+    $('.is-next', card).addEventListener('click', (e) => { e.stopPropagation(); go(1); });
+    track.addEventListener('scroll', () => { const i = Math.round(track.scrollLeft / track.clientWidth); dots.forEach((d, j) => d.classList.toggle('is-on', i === j)); }, { passive: true });
+  });
+
+  // share
+  const toast = $('.wk-toast');
+  $$('.wk-card__share').forEach((b) => b.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const card = b.closest('.wk-card');
+    const url = `${location.origin}${location.pathname}#${card.dataset.slug}`;
+    try {
+      if (navigator.share && matchMedia('(hover: none)').matches) { await navigator.share({ title: card.dataset.title, url }); return; }
+      await navigator.clipboard.writeText(url);
+      toast.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => (toast.hidden = true), 1800);
+    } catch (err) {}
+  }));
+
+  // open popup (handled by WorkModal)
+  grid.addEventListener('click', (e) => {
+    if (e.target.closest('.wk-card__share, .wk-card__arrow')) return;
+    const card = e.target.closest('.wk-card');
+    if (card) window.dispatchEvent(new CustomEvent('work:open', { detail: { slug: card.dataset.slug } }));
+  });
+
+  apply();
+})();
+</script>

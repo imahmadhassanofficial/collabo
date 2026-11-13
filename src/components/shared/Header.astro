@@ -1,0 +1,43 @@
+---
+// Shared Webflow header (.header-2). Pass current="contact" / current="work" on those pages.
+const { current } = Astro.props;
+const isContact = current === 'contact';
+const isWork = current === 'work';
+---
+<div class="header-2"><a href="/" aria-label="Collabo home" class="header_logo_container w-inline-block"><img loading="lazy" src="/webflow/images/6a9348bf176eadffba1cf0a0_logo-collaboo.svg" alt="Collabo" class="logo_image-2"/></a><div class="header_link_container-2"><a href="/work" aria-current={isWork ? "page" : undefined} class:list={["link_transparent w-inline-block", { "w--current": isWork }]}><div class="text_link_container"><div class="_21_bdo_grotesk">Work</div></div></a><a href="/contact" aria-current={isContact ? "page" : undefined} class:list={["dark_btn_container w-inline-block", { "w--current": isContact }]}><div class="text_block_container"><div class="_21_bdo_grotesk">Start a Conversation</div><div data-w-id="62549cf2-82b8-2a89-38da-26cd4bb9ca56" class="arrow_btn_container"><img loading="lazy" src="/webflow/images/6a934802e4d791d307af914c_arrow-block.svg" alt="" class="arrow_dark_container"/><img loading="lazy" src="/webflow/images/6a934802e4d791d307af914d_green-arrow.svg" alt=""/></div></div><div class="background_bg"></div></a></div><button class="m-menu-btn" type="button" aria-expanded="false" aria-controls="m-menu">Menu</button>
+</div>
+<!-- Phone-only full-screen menu (hidden on desktop by src/styles/mobile.css) -->
+<nav id="m-menu" class="m-menu" aria-label="Main" hidden>
+  <div class="m-menu__top">
+    <a href="/" class="m-menu__logo" aria-label="Collabo home"><img src="/webflow/images/6a9348bf176eadffba1cf0a0_logo-collaboo.svg" alt="Collabo" width="145" height="30" /></a>
+    <button class="m-menu__close" type="button" aria-label="Close menu">Close</button>
+  </div>
+  <ul class="m-menu__links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/work" aria-current={isWork ? "page" : undefined}>Work</a></li>
+    <li><a href="/contact" aria-current={isContact ? "page" : undefined}>Start a Conversation</a></li>
+  </ul>
+  <ul class="m-menu__legal">
+    <li><a href="/privacy-policy">Privacy Policy</a></li>
+    <li><a href="/terms-and-conditions">Terms &amp; Conditions</a></li>
+  </ul>
+</nav>
+<script is:inline>
+(() => {
+  const btn = document.querySelector('.m-menu-btn');
+  const menu = document.getElementById('m-menu');
+  if (!btn || !menu) return;
+  const close = menu.querySelector('.m-menu__close');
+  const set = (open) => {
+    menu.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    document.documentElement.classList.toggle('m-menu-open', open);
+    if (open) close.focus(); else btn.focus();
+  };
+  btn.addEventListener('click', () => set(true));
+  close.addEventListener('click', () => set(false));
+  menu.addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menu.hidden) set(false); });
+  matchMedia('(min-width: 900px)').addEventListener('change', (e) => { if (e.matches && !menu.hidden) set(false); });
+})();
+</script>

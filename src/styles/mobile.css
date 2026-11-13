@@ -1,0 +1,499 @@
+/* =========================================================================
+   Collabo — phone styles (max-width: 899px)
+   Loaded LAST on every page (see src/layouts/WebflowLayout.astro).
+   Desktop is untouched: every rule below sits inside a media query.
+   Selector pattern: html body .class:not(#_z) so phone rules always win.
+   Webflow/GSAP write inline transforms, so layout resets use !important.
+   Spacing: 20px sides · 64–80px between sections · 24px between blocks.
+   ========================================================================= */
+
+/* Phone-only pieces are hidden on desktop */
+@media (min-width: 900px) {
+  .m-menu-btn,
+  .m-menu,
+  .m-hero-cta { display: none !important; }
+}
+
+@media (max-width: 899px) {
+
+  /* ---------- Base ---------- */
+  html body:not(#_z) {
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+  html body .page_containers:not(#_z) { overflow-x: clip; }
+  html.m-menu-open body:not(#_z) { overflow: hidden; }
+
+  /* Shared type scale (px on phones) */
+  html body ._76_heading:not(#_z) { font-size: 36px; line-height: 1.15; letter-spacing: -0.02em; }
+  html body .h1_72:not(#_z),
+  html body ._64_heading:not(#_z),
+  html body ._96_heading-2:not(#_z) { font-size: 30px; line-height: 1.15; letter-spacing: -0.02em; }
+  html body ._48_heading:not(#_z) { font-size: 26px; line-height: 1.15; letter-spacing: -0.02em; }
+  html body ._34_heading:not(#_z),
+  html body ._32_heading:not(#_z) { font-size: 24px; line-height: 1.15; letter-spacing: -0.02em; }
+  html body ._40_text:not(#_z) { font-size: 28px; line-height: 1.15; letter-spacing: -0.02em; }
+  html body ._28_serotiva:not(#_z),
+  html body ._24_p:not(#_z),
+  html body ._24_paragraph:not(#_z),
+  html body ._24_vietnam:not(#_z),
+  html body ._22_p:not(#_z),
+  html body ._20_p:not(#_z),
+  html body ._20_para:not(#_z),
+  html body ._32_paragraph:not(#_z),
+  html body ._16_p:not(#_z) { font-size: 16px; line-height: 1.4; }
+  html body ._18_p:not(#_z) { font-size: 15px; line-height: 1.4; }
+  html body ._14_p:not(#_z),
+  html body ._14_ps:not(#_z) { font-size: 12px; line-height: 1.4; }
+
+  /* ---------- Header: logo + Menu ---------- */
+  html body .header-2:not(#_z) {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 20px;
+    transform: none !important;
+    background: #fff;
+  }
+  html body .header_logo_container:not(#_z) { margin: 0; width: auto; }
+  html body .logo_image-2:not(#_z) { width: 120px; height: auto; }
+  html body .header_link_container-2:not(#_z) { display: none; }
+  html body .m-menu-btn:not(#_z) {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 88px; height: 44px; padding: 0 18px;
+    border: 0; border-radius: 999px;
+    background: #ed6673; color: #161616;
+    font: 500 15px/1 'Be Vietnam Pro', sans-serif;
+    cursor: pointer;
+  }
+
+  /* Full-screen menu */
+  html body .m-menu:not(#_z) {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; flex-direction: column;
+    padding: 0 20px 32px;
+    background: #0a1128; color: #fff;
+    overflow-y: auto;
+    animation: m-fade 0.3s ease both;
+  }
+  html body .m-menu[hidden]:not(#_z) { display: none; }
+  html body .m-menu__top:not(#_z) { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  html body .m-menu__logo img:not(#_z) { width: 120px; height: auto; filter: brightness(0) invert(1); }
+  html body .m-menu__close:not(#_z) {
+    min-width: 88px; height: 44px; padding: 0 18px;
+    border: 1px solid rgba(255,255,255,.4); border-radius: 999px;
+    background: transparent; color: #fff;
+    font: 500 15px/1 'Be Vietnam Pro', sans-serif;
+  }
+  html body .m-menu__links:not(#_z) { list-style: none; margin: 48px 0 0; padding: 0; display: grid; gap: 8px; }
+  html body .m-menu__links a:not(#_z) {
+    display: flex; align-items: center; min-height: 56px;
+    font-family: Zodiak, serif; font-size: 32px; line-height: 1.15; letter-spacing: -0.02em;
+    color: #fff; text-decoration: none;
+  }
+  html body .m-menu__links a[aria-current="page"]:not(#_z) { color: #f98670; }
+  html body .m-menu__legal:not(#_z) { list-style: none; margin: auto 0 0; padding: 24px 0 0; display: grid; gap: 12px; border-top: 1px solid rgba(255,255,255,.2); }
+  html body .m-menu__legal a:not(#_z) { display: flex; align-items: center; min-height: 44px; font-size: 16px; color: rgba(255,255,255,.8); text-decoration: none; }
+
+  /* ---------- Hero: heading, intro, button, then cards ---------- */
+  html body .hero_game_container:not(#_z) {
+    height: auto; min-height: 0;
+    padding: 48px 0 32px;
+    border-radius: 0 0 24px 24px;
+  }
+  html body .hero_game_content:not(#_z) {
+    width: auto; margin: 0; padding: 0 20px;
+    gap: 24px; text-align: center; align-items: center;
+    transform: none !important;
+  }
+  html body .hero_game_heading:not(#_z),
+  html body .description_hero_game:not(#_z) { width: auto; max-width: none; }
+  html body .description_hero_game ._22_p:not(#_z) { font-weight: 300; }
+  html body .m-hero-cta:not(#_z) {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 52px; border-radius: 999px;
+    background: #ed6673; color: #161616;
+    font: 500 16px/1 'Be Vietnam Pro', sans-serif; text-decoration: none;
+  }
+  /* 3D card ring -> horizontal swipe row */
+  html body .hero_game_media_container:not(#_z) { width: 100%; height: auto; margin-top: 32px; }
+  html body .radial-cards-marquee:not(#_z) {
+    height: auto; overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  html body .radial-cards-marquee:not(#_z)::-webkit-scrollbar { display: none; }
+  html body .radial-cards-marquee__collection:not(#_z) {
+    position: static; top: auto; left: auto; transform: none !important;
+  }
+  html body .radial-cards-marquee__list:not(#_z) {
+    display: flex; gap: 12px; width: max-content;
+    padding: 0 20px;
+    animation: none !important; transform: none !important;
+  }
+  html body .radial-cards-marquee__item:not(#_z) {
+    flex: 0 0 auto; width: 78vw; max-width: 340px;
+    transform: none !important; scroll-snap-align: start;
+  }
+  html body .radial-cards-marquee__item:nth-child(n+5):not(#_z) { display: none; }
+  html body .demo-card-3:not(#_z) { width: 100%; transform: none !important; }
+  html body .demo-card__visual:not(#_z),
+  html body .demo-card__media:not(#_z) { width: 100%; height: auto; aspect-ratio: 16 / 10; }
+  html body .demo-card__media img:not(#_z) { width: 100%; height: 100%; object-fit: cover; }
+  html body .demo-card__info:not(#_z) { width: auto; padding: 12px 8px; }
+  html body .demo-card__h:not(#_z) { font-size: 14px; line-height: 1.3; }
+
+  /* ---------- About statement + partner logos ---------- */
+  html body .about_hero:not(#_z) { padding: 64px 0 0; }
+  html body .about_hero_container:not(#_z) { width: auto; padding: 0; gap: 40px; }
+  html body .hero_description_container:not(#_z) { width: auto; padding: 0 20px; text-align: center; }
+  html body .hero_description_container:not(#_z),
+  html body .hero_description_container ._48_heading:not(#_z) { width: 100%; max-width: none; }
+  html body .hero_description_container ._48_heading:not(#_z) { font-size: 24px; line-height: 1.3; letter-spacing: -0.02em; }
+  html body .logo_contain:not(#_z),
+  html body .partner_logo_section:not(#_z) { width: 100%; max-width: 100vw; overflow: hidden; }
+  html body .hero_carousal:not(#_z) { gap: 32px; }
+  html body .logo_inner_container:not(#_z) { display: flex; align-items: center; gap: 16px; width: auto; height: 48px; padding-right: 16px; }
+  html body .logo_partner:not(#_z) { height: 44px !important; width: auto !important; max-width: none; flex: none; }
+
+  /* ---------- Who we work with: one card per row ---------- */
+  html body .work_container_game:not(#_z) { margin-top: 64px; padding: 64px 0; border-radius: 24px 24px 0 0; }
+  html body .work_game_container:not(#_z) { width: auto; padding: 0 20px; gap: 32px; }
+  html body .work_head_container:not(#_z) { width: auto; gap: 16px; text-align: center; }
+  html body .descrption_work_game:not(#_z) { width: auto; max-width: none; }
+  html body .depth-tiles:not(#_z),
+  html body .depth-tiles__collection:not(#_z) {
+    flex-direction: column; gap: 16px; width: 100%; height: auto;
+    transform: none !important; perspective: none;
+  }
+  html body .depth-tiles__collection > div:not(#_z),
+  html body .depth-tiles__collection > div > div:not(#_z) { width: 100%; transform: none !important; }
+  html body .agency_word:not(#_z) {
+    flex-direction: column; width: 100%; height: auto;
+    padding: 24px 20px; border-radius: 20px;
+    transform: none !important;
+  }
+  html body .block_mains:not(#_z) { width: 100%; height: auto; gap: 16px; }
+  html body .container_mains:not(#_z) { height: auto; gap: 16px; }
+  html body .icon_image_container:not(#_z) { width: 56px; height: 56px; }
+  html body .icon_image_container img:not(#_z) { width: 56px; height: 56px; }
+  html body .agency_heads:not(#_z) { gap: 6px; }
+  html body .list_agncy:not(#_z) { gap: 10px; padding-left: 18px; }
+  html body .list_agncy ._14_p:not(#_z) { font-size: 14px; }
+  html body .image_agency:not(#_z) {
+    position: static; order: 2; width: 100%; height: auto; margin-top: 20px;
+    transform: none !important;
+  }
+  html body .card_imgs:not(#_z) { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; }
+
+  /* ---------- One Ad. Everywhere: draggable wheel -> swipe row ---------- */
+  html body .add-section:not(#_z) { padding: 64px 0; }
+  html body .add_container:not(#_z) { width: auto; padding: 0; gap: 32px; }
+  html body .add_top_container:not(#_z) { width: 100%; height: auto; gap: 32px; }
+  html body .add_head_containe:not(#_z) { width: auto; padding: 0 20px; gap: 12px; text-align: center; }
+  html body .demo-section-3:not(#_z),
+  html body .radial-gsap-slider:not(#_z) { width: 100%; height: auto; min-height: 0; }
+  html body .radial-gsap-slider__collection:not(#_z) {
+    position: static; width: 100%; height: auto;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+    scrollbar-width: none; transform: none !important;
+  }
+  html body .radial-gsap-slider__collection:not(#_z)::-webkit-scrollbar { display: none; }
+  html body .radial-gsap-slider:not(#_z) { display: block; }
+  html body .radial-gsap-slider__list:not(#_z) {
+    display: flex; justify-content: flex-start; gap: 12px;
+    width: max-content; height: auto !important; margin: 0; left: auto; top: auto;
+    padding: 0 20px; transform: none !important;
+  }
+  html body .radial-gsap-slider__item:not(#_z) {
+    position: relative !important; inset: auto !important;
+    flex: 0 0 auto; width: 72vw; max-width: 300px;
+    transform: none !important; rotate: none !important; scale: none !important; translate: none !important;
+    opacity: 1 !important; visibility: visible !important;
+    touch-action: auto !important; cursor: auto !important; user-select: auto !important;
+    scroll-snap-align: start;
+  }
+  html body .radial-gsap-slider__item:nth-child(n+5):not(#_z) { display: none; }
+  html body .card_block_container:not(#_z) { width: 100%; height: auto; border-radius: 16px; overflow: hidden; transform: none !important; }
+  html body .card_image:not(#_z) { width: 100%; height: auto; }
+  html body .image_cad:not(#_z) { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+  html body .card_detail_ads:not(#_z) {
+    width: 100%; height: auto; gap: 12px; padding: 16px;
+    transform: none !important; rotate: none !important;
+  }
+  html body .mobile_block:not(#_z) { width: 24px; height: 24px; flex: none; }
+  html body .mobile_block img:not(#_z) { width: 24px; height: 24px; }
+  html body .text_block_containe:not(#_z) { width: auto; gap: 4px; }
+  html body .text_block_containe ._22_p:not(#_z) { font-size: 18px; }
+  html body .text_block_containe ._18_p:not(#_z) { font-size: 14px; }
+  html body .radial-gsap-slider__controls:not(#_z) { display: none; }
+  /* View Gallery button: full width, 52px */
+  html body .add_container > div:last-child:not(#_z) { width: 100%; padding: 0 20px; }
+  html body .button-004:not(#_z) {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 52px; border-radius: 999px; background: #161616;
+  }
+  html body .button-004__inner:not(#_z) { justify-content: center; justify-items: center; width: 100%; height: auto; font-size: 16px; color: #fff; white-space: nowrap; }
+  html body .button-004__text:not(#_z) { white-space: nowrap; font-size: 16px; }
+  html body .button-004__bg:not(#_z) { border-radius: 999px; }
+
+  /* ---------- Services: sticky stack -> normal list of cards ---------- */
+  html body .service_block_head:not(#_z) { display: none; }
+  html body .service_sections:not(#_z) { height: auto; padding: 0 20px; }
+  html body .content_service_container:not(#_z),
+  html body .content_blocks:not(#_z) { width: auto; gap: 16px; text-align: center; }
+  html body .service_descri-ption:not(#_z) { width: auto; max-width: none; }
+  html body .div-block-2:not(#_z) { height: auto; padding: 32px 20px 0; }
+  html body .card-stack:not(#_z) { display: flex; flex-direction: column; gap: 16px; height: auto; }
+  html body .card-stack__item:not(#_z) {
+    position: static !important; height: auto; min-height: 0;
+    padding: 0; transform: none !important;
+  }
+  html body .card_containers:not(#_z) {
+    position: static !important; top: auto;
+    flex-direction: column; gap: 24px;
+    width: 100%; height: auto; padding: 24px 20px; border-radius: 20px;
+    transform: none !important;
+  }
+  html body .service_content_head:not(#_z) { width: 100%; height: auto; gap: 16px; }
+  html body .tag_block_container:not(#_z) { width: 40px; height: 48px; border-radius: 8px; }
+  html body .tag_block_container ._22_p:not(#_z) { font-size: 15px; }
+  html body .head_service_inner:not(#_z) { width: 100%; gap: 10px; }
+  html body .service_inner_contain:not(#_z) { width: 100%; max-width: none; }
+  html body .service_list_container:not(#_z) { width: 100%; gap: 12px; }
+  html body .tick_img:not(#_z) { gap: 12px; }
+  html body .tick_block:not(#_z) { width: 16px; height: 16px; }
+  html body .service_card_image:not(#_z) { width: 100%; height: auto; }
+  html body .service_image:not(#_z) { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; }
+
+  /* ---------- Platforms: heading + wavy logo marquee ---------- */
+  html body .platform_containe:not(#_z) { height: auto; padding: 72px 0 64px; gap: 32px; }
+  html body .platform_block:not(#_z),
+  html body .platform_containers:not(#_z) { width: auto; padding: 0 20px; gap: 16px; text-align: center; }
+  html body .description_block_container:not(#_z) { width: auto; max-width: none; }
+  html body .wavy-marquee:not(#_z) { width: 100%; height: 120px; padding-top: 16px; overflow: hidden; }
+  html body .wavy-marquee__item:not(#_z) { width: 72px; height: 72px; }
+  html body .logo-card:not(#_z),
+  html body .logo-card__box:not(#_z) { width: 64px; height: 64px; }
+  html body .logo-card__box-img:not(#_z) { width: 40px; height: 22px; object-fit: contain; }
+
+  /* ---------- Process: pinned horizontal -> heading, swipe row, text ---------- */
+  html body .process_inner_container:not(#_z) { height: auto !important; }
+  html body .process_container:not(#_z) {
+    position: static !important; height: auto; min-height: 0;
+    padding: 64px 0;
+  }
+  html body .process_container .content_block:not(#_z) {
+    display: flex; flex-direction: column; gap: 32px;
+    width: 100%; height: auto; padding: 0;
+  }
+  html body .process_container .content:not(#_z) { display: contents; }
+  html body .header_bloick:not(#_z) { order: 1; width: auto; padding: 0 20px; }
+  html body .process_card_container:not(#_z) {
+    order: 2;
+    display: flex; gap: 12px;
+    width: 100%; height: auto; padding: 0 20px 4px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+    scrollbar-width: none;
+  }
+  html body .process_card_container:not(#_z)::-webkit-scrollbar { display: none; }
+  html body .card_inner_container:not(#_z) {
+    position: relative !important; inset: auto !important;
+    flex: 0 0 auto; width: 72vw; max-width: 280px; height: auto; aspect-ratio: 1 / 1;
+    padding: 20px; border-radius: 12px;
+    transform: none !important; rotate: none !important; translate: none !important;
+    opacity: 1 !important; scroll-snap-align: start;
+  }
+  html body .process_inner_text:not(#_z),
+  html body .process_inner_heading:not(#_z),
+  html body .process_inner_description:not(#_z) { width: 100%; height: auto; }
+  html body .process_inner_text:not(#_z) { gap: 10px; }
+  html body .process_inner_description ._14_p:not(#_z) { font-size: 14px; }
+  html body .number_process:not(#_z) { position: absolute; right: 20px; bottom: 16px; width: auto; height: auto; }
+  html body .number_process ._64_para:not(#_z) { font-size: 44px; line-height: 1; }
+  html body .description_block:not(#_z) { order: 3; width: auto; padding: 0 20px; }
+  html body .description_inner_process:not(#_z) { width: auto; margin: 0; }
+  html body .description_inner_process ._24_p:not(#_z) { font-size: 16px; }
+
+  /* ---------- Compare: stacked cards, list then image ---------- */
+  html body .compaire_container:not(#_z) { padding: 72px 0 64px; }
+  html body .compaire_iiner_contaiuner:not(#_z) { width: auto; padding: 0 20px; gap: 24px; }
+  html body .compaire_head:not(#_z) { gap: 32px; }
+  html body .compaire_heading:not(#_z) { width: auto; }
+  html body .compaire_card:not(#_z) { display: flex; flex-direction: column; gap: 24px; width: 100%; }
+  html body .compaire_heads:not(#_z) { width: 100%; gap: 12px; }
+  html body .compare_block:not(#_z) { flex-direction: column; gap: 16px; width: 100%; padding: 20px; border-radius: 16px; }
+  html body .compaire_list_container:not(#_z) { width: 100%; gap: 12px; }
+  html body .compaire_image_container:not(#_z) { gap: 10px; min-height: 24px; }
+  html body .arrow_images:not(#_z) { width: 20px; height: 20px; }
+  html body .compaire_image_container ._20_para:not(#_z) { font-size: 15px; font-weight: 500; }
+  html body .compaire_image:not(#_z) { width: 100%; height: auto; }
+  html body .collabo_img:not(#_z) { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; }
+  html body .compaire_description:not(#_z) { width: auto; }
+
+  /* ---------- Footer form (Home + legal pages): form first, then map + info ---------- */
+  html body .footer_form_container:not(#_z) { padding: 0 20px 64px; }
+  html body .footer_form_section:not(#_z) { width: auto; padding: 0; }
+  html body .form_blocks:not(#_z) { display: flex; flex-direction: column; border-radius: 20px; overflow: hidden; }
+  html body .form_containers:not(#_z) { order: 1; width: 100%; padding: 32px 20px; }
+  html body .footer_form_map:not(#_z) { order: 2; width: 100%; }
+  html body .form_map_container:not(#_z),
+  html body .form_map_container .map:not(#_z) { width: 100%; height: auto; aspect-ratio: 16 / 9; }
+  html body .form_map_content:not(#_z) { width: 100%; height: auto; }
+  html body .form_content_container:not(#_z) { width: auto; padding: 32px 20px; gap: 24px; }
+  html body .logo_image_contain:not(#_z),
+  html body .logo_image_contain img:not(#_z) { width: 64px; height: 64px; }
+  html body .logo_list_container:not(#_z),
+  html body .collabo_head:not(#_z),
+  html body .collabo_description:not(#_z) { width: 100%; height: auto; gap: 12px; }
+  html body .form_head_block:not(#_z) { width: 100%; gap: 24px; }
+  html body .form_heading:not(#_z) { width: auto; }
+
+  /* Form fields: one per row, 48px, 16px text */
+  html body .form_contains:not(#_z),
+  html body .form_blck:not(#_z),
+  html body .form_inner_container:not(#_z),
+  html body .form_input_container:not(#_z) { width: 100%; }
+  html body .form_inner_container:not(#_z),
+  html body .form_input_container:not(#_z) { gap: 12px; }
+  html body .input_block_container:not(#_z) { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+  html body .input_block:not(#_z),
+  html body .input_block_container .input_block:not(#_z) {
+    width: 100%; height: 48px; margin: 0; padding: 0 20px;
+    font-size: 16px; border-radius: 999px;
+  }
+  html body .input_blocks:not(#_z) { width: 100%; gap: 12px; }
+  html body .text_area_container:not(#_z) {
+    width: 100%; height: 160px; min-height: 120px; margin: 0; padding: 14px 20px;
+    font-size: 16px; border-radius: 16px;
+  }
+  html body .form_btn_contain:not(#_z) {
+    width: 100%; height: 52px; margin-top: 4px; border-radius: 999px;
+    font-size: 16px;
+  }
+
+  /* ---------- Footer ---------- */
+  html body .footer_sections:not(#_z) { border-radius: 24px 24px 0 0; background-size: cover; background-position: center bottom; }
+  html body .footer_containers:not(#_z) { width: auto; padding: 56px 20px 0; gap: 32px; }
+  html body .foooter_inner_container:not(#_z) { width: 100%; gap: 40px; }
+  html body .footer_top_head:not(#_z) { flex-direction: column; gap: 40px; width: 100%; height: auto; }
+  html body .footer_heading:not(#_z),
+  html body .footer_heading ._64_heading:not(#_z) { width: 100%; max-width: none; height: auto; }
+  html body .footer_heading ._64_heading:not(#_z) { font-size: 32px; }
+  html body .footer_detail:not(#_z) { width: 100%; height: auto; gap: 24px; }
+  html body .footer_test:not(#_z) { width: 100%; height: auto; gap: 6px; }
+  html body .footer_test ._24_paragraph:not(#_z) { font-size: 18px; line-height: 1.4; overflow-wrap: anywhere; }
+  html body .head_sections:not(#_z) { height: auto; }
+  html body .head_sections ._14_p:not(#_z) { opacity: .7; }
+  html body .social_logo_container:not(#_z) { gap: 12px; height: auto; }
+  html body .logo_contai:not(#_z) { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
+  html body .logo_contai img:not(#_z) { width: 40px; height: 40px; }
+  html body .copywrite_container:not(#_z) {
+    flex-direction: column-reverse; align-items: flex-start; gap: 16px;
+    height: auto; padding-bottom: 20px;
+  }
+  html body .copywrite_text:not(#_z),
+  html body .content_inner_container:not(#_z) { width: auto; }
+  html body .content_inner_container:not(#_z) { flex-direction: column; gap: 12px; }
+  html body .copywrite_container ._16_p:not(#_z) { font-size: 16px; }
+  html body .content_inner_container a:not(#_z),
+  html body .content_inner_container ._16_p:not(#_z) { display: inline-flex; min-height: 24px; }
+  html body .copywrite_text ._16_p:not(#_z) { font-size: 13px; opacity: .8; }
+  html body .footer_logo:not(#_z) { width: 100%; height: auto; padding-bottom: 8px; }
+  html body .logo_containers:not(#_z) { width: 100%; height: auto; }
+
+  /* ================= CONTACT PAGE ================= */
+  /* Hero: heading, intro, then contact details */
+  html body .head_block:not(#_z) { padding: 0; }
+  html body .contact_section:not(#_z) { height: auto; min-height: 0; padding: 48px 20px 40px; border-radius: 0 0 24px 24px; }
+  html body .content_container:not(#_z) {
+    flex-direction: column; align-items: stretch; gap: 32px;
+    width: 100%; height: auto; padding: 0; margin: 0;
+  }
+  html body .content_head:not(#_z) { width: 100%; height: auto; gap: 16px; }
+  html body .content_head ._96_heading:not(#_z) { width: 100%; font-size: 36px; line-height: 1.15; letter-spacing: -0.02em; }
+  html body .contact_description:not(#_z),
+  html body .contact_description ._24_p:not(#_z) { width: 100%; max-width: none; }
+  html body .get_in_touch:not(#_z) { width: 100%; height: auto; gap: 24px; }
+  html body .getintouch_container:not(#_z) { width: 100%; gap: 12px; }
+  html body .getintouch_container ._20_p:not(#_z) { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; opacity: .75; }
+  html body .social_list_container:not(#_z) { width: 100%; gap: 4px; }
+  html body .social_list_container .link_container:not(#_z) { width: 100%; min-height: 44px; align-items: center; gap: 12px; }
+  html body .link_container .icon:not(#_z) { width: 18px; height: 18px; flex: none; }
+  html body .social_list_container ._18_p:not(#_z) { width: auto; font-size: 16px; }
+  html body .social_icon_container:not(#_z) { gap: 8px; height: auto; }
+  html body .social_icon_container .link_container:not(#_z) { width: 44px; height: 44px; align-items: center; justify-content: center; }
+  html body .social_icon:not(#_z) { width: 22px; height: 22px; }
+
+  /* Form first, then map */
+  html body .form_container_contact:not(#_z) {
+    display: flex; flex-direction: column; gap: 32px;
+    width: auto; height: auto; margin: 0; padding: 48px 20px 72px;
+  }
+  html body .form_container:not(#_z),
+  html body .form_section:not(#_z),
+  html body .form_container .form:not(#_z),
+  html body .form_block_container:not(#_z) { width: 100%; height: auto; margin: 0; padding: 0; }
+  html body .form_block_container:not(#_z) { gap: 12px; }
+  html body .form_input:not(#_z) {
+    width: 100%; height: 48px; margin: 0; padding: 0 16px;
+    font-size: 16px; border-radius: 12px;
+  }
+  html body select.form_input:not(#_z) { padding-right: 36px; background-position: right 14px center; }
+  html body .budget_container:not(#_z) { width: 100%; gap: 12px; padding-top: 12px; }
+  html body .budget_container ._20_p:not(#_z) { font-size: 16px; font-weight: 500; }
+  html body .radio_contain:not(#_z) { width: 100%; gap: 0; }
+  html body .radio_container:not(#_z) { width: 100%; min-height: 44px; align-items: center; gap: 12px; margin: 0; padding: 0; }
+  html body .radio_btn:not(#_z) { width: 20px; height: 20px; margin: 0; flex: none; }
+  html body .radio_container ._18_p:not(#_z) { font-size: 16px; }
+  html body .text_area:not(#_z) {
+    width: 100%; height: 160px; min-height: 120px; margin: 0; padding: 14px 16px;
+    font-size: 16px; border-radius: 12px;
+  }
+  html body .submit-button:not(#_z) {
+    width: 100%; height: 52px; margin-top: 8px; border-radius: 999px;
+    font-size: 16px;
+  }
+  html body .google_map_container:not(#_z) { width: 100%; height: auto; }
+  html body .map_contain:not(#_z) { width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; }
+
+  /* ================= LEGAL PAGES (Privacy, Terms) ================= */
+  html body .privacy_heading:not(#_z) { width: 100%; padding: 0; justify-content: center; }
+  html body .privacy_heading ._96_heading:not(#_z) { width: auto; text-align: center; }
+  html body .termcondition_container:not(#_z) { height: auto; padding: 40px 20px 72px; }
+  html body .term_content:not(#_z) { flex-direction: column; align-items: stretch; gap: 32px; width: 100%; margin: 0; padding: 0; }
+  html body .term_content_container:not(#_z) { order: 1; width: 100%; }
+  html body .term_content_container .w-richtext:not(#_z) { font-size: 16px; line-height: 1.4; overflow-wrap: anywhere; }
+  html body .term_content_container .w-richtext p:not(#_z) { margin: 0 0 12px; }
+  html body .term_content_container .w-richtext p strong:not(#_z) { display: inline-block; margin-top: 12px; }
+  html body .term_content_container .w-richtext ul:not(#_z) { margin: 0 0 16px; padding-left: 20px; }
+  html body .term_content_container .w-richtext li:not(#_z) { margin-bottom: 6px; }
+  html body .term_block_container:not(#_z) { order: 2; width: 100%; height: auto; }
+  html body .term_block:not(#_z) { position: static !important; width: 100%; height: auto; padding: 20px; gap: 8px; border-radius: 16px; }
+  html body .term_block ._24_serotiva:not(#_z) { font-size: 16px; line-height: 1.4; }
+  html body .block_term:not(#_z) { gap: 4px; }
+
+  /* ---------- Motion ---------- */
+  html body .progressive-blur:not(#_z) { display: none; }
+  @keyframes m-fade { from { opacity: 0; } to { opacity: 1; } }
+}
+
+/* No hover-only extras on touch screens */
+@media (max-width: 899px) and (hover: none) {
+  html body .background_bg:not(#_z),
+  html body .button-004__bg:not(#_z) { transition: none; }
+}
+
+/* Reduced motion: no animation at all on phones */
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  html body *:not(#_z),
+  html body *:not(#_z)::before,
+  html body *:not(#_z)::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "title": "Summit Coffee – Tap to Pour",
+  "client": "Summit Coffee",
+  "summary": "Mobile interstitial where a tap pours the coffee and reveals an offer endcard.",
+  "description": "Sample HTML5 interstitial (320 × 480). The user taps the cup to pour, steam rises and an endcard with the offer slides in.",
+  "device": "Mobile",
+  "adType": [
+    "Interactive Ads",
+    "Rich Media Ads"
+  ],
+  "platform": [
+    "Mobile Web",
+    "In-App"
+  ],
+  "industry": [
+    "Food & Beverage"
+  ],
+  "features": [
+    "Tap Interaction",
+    "Endcard"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [
+    "320x480"
+  ],
+  "tags": [
+    "HTML5",
+    "INTERACTIVE",
+    "Mobile"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-summit-coffee/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "html5",
+    "src": "/work/samples/sample-summit-coffee/index.html",
+    "width": 320,
+    "height": 480
+  },
+  "date": "2026-11-12",
+  "draft": true
+}

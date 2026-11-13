@@ -1,0 +1,286 @@
+---
+// Work popup: opens when a card is clicked (or the URL has #<slug>). Shows the demo in a device frame + details.
+// Demo types: video (custom player, muted by default, sound button), html5 (iframe), url (ad-server test URL), image.
+---
+<dialog class="wk-modal" aria-labelledby="wk-m-title">
+  <div class="wk-m">
+    <header class="wk-m__head">
+      <div class="wk-m__titles">
+        <div class="wk-m__meta"><span class="wk-m__pill"></span><span class="wk-m__client"></span></div>
+        <h2 class="wk-m__title" id="wk-m-title"></h2>
+        <p class="wk-m__desc"></p>
+      </div>
+      <button type="button" class="wk-m__close" aria-label="Close">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M2 2l18 18M20 2L2 20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+
+    <div class="wk-m__stage">
+      <div class="wk-m__frame"><div class="wk-m__screen"></div></div>
+      <p class="wk-m__note" hidden></p>
+    </div>
+
+    <footer class="wk-m__foot">
+      <dl class="wk-m__specs"></dl>
+      <div class="wk-m__actions">
+        <button type="button" class="wk-m__nav is-prev" aria-label="Previous demo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4.5L7 10l5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <a class="wk-m__live" href="#" target="_blank" rel="noopener" hidden>Open live demo ↗</a>
+        <a class="wk-m__cta" href="/contact">Start a Conversation</a>
+        <button type="button" class="wk-m__nav is-next" aria-label="Next demo">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.5 4.5L13 10l-5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </footer>
+  </div>
+</dialog>
+
+<style is:global>
+  html.wk-modal-open { overflow: hidden; }
+  .wk-modal {
+    width: min(94.792vw, 1820px); max-width: none; max-height: calc(100dvh - 40px); height: auto;
+    margin: auto; padding: 0; border: 0; border-radius: clamp(20px, 1.6vw, 30px); background: #fff; color: #04091a;
+    overflow: auto; overscroll-behavior: contain;
+  }
+  .wk-modal::backdrop { background: rgba(4, 9, 26, 0.72); backdrop-filter: blur(6px); }
+  .wk-modal[open] { animation: wk-pop .35s cubic-bezier(.2, .8, .2, 1); }
+  @keyframes wk-pop { from { opacity: 0; transform: translateY(24px) scale(.98); } }
+  .wk-modal.is-closing { animation: wk-out .25s ease forwards; }
+  .wk-modal.is-closing::backdrop { opacity: 0; transition: opacity .25s; }
+  @keyframes wk-out { to { opacity: 0; transform: translateY(16px) scale(.98); } }
+  .wk-m { display: flex; flex-direction: column; gap: clamp(20px, 1.7vw, 32px); padding: clamp(20px, 2.6vw, 50px); }
+
+  .wk-m__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+  .wk-m__titles { min-width: 0; max-width: 925px; }
+  .wk-m__meta { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .wk-m__pill { background: #1c3a60; color: #fff; border-radius: 99px; padding: 5px 14px; font: 400 13px/1.3 'Be Vietnam Pro', sans-serif; }
+  .wk-m__client { font: 400 15px/1.3 'Be Vietnam Pro', sans-serif; color: #677b94; }
+  .wk-m__title { margin: 0; font: 400 clamp(28px, 2.6vw, 50px)/1.1 Zodiak, Arial, sans-serif; color: #04091a; }
+  .wk-m__desc { margin: 14px 0 0; font: 400 clamp(15px, .95vw, 18px)/1.5 'Be Vietnam Pro', sans-serif; color: #677b94; }
+  .wk-m__close {
+    flex: none; width: clamp(48px, 3.6vw, 68px); height: clamp(48px, 3.6vw, 68px); border-radius: 50%; border: 1.5px solid #1c3a60;
+    background: #fff; color: #1c3a60; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color .2s, color .2s;
+  }
+  .wk-m__close:hover { background: #1c3a60; color: #fff; }
+
+  .wk-m__stage {
+    position: relative; border-radius: clamp(16px, 1.3vw, 24px); overflow: hidden;
+    background: radial-gradient(90% 80% at 50% 100%, #5a4fe0 0%, #1d1556 45%, #060b1e 100%);
+    height: min(62vh, 992px); min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: clamp(16px, 2vw, 40px);
+  }
+  .wk-m__frame { position: relative; display: flex; flex-direction: column; max-width: 100%; max-height: 100%; }
+  .wk-m__screen { position: relative; overflow: hidden; background: #000; width: 100%; height: 100%; }
+  .wk-m__screen > img, .wk-m__screen > video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .wk-m__screen > .wk-m__img-contain { object-fit: contain; background: #fff; }
+  .wk-m__screen iframe { border: 0; display: block; background: #fff; }
+  .wk-m__iframe-wrap { position: absolute; left: 50%; top: 50%; transform-origin: 0 0; }
+  .wk-m__empty { height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; color: #fff; font: 400 clamp(18px, 1.3vw, 24px)/1.2 Zodiak, Arial, sans-serif; background: linear-gradient(160deg, #5a4fe0, #131313); }
+  .wk-m__note { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); margin: 0; background: rgba(255,255,255,.14); color: #fff; border-radius: 99px; padding: 6px 14px; font: 400 13px/1.3 'Be Vietnam Pro', sans-serif; white-space: nowrap; }
+
+  /* Device frames: height-driven so they always fit the stage */
+  .wk-m__frame[data-device="Mobile"] { height: 100%; aspect-ratio: 9 / 19.5; border: 10px solid #0d0d12; border-radius: 42px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.7); }
+  .wk-m__frame[data-device="Mobile"] .wk-m__screen { border-radius: 32px; }
+  .wk-m__frame[data-device="Tablet"] { height: 100%; aspect-ratio: 3 / 4; border: 14px solid #0d0d12; border-radius: 34px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.7); }
+  .wk-m__frame[data-device="Tablet"] .wk-m__screen { border-radius: 18px; }
+  .wk-m__frame[data-device="Desktop"] { width: 100%; max-width: calc((min(62vh, 992px) - 80px) * 1.6); aspect-ratio: 16 / 10; border-radius: 14px; overflow: hidden; background: #e9ebf0; padding-top: 28px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.7); }
+  .wk-m__frame[data-device="Desktop"]::before { content: ''; position: absolute; top: 10px; left: 14px; width: 40px; height: 9px; background: radial-gradient(circle, #f78071 4px, transparent 4.5px) 0 0/14px 9px repeat-x; }
+  .wk-m__frame[data-device="CTV"] { width: 100%; max-width: calc((min(62vh, 992px) - 110px) * 1.778); aspect-ratio: 16 / 9; border: 8px solid #0d0d12; border-radius: 10px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.7); }
+  .wk-m__frame[data-device="CTV"]::after { content: ''; position: absolute; left: 50%; bottom: -34px; transform: translateX(-50%); width: 22%; height: 26px; background: linear-gradient(#0d0d12, #0d0d12) 50% 0/12% 16px no-repeat, linear-gradient(#0d0d12, #0d0d12) 50% 100%/100% 6px no-repeat; }
+
+  /* Custom video player */
+  .wk-vp { position: absolute; inset: 0; }
+  .wk-vp video { width: 100%; height: 100%; object-fit: contain; background: #000; display: block; }
+  .wk-vp__bar { position: absolute; left: 10px; right: 10px; bottom: 10px; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 99px; background: rgba(4, 9, 26, .55); backdrop-filter: blur(8px); opacity: 0; transition: opacity .25s; }
+  .wk-vp:hover .wk-vp__bar, .wk-vp.is-paused .wk-vp__bar, .wk-vp:focus-within .wk-vp__bar { opacity: 1; }
+  @media (hover: none) { .wk-vp__bar { opacity: 1; } }
+  .wk-vp__btn { flex: none; width: 30px; height: 30px; border: 0; border-radius: 50%; background: #fff; color: #04091a; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+  .wk-vp__prog { flex: 1; height: 4px; border-radius: 4px; background: rgba(255,255,255,.3); cursor: pointer; position: relative; }
+  .wk-vp__prog i { position: absolute; inset: 0 auto 0 0; width: 0; background: #f78071; border-radius: 4px; }
+  .wk-vp__big { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; border-radius: 50%; border: 0; background: rgba(255,255,255,.9); display: none; align-items: center; justify-content: center; cursor: pointer; }
+  .wk-vp.is-paused .wk-vp__big { display: flex; }
+
+  .wk-m__foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .wk-m__specs { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 0; }
+  .wk-m__specs div { min-width: 0; }
+  .wk-m__specs dt { font: 400 12px/1.4 'Be Vietnam Pro', sans-serif; color: #677b94; text-transform: uppercase; letter-spacing: .05em; }
+  .wk-m__specs dd { margin: 2px 0 0; font: 400 15px/1.4 Zodiak, Arial, sans-serif; color: #04091a; }
+  .wk-m__actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+  .wk-m__nav { width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid #1c3a60; background: #fff; color: #1c3a60; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .wk-m__nav:hover { background: #1c3a60; color: #fff; }
+  .wk-m__nav:disabled { opacity: .35; cursor: default; background: #fff; color: #1c3a60; }
+  .wk-m__cta, .wk-m__live { display: inline-flex; align-items: center; height: 48px; padding: 0 24px; border-radius: 99px; text-decoration: none; white-space: nowrap; font: 400 16px/1 'Be Vietnam Pro', sans-serif; }
+  .wk-m__cta { background: linear-gradient(90deg, #f78071, #f2a74b); color: #04091a; }
+  .wk-m__live { background: #04091a; color: #fff; }
+  .wk-m__live[hidden] { display: none; }
+
+  @media (max-width: 899px) {
+    .wk-modal { width: 100vw; max-height: 100dvh; height: 100dvh; border-radius: 0; }
+    .wk-m { padding: 16px 16px 24px; min-height: 100%; }
+    .wk-m__head { gap: 12px; }
+    .wk-m__close { width: 44px; height: 44px; }
+    .wk-m__stage { height: 62vh; min-height: 0; padding: 16px; }
+    .wk-m__frame[data-device="Mobile"] { border-width: 7px; border-radius: 30px; }
+    .wk-m__frame[data-device="Mobile"] .wk-m__screen { border-radius: 23px; }
+    .wk-m__frame[data-device="Tablet"] { border-width: 9px; border-radius: 22px; }
+    .wk-m__frame[data-device="Desktop"], .wk-m__frame[data-device="CTV"] { max-width: 100%; }
+    .wk-m__foot { flex-direction: column; align-items: stretch; }
+    .wk-m__actions { margin-left: 0; flex-wrap: wrap; justify-content: center; }
+    .wk-m__cta, .wk-m__live { flex: 1 1 auto; justify-content: center; }
+  }
+</style>
+
+<script is:inline>
+(() => {
+  const dlg = document.querySelector('.wk-modal');
+  const dataEl = document.getElementById('wk-data');
+  if (!dlg || !dataEl) return;
+  const items = JSON.parse(dataEl.textContent);
+  const bySlug = new Map(items.map((i) => [i.slug, i]));
+  let order = items.map((i) => i.slug);
+  let current = null;
+  const $ = (s) => dlg.querySelector(s);
+  const screen = $('.wk-m__screen'), frame = $('.wk-m__frame'), note = $('.wk-m__note');
+
+  window.addEventListener('work:filtered', (e) => { order = e.detail.visible; });
+
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const icon = {
+    play: '<svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>',
+    pause: '<svg width="14" height="14" viewBox="0 0 14 14"><path d="M3 1.5h3v11H3zM8 1.5h3v11H8z" fill="currentColor"/></svg>',
+    muted: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6h3l4-3v10L5 10H2z" fill="currentColor"/><path d="M11 6l4 4M15 6l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+    sound: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6h3l4-3v10L5 10H2z" fill="currentColor"/><path d="M11.5 5.5a3.5 3.5 0 010 5M13 3.5a6 6 0 010 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  };
+
+  function videoPlayer(d) {
+    const wrap = document.createElement('div');
+    wrap.className = 'wk-vp';
+    wrap.innerHTML =
+      `<video playsinline muted loop preload="metadata" ${d.poster ? `poster="${esc(d.poster)}"` : ''} src="${esc(d.src)}"></video>` +
+      `<button type="button" class="wk-vp__big" aria-label="Play">${icon.play}</button>` +
+      `<div class="wk-vp__bar"><button type="button" class="wk-vp__btn wk-vp__play" aria-label="Pause">${icon.pause}</button>` +
+      `<div class="wk-vp__prog" role="slider" aria-label="Seek" tabindex="0"><i></i></div>` +
+      (d.audio ? `<button type="button" class="wk-vp__btn wk-vp__mute" aria-label="Turn sound on">${icon.muted}</button>` : '') + `</div>`;
+    const v = wrap.querySelector('video'), play = wrap.querySelector('.wk-vp__play'), prog = wrap.querySelector('.wk-vp__prog'), bar = prog.querySelector('i'), mute = wrap.querySelector('.wk-vp__mute');
+    const sync = () => { wrap.classList.toggle('is-paused', v.paused); play.innerHTML = v.paused ? icon.play : icon.pause; play.setAttribute('aria-label', v.paused ? 'Play' : 'Pause'); };
+    const toggle = () => (v.paused ? v.play() : v.pause());
+    play.addEventListener('click', toggle); wrap.querySelector('.wk-vp__big').addEventListener('click', toggle);
+    v.addEventListener('click', toggle); v.addEventListener('play', sync); v.addEventListener('pause', sync);
+    v.addEventListener('timeupdate', () => { bar.style.width = (v.duration ? (v.currentTime / v.duration) * 100 : 0) + '%'; });
+    const seek = (x) => { const r = prog.getBoundingClientRect(); if (v.duration) v.currentTime = Math.max(0, Math.min(1, (x - r.left) / r.width)) * v.duration; };
+    prog.addEventListener('click', (e) => seek(e.clientX));
+    prog.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') v.currentTime += 5; if (e.key === 'ArrowLeft') v.currentTime -= 5; });
+    if (mute) mute.addEventListener('click', () => { v.muted = !v.muted; mute.innerHTML = v.muted ? icon.muted : icon.sound; mute.setAttribute('aria-label', v.muted ? 'Turn sound on' : 'Mute'); });
+    v.play().catch(sync);
+    return wrap;
+  }
+
+  function fitIframe(wrap, w, h) {
+    const fit = () => {
+      const r = screen.getBoundingClientRect();
+      const s = Math.min(1, r.width / w, r.height / h);
+      wrap.style.transform = `scale(${s}) translate(-50%, -50%)`;
+    };
+    requestAnimationFrame(fit);
+    return fit;
+  }
+  let onResize = null;
+
+  function render(it) {
+    current = it.slug;
+    $('.wk-m__pill').textContent = it.device;
+    $('.wk-m__client').textContent = it.client && it.client !== it.title ? it.client : '';
+    $('.wk-m__title').textContent = it.title;
+    $('.wk-m__desc').textContent = it.description || it.summary || '';
+    const specs = [['Ad Type', it.adType], ['Platform', it.platform], ['Industry', it.industry], ['Features', it.features], ['Technology', it.technology], ['Ad Size', it.adSize]]
+      .filter(([, v]) => v && v.length).map(([k, v]) => `<div><dt>${k}</dt><dd>${v.map(esc).join(', ')}</dd></div>`).join('');
+    $('.wk-m__specs').innerHTML = specs;
+
+    frame.dataset.device = it.device;
+    screen.innerHTML = '';
+    if (onResize) { window.removeEventListener('resize', onResize); onResize = null; }
+    note.hidden = true;
+    const live = $('.wk-m__live'); live.hidden = true;
+    const d = it.demo;
+    if (d && d.type === 'video') {
+      screen.appendChild(videoPlayer(d));
+    } else if (d && (d.type === 'html5' || d.type === 'url')) {
+      const w = d.width || screen.clientWidth || 1280, h = d.height || screen.clientHeight || 720;
+      if (d.width && d.height) {
+        const wrap = document.createElement('div'); wrap.className = 'wk-m__iframe-wrap';
+        wrap.innerHTML = `<iframe src="${esc(d.src)}" width="${w}" height="${h}" title="${esc(it.title)} demo" loading="lazy" allow="autoplay; fullscreen"></iframe>`;
+        screen.appendChild(wrap); onResize = fitIframe(wrap, w, h); window.addEventListener('resize', onResize);
+      } else {
+        screen.innerHTML = `<iframe src="${esc(d.src)}" title="${esc(it.title)} demo" style="width:100%;height:100%" allow="autoplay; fullscreen"></iframe>`;
+      }
+      live.href = d.src; live.hidden = false;
+    } else if (d && d.type === 'image') {
+      screen.innerHTML = `<img src="${esc(d.src)}" alt="${esc(it.title)}" class="wk-m__img-contain" />`;
+    } else if (it.thumbnails && it.thumbnails.length) {
+      screen.innerHTML = `<img src="${esc(it.thumbnails[0])}" alt="${esc(it.title)}" class="wk-m__img-contain" />`;
+      note.textContent = 'Live demo coming soon'; note.hidden = false;
+    } else {
+      screen.innerHTML = `<div class="wk-m__empty">${esc(it.client || it.title)}</div>`;
+      note.textContent = 'Live demo coming soon'; note.hidden = false;
+    }
+    const i = order.indexOf(it.slug);
+    $('.wk-m__nav.is-prev').disabled = i <= 0;
+    $('.wk-m__nav.is-next').disabled = i < 0 || i >= order.length - 1;
+  }
+
+  const lenisOf = () => (typeof lenis !== 'undefined' ? lenis : null); // global from PageScripts
+  function open(slug, push = true) {
+    const it = bySlug.get(slug); if (!it) return;
+    render(it);
+    if (!dlg.open) {
+      dlg.showModal();
+      document.documentElement.classList.add('wk-modal-open');
+      const l = lenisOf(); if (l && l.stop) l.stop();
+    }
+    dlg.scrollTop = 0;
+    if (push) history.replaceState(null, '', '#' + slug);
+  }
+  function close() { if (dlg.open) dlg.close(); }
+  dlg.addEventListener('close', () => {
+    screen.innerHTML = ''; current = null;
+    document.documentElement.classList.remove('wk-modal-open');
+    const l = lenisOf(); if (l && l.start) l.start();
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    if (onResize) { window.removeEventListener('resize', onResize); onResize = null; }
+  });
+  $('.wk-m__close').addEventListener('click', close);
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); }); // click on backdrop
+  const step = (n) => { const i = order.indexOf(current) + n; if (order[i]) open(order[i]); };
+  $('.wk-m__nav.is-prev').addEventListener('click', () => step(-1));
+  $('.wk-m__nav.is-next').addEventListener('click', () => step(1));
+  dlg.addEventListener('keydown', (e) => {
+    if (e.target.closest('input, textarea, .wk-vp__prog')) return;
+    if (e.key === 'ArrowRight') step(1); if (e.key === 'ArrowLeft') step(-1);
+  });
+  // stop Lenis from eating wheel events inside the popup
+  dlg.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
+
+  // "Start a Conversation" (and any other page link in the popup): close the popup first, then change page
+  // through the normal link click so the shutter transition still plays.
+  dlg.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href]');
+    if (!a || a.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault(); e.stopPropagation();
+    const href = a.getAttribute('href');
+    dlg.classList.add('is-closing');
+    setTimeout(() => {
+      dlg.classList.remove('is-closing');
+      close();
+      const go = document.createElement('a');
+      go.href = href; go.hidden = true; document.body.appendChild(go);
+      go.click(); // picked up by PageTransition (shutter), falls back to a normal navigation
+    }, 250);
+  });
+
+  window.addEventListener('work:open', (e) => open(e.detail.slug));
+  const fromHash = () => { const s = decodeURIComponent(location.hash.slice(1)); if (bySlug.has(s)) open(s, false); };
+  window.addEventListener('hashchange', fromHash);
+  // deep link (/work#slug): wait for the page scripts (Lenis) before opening
+  if (document.readyState === 'complete') fromHash(); else window.addEventListener('load', fromHash, { once: true });
+})();
+</script>

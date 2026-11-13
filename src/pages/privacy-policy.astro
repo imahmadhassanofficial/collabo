@@ -1,0 +1,19 @@
+---
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import PrivacyHead from '../components/heads/PrivacyHead.astro';
+import PageScripts from '../components/scripts/PageScripts.astro';
+import Header from '../components/shared/Header.astro';
+import FooterWithForm from '../components/shared/FooterWithForm.astro';
+import LegalHero from '../components/sections/legal/LegalHero.astro';
+import PrivacyContent from '../components/sections/legal/PrivacyContent.astro';
+
+const wfPage = '6a0aac72b53390297518fb4b';
+---
+<WebflowLayout wfPage={wfPage}>
+  <PrivacyHead slot="head" />
+  <Header />
+  <LegalHero title="Privacy Policy" />
+  <PrivacyContent />
+  <FooterWithForm wfPage={wfPage} />
+  <PageScripts slot="scripts" />
+</WebflowLayout>

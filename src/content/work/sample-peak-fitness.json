@@ -1,0 +1,44 @@
+{
+  "title": "Peak Fitness – Vertical Video",
+  "client": "Peak Fitness",
+  "summary": "Vertical video for social and in-app placements with a free-trial message.",
+  "description": "Sample 9:16 video with sound for in-app and social placements. Three quick scenes ending on the free-week offer.",
+  "device": "Mobile",
+  "adType": [
+    "Video Ads"
+  ],
+  "platform": [
+    "In-App",
+    "Social"
+  ],
+  "industry": [
+    "Fitness"
+  ],
+  "features": [
+    "Overlay"
+  ],
+  "technology": [
+    "VAST",
+    "MP4"
+  ],
+  "adSize": [
+    "1080x1920"
+  ],
+  "tags": [
+    "VAST",
+    "VIDEO",
+    "Mobile"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-peak-fitness/thumb-1.jpg",
+    "/work/samples/sample-peak-fitness/thumb-2.jpg"
+  ],
+  "demo": {
+    "type": "video",
+    "src": "/work/samples/sample-peak-fitness/demo.mp4",
+    "poster": "/work/samples/sample-peak-fitness/demo-poster.jpg",
+    "audio": true
+  },
+  "date": "2026-11-09",
+  "draft": true
+}

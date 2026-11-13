@@ -1,0 +1,33 @@
+{
+  "title": "Dignity Health",
+  "client": "Dignity Health",
+  "summary": "A brief overview describing the campaign, its goals, interaction model, and supported environments.",
+  "device": "Mobile",
+  "adType": [
+    "Interactive Ads"
+  ],
+  "platform": [
+    "Mobile"
+  ],
+  "industry": [
+    "Healthcare"
+  ],
+  "features": [],
+  "technology": [
+    "HTML5",
+    "VAST"
+  ],
+  "adSize": [],
+  "tags": [
+    "HTML5",
+    "INTERACTIVE",
+    "VAST",
+    "Mobile",
+    "CTV"
+  ],
+  "thumbnails": [
+    "/work/dignity-health/thumb-1.jpg"
+  ],
+  "date": "2026-11-01",
+  "draft": false
+}

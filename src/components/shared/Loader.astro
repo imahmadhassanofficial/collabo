@@ -1,0 +1,157 @@
+---
+// "Dropping cards" loader. Shows once per visit (first page opened in the tab), never after a shutter page change.
+// Cards fall in one by one and stack in the middle while the page loads, then fall away and the loader slides up.
+// Settings: CARDS (images), colours in <style>, timings in the script.
+const CARDS = [
+  // Same demo cards as the home hero marquee (src/components/sections/home/Hero.astro)
+  { src: '/webflow/images/6a6520ef558f120d4036f2b8_pixelate-image-render-effect-1440x900.avif', title: 'Pixelate Image Render Effect' },
+  { src: '/webflow/images/6a6520ef558f120d4036f2b6_directional-list-hover-1440x900.avif', title: 'Directional List Hover' },
+  { src: '/webflow/images/6a6520ef558f120d4036f2ba_flick-cards-slider-1440x900.avif', title: 'Flick Cards Slider' },
+  { src: '/webflow/images/6a6520ef558f120d4036f2bc_face-follow-cursor-1440x900.avif', title: 'Face Follow Cursor (Mascot)' },
+];
+---
+<div class="cl-loader" aria-hidden="true">
+  <div class="cl-loader__stack">
+    {CARDS.map((c) => (
+      <div class="cl-loader__card">
+        <div class="cl-loader__media"><img src={c.src} alt="" decoding="async" fetchpriority="high" /></div>
+      </div>
+    ))}
+  </div>
+  <div class="cl-loader__count"><span class="cl-loader__num">0</span>%</div>
+</div>
+
+<script is:inline>
+  // Decide before first paint: show only on the first page of the visit, not after a shutter transition.
+  (function () {
+    try {
+      var seen = sessionStorage.getItem('cl-loaded') === '1';
+      var viaShutter = sessionStorage.getItem('shutter') === '1';
+      var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!seen && !viaShutter && !reduced) document.documentElement.classList.add('cl-loading');
+      sessionStorage.setItem('cl-loaded', '1');
+    } catch (e) {}
+  })();
+</script>
+
+<style is:global>
+  .cl-loader { display: none; }
+  html.cl-loading .cl-loader {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 2147483100; /* above the shutter */
+    overflow: hidden;
+    background: #131313 radial-gradient(circle, #5a4fe0, #131313); /* same as the home hero (.hero_game_container) */
+    color: #fff;
+  }
+
+  .cl-loader__stack {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(360px, 64vw);
+    aspect-ratio: 16 / 10;
+    transform: translate(-50%, -50%);
+  }
+  /* Just the image: no card background, padding or title */
+  .cl-loader__card {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    border-radius: 8px;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+    transform: translateY(-130vh); /* waiting above the screen */
+    will-change: transform;
+  }
+  .cl-loader__media { aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; }
+  .cl-loader__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .cl-loader__count {
+    position: absolute;
+    right: 4vw;
+    bottom: 3vw;
+    font-size: clamp(48px, 9vw, 140px);
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 899px) {
+    .cl-loader__count { right: 20px; bottom: 24px; }
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var root = document.documentElement;
+    if (!root.classList.contains('cl-loading')) return;
+
+    var loader = document.querySelector('.cl-loader');
+    var cards = Array.prototype.slice.call(loader.querySelectorAll('.cl-loader__card'));
+    var num = loader.querySelector('.cl-loader__num');
+
+    var DROP = 700;        // ms each card takes to fall in
+    var GAP = 220;         // ms between cards
+    var MIN_TIME = DROP + GAP * (cards.length - 1) + 250; // let every card land
+    var MAX_WAIT = 6000;   // never block the site longer than this
+    var start = performance.now();
+
+    // Stop wheel/touch scrolling (incl. Lenis) while the loader is up.
+    function block(e) { e.preventDefault(); e.stopPropagation(); }
+    window.addEventListener('wheel', block, { capture: true, passive: false });
+    window.addEventListener('touchmove', block, { capture: true, passive: false });
+
+    // Drop the cards in, each with its own small tilt.
+    var tilts = [-7, 5, -3, 8, -5, 2];
+    cards.forEach(function (card, i) {
+      var r = tilts[i % tilts.length];
+      var x = (i % 2 ? 1 : -1) * (i * 4);
+      card.dataset.end = 'translate(' + x + 'px, 0) rotate(' + r + 'deg)';
+      card.animate(
+        [
+          { transform: 'translate(' + x * 3 + 'px, -130vh) rotate(' + (r * -3) + 'deg)' },
+          { transform: card.dataset.end }
+        ],
+        { duration: DROP, delay: i * GAP, easing: 'cubic-bezier(0.34, 1.3, 0.64, 1)', fill: 'forwards' }
+      );
+    });
+
+    // Counter: runs on time, holds at 90 until the page has loaded.
+    var loaded = document.readyState === 'complete';
+    window.addEventListener('load', function () { loaded = true; });
+    var shown = 0;
+    function tick(now) {
+      var t = Math.min(1, (now - start) / MIN_TIME);
+      var target = loaded ? Math.round(t * 100) : Math.min(90, Math.round(t * 100));
+      if (now - start > MAX_WAIT) target = 100;
+      if (target > shown) { shown = target; num.textContent = shown; }
+      if (shown < 100) requestAnimationFrame(tick); else finish();
+    }
+    requestAnimationFrame(tick);
+
+    function finish() {
+      // Cards fall away (top card first), then the loader slides up.
+      var last = 0;
+      cards.slice().reverse().forEach(function (card, i) {
+        var a = card.animate(
+          [{ transform: card.dataset.end }, { transform: 'translate(0, 130vh) rotate(' + (i % 2 ? 12 : -12) + 'deg)' }],
+          { duration: 600, delay: 150 + i * 60, easing: 'cubic-bezier(0.55, 0, 0.75, 0.2)', fill: 'forwards' }
+        );
+        last = 150 + i * 60 + 600;
+      });
+      var slide = loader.animate(
+        [{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }],
+        { duration: 800, delay: last - 250, easing: 'cubic-bezier(0.76, 0, 0.24, 1)', fill: 'forwards' }
+      );
+      slide.onfinish = function () {
+        root.classList.remove('cl-loading');
+        window.removeEventListener('wheel', block, { capture: true });
+        window.removeEventListener('touchmove', block, { capture: true });
+        loader.remove();
+        window.dispatchEvent(new Event('collabo:loader-done'));
+      };
+    }
+  })();
+</script>

@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fresh Market – sample ad</title><style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:Poppins,system-ui,-apple-system,Segoe UI,Arial,sans-serif;-webkit-user-select:none;user-select:none}
+.tag{position:absolute;top:8px;right:8px;font-size:9px;letter-spacing:.08em;border:1px solid currentColor;border-radius:99px;padding:2px 7px;opacity:.85;z-index:9}
+.brand{font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.cta{display:inline-block;border:0;border-radius:99px;font-weight:600;cursor:pointer;font-family:inherit}
+body{width:300px;height:250px}
+body{background:linear-gradient(135deg,#1f6f3b,#9be15d);color:#fff}
+.wrap{position:relative;width:300px;height:250px;padding:14px}
+.brand{font-size:11px}.h{font:600 18px/1.15 Georgia,serif;margin-top:6px}
+.card{position:relative;width:220px;height:110px;margin:12px auto 0;border-radius:14px;background:#fff;color:#1f6f3b;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.card b{font-size:34px;line-height:1}.card span{font-size:11px;margin-top:4px}
+canvas{position:absolute;inset:0;cursor:crosshair;touch-action:none}
+.hint{text-align:center;font-size:11px;margin-top:8px;opacity:.9}</style></head><body><div class="wrap"><span class="tag">SAMPLE</span><div class="brand">Fresh Market</div><div class="h">Scratch &amp; save on groceries</div>
+<div class="card"><b>20% OFF</b><span>your next basket · code FRESH20</span><canvas id="c" width="220" height="110"></canvas></div><div class="hint" id="h">Scratch the card to reveal your deal</div></div><script>const c=document.getElementById('c'),x=c.getContext('2d');const g=x.createLinearGradient(0,0,220,110);g.addColorStop(0,'#c0c0c0');g.addColorStop(1,'#8e8e8e');x.fillStyle=g;x.fillRect(0,0,220,110);
+x.fillStyle='#fff';x.font='600 14px sans-serif';x.textAlign='center';x.fillText('SCRATCH HERE',110,60);x.globalCompositeOperation='destination-out';
+let d=false,n=0;const p=e=>{const r=c.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return[(t.clientX-r.left)*220/r.width,(t.clientY-r.top)*110/r.height]};
+const s=e=>{if(!d)return;e.preventDefault();const[a,b]=p(e);x.beginPath();x.arc(a,b,16,0,7);x.fill();if(++n>60){c.style.transition='opacity .5s';c.style.opacity=0;document.getElementById('h').textContent='Deal unlocked! Show this at checkout.'}};
+['mousedown','touchstart'].forEach(v=>c.addEventListener(v,e=>{d=true;s(e)}));['mousemove','touchmove'].forEach(v=>c.addEventListener(v,s,{passive:false}));['mouseup','mouseleave','touchend'].forEach(v=>c.addEventListener(v,()=>d=false));</script></body></html>

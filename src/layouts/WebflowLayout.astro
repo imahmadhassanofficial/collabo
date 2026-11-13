@@ -1,0 +1,31 @@
+---
+// Webflow page shell. wfPage / wfSite keep Webflow interactions (IX2) and forms wired to the right page.
+// Slots: "head" = the page's <head> component, default = page sections, "scripts" = page scripts.
+import mobileCss from '../styles/mobile.css?url';
+import MobileFixes from '../components/scripts/MobileFixes.astro';
+import PageTransition from '../components/shared/PageTransition.astro';
+import Loader from '../components/shared/Loader.astro';
+import CookieConsent from '../components/shared/CookieConsent.astro';
+import ChatWidget from '../components/shared/ChatWidget.astro';
+const { wfPage, wfSite = '69f3c988b21ed48b5a87eddd' } = Astro.props;
+---
+<html data-wf-page={wfPage} data-wf-site={wfSite} lang="en">
+  <head>
+    <slot name="head" />
+    <!-- Phone styles: loaded last so they win over Webflow CSS -->
+    <link rel="stylesheet" href={mobileCss} />
+  </head>
+  <body class="body">
+    <!-- Shutter page transition: must stay first in <body> so the page starts covered -->
+    <PageTransition />
+    <!-- Dropping-cards loader: first page of a visit only -->
+    <Loader />
+    <slot />
+    <slot name="scripts" />
+    <MobileFixes />
+    <!-- Cookie banner (first visit) + preferences; reopen with any [data-cookie-settings] button -->
+    <CookieConsent />
+    <!-- Claude chat bubble (bottom-right); calls /api/chat and /api/lead -->
+    <ChatWidget />
+  </body>
+</html>

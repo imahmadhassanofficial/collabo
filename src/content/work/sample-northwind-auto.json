@@ -1,0 +1,44 @@
+{
+  "title": "Northwind Auto – CTV Spot",
+  "client": "Northwind Auto",
+  "summary": "15-second connected-TV spot with sound and a dealer-finder endcard.",
+  "description": "Sample CTV video (16:9) delivered via VAST. Three scenes end on a dealer call to action. Starts muted — use the sound button.",
+  "device": "CTV",
+  "adType": [
+    "Video Ads"
+  ],
+  "platform": [
+    "CTV",
+    "OTT"
+  ],
+  "industry": [
+    "Automotive"
+  ],
+  "features": [
+    "Endcard"
+  ],
+  "technology": [
+    "VAST",
+    "MP4"
+  ],
+  "adSize": [
+    "1920x1080"
+  ],
+  "tags": [
+    "VAST",
+    "VIDEO",
+    "CTV"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-northwind-auto/thumb-1.jpg",
+    "/work/samples/sample-northwind-auto/thumb-2.jpg"
+  ],
+  "demo": {
+    "type": "video",
+    "src": "/work/samples/sample-northwind-auto/demo.mp4",
+    "poster": "/work/samples/sample-northwind-auto/demo-poster.jpg",
+    "audio": true
+  },
+  "date": "2026-11-11",
+  "draft": true
+}

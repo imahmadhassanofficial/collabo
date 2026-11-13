@@ -1,0 +1,19 @@
+---
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import TermsHead from '../components/heads/TermsHead.astro';
+import PageScripts from '../components/scripts/PageScripts.astro';
+import Header from '../components/shared/Header.astro';
+import FooterWithForm from '../components/shared/FooterWithForm.astro';
+import LegalHero from '../components/sections/legal/LegalHero.astro';
+import TermsContent from '../components/sections/legal/TermsContent.astro';
+
+const wfPage = '6a0aadc7a9a3646fb7c07dbb';
+---
+<WebflowLayout wfPage={wfPage}>
+  <TermsHead slot="head" />
+  <Header />
+  <LegalHero title="Term of Services" />
+  <TermsContent />
+  <FooterWithForm wfPage={wfPage} />
+  <PageScripts slot="scripts" />
+</WebflowLayout>

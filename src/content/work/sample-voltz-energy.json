@@ -1,0 +1,43 @@
+{
+  "title": "Voltz Energy – Spin to Win",
+  "client": "Voltz Energy",
+  "summary": "Mobile spin-the-wheel game that rewards a free charge.",
+  "description": "Sample gamified mobile interstitial (320 × 480). One spin per user, ending on a claimable prize.",
+  "device": "Mobile",
+  "adType": [
+    "Gamified Ads"
+  ],
+  "platform": [
+    "In-App",
+    "Mobile Web"
+  ],
+  "industry": [
+    "Energy"
+  ],
+  "features": [
+    "Spin to Win",
+    "Gamification"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [
+    "320x480"
+  ],
+  "tags": [
+    "HTML5",
+    "GAMIFIED",
+    "Mobile"
+  ],
+  "thumbnails": [
+    "/work/samples/sample-voltz-energy/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "html5",
+    "src": "/work/samples/sample-voltz-energy/index.html",
+    "width": 320,
+    "height": 480
+  },
+  "date": "2026-11-05",
+  "draft": true
+}

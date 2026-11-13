@@ -1,0 +1,37 @@
+---
+// Footer block (.footer_sections): heading, address, phone, email, social, legal links, wordmark
+---
+<div class="footer_sections"><div class="footer_containers"><div class="foooter_inner_container"><div class="footer_top_head"><div class="footer_heading"><h2 class="_64_heading _1">Build Ads That People Remember</h2></div><div class="footer_detail"><div class="footer_test"><div class="head_sections"><div class="_14_p">Headquarters:</div></div><div class="_24_paragraph">3104 E Camelback Rd Suite #7406 Phoenix, AZ 85016</div></div><div class="footer_test"><div class="head_sections"><div class="_14_p">Phone: </div></div><div class="_24_paragraph">(480) 885-6858</div></div><div class="footer_test"><div class="head_sections"><div class="_14_p">Email: : </div></div><div class="_24_paragraph">info@collaboLLC.com</div></div><div class="footer_test"><div class="head_sections"><div class="_14_p">Social</div></div><div class="social_logo_container"><a href="#" class="logo_contai w-inline-block"><img loading="lazy" src="/webflow/images/6a6a777408498306dab65507_Frame-126.svg" alt=""/></a><a href="#" class="logo_contai w-inline-block"><img loading="lazy" src="/webflow/images/6a6a7774ed46a65cdf21be7e_Frame-125.svg" alt=""/></a><a href="#" class="logo_contai w-inline-block"><img loading="lazy" src="/webflow/images/6a6a7774435953f8b3f5f2cd_Frame-520.svg" alt=""/></a></div></div></div></div><div class="copywrite_container"><div class="copywrite_text"><div class="_16_p">© All Rights Reserved by Collabo</div></div><div class="content_inner_container"><a href="/terms-and-conditions" class="_16_p" style="color:inherit;text-decoration:none">Term &amp; Conditions</a><a href="/privacy-policy" class="_16_p" style="color:inherit;text-decoration:none">Privacy Policy</a></div></div></div><div class="footer_logo footer-marquee" aria-label="Collabo"><div class="footer-marquee__track"><div class="footer-marquee__item"><img loading="lazy" src="/webflow/images/6a6a7338ed46a65cdf1fdf44_logo-images.svg" alt="" class="logo_containers"/></div><div class="footer-marquee__item" aria-hidden="true"><img loading="lazy" src="/webflow/images/6a6a7338ed46a65cdf1fdf44_logo-images.svg" alt="" class="logo_containers"/></div></div></div></div></div>
+
+<style is:global>
+  /* Footer wordmark: endless sideways scroll (two copies, track moves by one copy width). */
+  .footer-marquee { overflow: hidden; }
+  .content_inner_container { width: auto; min-width: 26.927vw; gap: 2.5vw; } /* room for the 3rd legal link */
+  /* Edge to edge: break out of .footer_containers (94.792vw desktop / 20px padding phone) to the full screen width */
+  html body .footer_logo.footer-marquee:not(#_z) {
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(50% - 50vw);
+    margin-right: 0;
+  }
+  .footer_sections { overflow-x: clip; } /* hides the extra scrollbar-width so the page never scrolls sideways */
+  .footer-marquee__track {
+    display: flex;
+    width: 200%;
+    animation: footer-marquee 22s linear infinite;
+    will-change: transform;
+  }
+  .footer-marquee__item {
+    flex: 0 0 50%;
+    padding-right: 4vw; /* gap between COLLABO copies */
+    box-sizing: border-box;
+  }
+  .footer-marquee__item .logo_containers { display: block; width: 100%; height: auto; }
+  @keyframes footer-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .footer-marquee__track { animation: none; }
+  }
+</style>

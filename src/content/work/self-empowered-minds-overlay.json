@@ -1,0 +1,30 @@
+{
+  "title": "Self Empowered Minds – Overlay",
+  "client": "Self Empowered Minds",
+  "summary": "A brief overview describing the campaign, its goals, interaction model, and supported environments.",
+  "device": "Mobile",
+  "adType": [
+    "Video Ads"
+  ],
+  "platform": [
+    "Mobile"
+  ],
+  "industry": [],
+  "features": [
+    "Overlay"
+  ],
+  "technology": [
+    "VAST"
+  ],
+  "adSize": [],
+  "tags": [
+    "HTML5",
+    "INTERACTIVE",
+    "VAST",
+    "Mobile",
+    "CTV"
+  ],
+  "thumbnails": [],
+  "date": "2026-10-20",
+  "draft": true
+}

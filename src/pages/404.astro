@@ -1,0 +1,41 @@
+---
+// 404 page: same header, hero look and footer as the rest of the site; not indexed.
+import WebflowLayout from '../layouts/WebflowLayout.astro';
+import NotFoundHead from '../components/heads/NotFoundHead.astro';
+import PageScripts from '../components/scripts/PageScripts.astro';
+import Header from '../components/shared/Header.astro';
+import FooterWithForm from '../components/shared/FooterWithForm.astro';
+
+const wfPage = '6a0aac72b53390297518fb4b';
+---
+<WebflowLayout wfPage={wfPage} noindex>
+  <NotFoundHead slot="head" />
+  <Header />
+  <div class="head_block">
+    <div class="contact_section">
+      <div class="privacy_heading nf">
+        <p class="nf-code">404</p>
+        <h1 class="_96_heading">This page took a wrong turn.</h1>
+        <p class="nf-text">The page you're looking for doesn't exist or has moved. Here are a few places to go instead.</p>
+        <div class="nf-actions">
+          <a href="/" class="ch-cta nf-btn">Back to home</a>
+          <a href="/work" class="ch-phone nf-btn">See the work</a>
+          <a href="/contact" class="ch-phone nf-btn">Contact us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <FooterWithForm wfPage={wfPage} />
+  <PageScripts slot="scripts" />
+</WebflowLayout>
+
+<style is:global>
+  .nf { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; padding: 40px 20px 20px; }
+  .nf-code {
+    margin: 0; font: 600 14px/1 'Be Vietnam Pro', sans-serif; letter-spacing: .3em;
+    background: linear-gradient(90deg, #26aeee, #5a4fe0, #9b2ec2, #ed6673); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .nf-text { margin: 0; max-width: 560px; color: rgba(255, 255, 255, .75); font: 400 16px/1.6 'Be Vietnam Pro', sans-serif; }
+  .nf-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 8px; }
+  .nf-btn { display: inline-flex; align-items: center; height: 46px; padding: 0 22px; border-radius: 99px; text-decoration: none; }
+</style>

@@ -7,30 +7,49 @@ import PageTransition from '../components/shared/PageTransition.astro';
 import Loader from '../components/shared/Loader.astro';
 import CookieConsent from '../components/shared/CookieConsent.astro';
 import ChatWidget from '../components/shared/ChatWidget.astro';
-const { wfPage, wfSite = '69f3c988b21ed48b5a87eddd' } = Astro.props;
+import LeadForms from '../components/shared/LeadForms.astro';
+import BarbaRouter from '../components/shared/BarbaRouter.astro';
+import SiteSchema from '../components/seo/SiteSchema.astro';
+const { wfPage, wfSite = '69f3c988b21ed48b5a87eddd', noindex = false } = Astro.props;
+// Barba namespace: 'home', 'work', 'contact', …
+const namespace = Astro.url.pathname.replace(/^\/|\/$/g, '') || 'home';
 ---
 <html data-wf-page={wfPage} data-wf-site={wfSite} lang="en">
   <head>
     <slot name="head" />
+    <!-- SEO: robots/theme meta + schema.org JSON-LD (organization, website, breadcrumbs) -->
+    <SiteSchema noindex={noindex} />
     <!-- Phone styles: loaded last so they win over Webflow CSS -->
     <link rel="stylesheet" href={mobileCss} />
     <!-- Night-sky effects (self-contained, inject their own CSS): twinkling stars + one shooting star in hero and footer -->
-    <script is:inline defer src="/js/hero-stars.js"></script>
-    <script is:inline defer src="/js/hero-shooting-star.js"></script>
-    <script is:inline defer src="/js/footer-stars.js"></script>
-    <script is:inline defer src="/js/footer-shooting-star.js"></script>
+    <script is:inline defer data-rerun src="/js/hero-globe.js?v=5"></script>
+    <script is:inline defer data-rerun src="/js/hero-stars.js?v=2"></script>
+    <script is:inline defer data-rerun src="/js/hero-shooting-star.js?v=2"></script>
+    <script is:inline defer data-rerun src="/js/footer-bg.js?v=5"></script>
+    <script is:inline defer data-rerun src="/js/text-reveal.js?v=2"></script>
+    <script is:inline defer data-rerun src="/js/footer-stars.js?v=2"></script>
+    <script is:inline defer data-rerun src="/js/footer-shooting-star.js?v=2"></script>
   </head>
   <body class="body">
-    <!-- Shutter page transition: must stay first in <body> so the page starts covered -->
+    <!-- Barba page transition panel (dark night sky with dots, draws top → bottom) -->
     <PageTransition />
     <!-- Dropping-cards loader: first page of a visit only -->
     <Loader />
-    <slot />
-    <slot name="scripts" />
-    <MobileFixes />
+    <!-- Barba swaps only the container; everything outside it stays for the whole visit -->
+    <div data-barba="wrapper">
+      <div data-barba="container" data-barba-namespace={namespace}>
+        <slot />
+        <slot name="scripts" />
+        <MobileFixes />
+      </div>
+    </div>
     <!-- Cookie banner (first visit) + preferences; reopen with any [data-cookie-settings] button -->
     <CookieConsent />
     <!-- Claude chat bubble (bottom-right); calls /api/chat and /api/lead -->
     <ChatWidget />
+    <!-- Footer + Contact forms → /api/lead -->
+    <LeadForms />
+    <!-- Barba.js: internal links swap pages with the transition panel and re-run every page animation -->
+    <BarbaRouter />
   </body>
 </html>

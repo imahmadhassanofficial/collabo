@@ -16,9 +16,6 @@ touchMultiplier: 2,
 infinite: false, 
 }) 
 
-//get scroll value 
-lenis.on('scroll', ({ scroll, limit, velocity, direction, progress }) => { console.log({ scroll, limit, velocity, direction, progress }) 
-}) 
 
 function raf(time) { 
 lenis.raf(time) 
@@ -105,33 +102,7 @@ function initRadialCardsMarquee() {
 document.addEventListener('DOMContentLoaded', initRadialCardsMarquee);
 </script>
 
-<script is:inline src="/vendor/gsap-3.12.5/gsap.min.js"></script>
-<script is:inline>
-  const colors = ["#ED6673","#F98670","#26AEEE","#306BE7","#5A4FE0","#864EE3","#9B2EC2"];
-  const el = document.querySelector('.hero_game_container');
-  const proxy = { c: colors[0] };
-  let i = 0;
-
-  el.style.backgroundImage = `radial-gradient(circle, ${proxy.c}, #131313)`;
-
-  function next() {
-    const target = colors[(i + 1) % colors.length];
-    gsap.to(proxy, {
-      c: target,
-      duration: 1.5,          // time per transition
-      ease: "sine.inOut",
-      onUpdate: () => {
-        el.style.backgroundImage = `radial-gradient(circle, ${proxy.c}, #131313)`;
-      },
-      onComplete: () => {
-        i = (i + 1) % colors.length;
-        next();
-      }
-    });
-  }
-
-  next();
-</script>
+<!-- Hero background is now the static brand night-sky (public/js/hero-globe.js); the old colour-cycling gradient was removed. -->
 
 
 <script is:inline>

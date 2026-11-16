@@ -1,0 +1,64 @@
+---
+// Site-wide SEO extras, rendered in every page's <head> by WebflowLayout:
+// robots/theme meta, og:site_name, and schema.org JSON-LD (Organization + local business, WebSite, breadcrumbs).
+const { noindex = false } = Astro.props;
+const site = (Astro.site?.href ?? 'https://collabollc.com/').replace(/\/$/, '');
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const NAMES: Record<string, string> = {
+  '/work': 'Our Work',
+  '/contact': 'Contact',
+  '/privacy-policy': 'Privacy Policy',
+  '/terms-and-conditions': 'Terms and Conditions',
+};
+const org = {
+  '@type': ['Organization', 'ProfessionalService'],
+  '@id': `${site}/#organization`,
+  name: 'Collabo',
+  legalName: 'Collabo LLC',
+  url: `${site}/`,
+  logo: `${site}/webflow/images/6abae1a3e6e7be6ccdf89fa2_favicon.png`,
+  image: `${site}/webflow/images/69f7c78c77c4312b2a6a8ad9_collabo-og-image.png`,
+  description:
+    'Collabo builds high-impact interactive digital ads, hosts them on enterprise-grade ad serving infrastructure and delivers them to every major DSP — ad creation, ad serving, DSP integration and GAM enhancement.',
+  email: 'info@collaboLLC.com',
+  telephone: '+1-480-885-6858',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '3104 E Camelback Rd Suite #7406',
+    addressLocality: 'Phoenix',
+    addressRegion: 'AZ',
+    postalCode: '85016',
+    addressCountry: 'US',
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: 33.5106965, longitude: -112.0157274 },
+  areaServed: { '@type': 'Country', name: 'United States' },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'sales',
+    telephone: '+1-480-885-6858',
+    email: 'info@collaboLLC.com',
+    areaServed: 'US',
+    availableLanguage: 'English',
+  },
+  knowsAbout: ['HTML5 ads', 'Rich media ads', 'Video ads', 'CTV / OTT ads', 'VAST', 'VPAID', 'SIMID', 'Ad serving', 'DSP integration', 'Google Ad Manager', 'Dynamic creative optimization'],
+};
+const graph: any[] = [
+  org,
+  { '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: 'Collabo', publisher: { '@id': `${site}/#organization` }, inLanguage: 'en-US' },
+];
+if (NAMES[path]) {
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${site}/` },
+      { '@type': 'ListItem', position: 2, name: NAMES[path], item: `${site}${path}/` },
+    ],
+  });
+}
+const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+---
+<meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+<meta name="theme-color" content="#07070d" />
+<meta property="og:site_name" content="Collabo" />
+<meta property="og:locale" content="en_US" />
+<script type="application/ld+json" set:html={json} />

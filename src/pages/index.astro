@@ -2,6 +2,7 @@
 import WebflowLayout from '../layouts/WebflowLayout.astro';
 import HomeHead from '../components/heads/HomeHead.astro';
 import HomeScripts from '../components/scripts/HomeScripts.astro';
+import MobileHome from '../components/scripts/MobileHome.astro';
 import ProgressiveBlur from '../components/ProgressiveBlur.astro';
 import Header from '../components/shared/Header.astro';
 import FooterWithForm from '../components/shared/FooterWithForm.astro';
@@ -36,4 +37,5 @@ const wfPage = '69f3c989b21ed48b5a87ee0c';
   </div>
   <ProgressiveBlur />
   <HomeScripts slot="scripts" />
+  <MobileHome slot="scripts" />
 </WebflowLayout>

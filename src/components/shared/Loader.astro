@@ -42,7 +42,12 @@ const CARDS = [
     inset: 0;
     z-index: 2147483100; /* above the shutter */
     overflow: hidden;
-    background: #131313 radial-gradient(circle, #5a4fe0, #131313); /* same as the home hero (.hero_game_container) */
+    /* same look as the heroes: dark base + blue glow left, purple-pink right (the dotted globe is added by public/js/hero-globe.js) */
+    background:
+      radial-gradient(circle at 10% 28%, rgba(48, 107, 231, .42), rgba(90, 79, 224, .18) 22%, rgba(48, 107, 231, 0) 42%),
+      radial-gradient(circle at 90% 20%, rgba(155, 46, 194, .42), rgba(237, 102, 115, .16) 22%, rgba(155, 46, 194, 0) 42%),
+      radial-gradient(circle at 55% 115%, rgba(90, 79, 224, .3), rgba(90, 79, 224, 0) 45%),
+      #07070d;
     color: #fff;
   }
 

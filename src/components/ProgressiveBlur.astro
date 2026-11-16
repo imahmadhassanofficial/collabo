@@ -2,3 +2,17 @@
 // Fixed progressive blur overlay at the bottom of the viewport
 ---
 <div class="progressive-blur"><div class="progressive-blur__layer is--1"></div><div class="progressive-blur__layer is--2"></div><div class="progressive-blur__layer is--3"></div><div class="progressive-blur__layer is--4"></div><div class="progressive-blur__layer is--5"></div></div>
+
+<style is:global>
+  .progressive-blur { transition: opacity .4s ease; }
+  .progressive-blur.is-off { opacity: 0; }
+</style>
+<script is:inline>
+  // Fade the bottom blur out once the footer is on screen, so the footer looks the same as on every other page.
+  (function () {
+    var blur = document.querySelector('.progressive-blur');
+    var foot = document.querySelector('.footer_sectio') || document.querySelector('.footer_sections');
+    if (!blur || !foot || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function (e) { blur.classList.toggle('is-off', e[0].isIntersecting); }).observe(foot);
+  })();
+</script>

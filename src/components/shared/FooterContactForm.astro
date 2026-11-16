@@ -3,4 +3,67 @@
 // wfPage = the Webflow page id, used by Webflow's form handler.
 const { wfPage } = Astro.props;
 ---
-<div class="footer_form_container"><div class="footer_form_section"><div class="form_blocks"><div class="footer_form_map"><div class="form_map_container"><div class="map w-widget w-widget-map" data-widget-style="roadmap" data-widget-latlng="33.5106965,-112.0157274" data-enable-scroll="true" role="region" title="" data-enable-touch="true" data-widget-zoom="12" data-widget-tooltip=""></div></div><div class="form_map_content"><div class="form_content_container"><div class="logo_image_contain"><img loading="lazy" src="/webflow/images/6a6a7fc1cb3e6ea1b27a98f4_logo-icon.svg" alt=""/></div><div class="logo_list_container"><div class="collabo_head"><div class="logo_map_heading"><div class="_40_text">Collabo</div></div><div class="collabo_description"><div class="_24_paragraph _300">To be the trusted partner for brands, agencies, and publishers navigating the future of digital advertising.</div></div></div><div class="footer_test"><div class="head_sections"><div class="_14_p">Email: : </div></div><div class="_24_paragraph">info@collaboLLC.com</div></div></div></div></div></div><div class="form_containers"><div class="form_head_block"><div class="form_heading"><div class="_48_heading">Tell us about your goals</div></div><div class="form_head"><div class="form_contains w-form"><form id="email-form" name="email-form" data-name="Email Form" method="get" class="form_blck" data-wf-page-id={wfPage} data-wf-element-id="a4d37e32-a875-5371-0331-86e2dee748db" data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e"><div class="form_inner_container"><div class="form_input_container"><input class="input_block w-input" maxlength="256" name="email" data-name="Email" placeholder="Enter your name" type="email" id="email" required=""/><div class="input_block_container"><input class="input_block w-node-a4d37e32-a875-5371-0331-86e2dee748e0-dee748bb w-input" maxlength="256" name="email" data-name="Email" placeholder="Enter your email" type="email" id="email" required=""/><input class="input_block w-node-a4d37e32-a875-5371-0331-86e2dee748e1-dee748bb w-input" maxlength="256" name="email" data-name="Email" placeholder="Enter your phone" type="email" id="email" required=""/></div><div class="input_blocks"><div class="_24_vietnam">What do you want to create?</div><textarea id="field" name="field" maxlength="5000" data-name="Field" placeholder="Share your ideas" class="text_area_container w-input"></textarea></div></div><input type="submit" data-wait="Submit Your Form" class="form_btn_contain w-button" value="Submit Your Form"/></div></form><div class="w-form-done"><div>Thank you! Your submission has been received!</div></div><div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div></div></div></div></div></div></div></div>
+<div class="footer_form_container"><div class="footer_form_section"><div class="form_blocks"><div class="footer_form_map"><div class="form_map_container"><div class="map w-widget w-widget-map" data-widget-style="roadmap" data-widget-latlng="33.5106965,-112.0157274" data-enable-scroll="true" role="region" title="" data-enable-touch="true" data-widget-zoom="12" data-widget-tooltip=""></div></div><div class="form_map_content"><div class="form_content_container"><div class="logo_image_contain"><img loading="lazy" src="/webflow/images/6a6a7fc1cb3e6ea1b27a98f4_logo-icon.svg" alt=""/></div><div class="logo_list_container"><div class="collabo_head"><div class="logo_map_heading"><div class="_40_text">Collabo</div></div><div class="collabo_description"><div class="_24_paragraph _300">To be the trusted partner for brands, agencies, and publishers navigating the future of digital advertising.</div></div></div><div class="footer_test"><div class="head_sections"><div class="_14_p">Email: </div></div><a href="mailto:info@collaboLLC.com" class="_24_paragraph ft-link">info@collaboLLC.com</a></div></div></div></div></div><div class="form_containers"><div class="form_head_block"><div class="form_heading"><div class="_48_heading">Tell us about your goals</div></div><div class="form_head"><div class="form_contains w-form"><form id="email-form" name="email-form" data-name="Email Form" method="get" class="form_blck" data-wf-page-id={wfPage} data-wf-element-id="a4d37e32-a875-5371-0331-86e2dee748db"><div class="form_inner_container"><div class="form_input_container"><input class="input_block w-input" maxlength="256" name="name" data-name="Name" placeholder="Enter your name" type="text" id="footer-name" autocomplete="name" required=""/><div class="input_block_container"><input class="input_block w-node-a4d37e32-a875-5371-0331-86e2dee748e0-dee748bb w-input" maxlength="256" name="email" data-name="Email" placeholder="Enter your email" type="email" id="footer-email" autocomplete="email" required=""/><input class="input_block w-node-a4d37e32-a875-5371-0331-86e2dee748e1-dee748bb w-input" maxlength="256" name="phone" data-name="Phone" placeholder="Enter your phone" type="tel" id="footer-phone" autocomplete="tel"/></div><div class="input_blocks"><div class="_24_vietnam">What do you want to create?</div><textarea id="field" name="field" maxlength="5000" data-name="Field" placeholder="Share your ideas" class="text_area_container w-input"></textarea></div></div><input type="submit" data-wait="Submit Your Form" class="form_btn_contain w-button" value="Submit Your Form"/></div></form><div class="w-form-done"><div>Thank you! Your submission has been received!</div></div><div class="w-form-fail"><div>Oops! Something went wrong while submitting the form.</div></div></div></div></div></div></div></div></div>
+
+<style is:global>
+  /* The home page also loads slater-46199.css, whose reset changed this block's fonts and logo size there.
+     Pin them so the footer form looks identical on every page. */
+  html body .footer_form_container input:not(#_z),
+  html body .footer_form_container textarea:not(#_z),
+  html body .footer_form_container select:not(#_z),
+  html body .footer_form_container .form_btn_contain:not(#_z) { font-family: 'Be Vietnam Pro', sans-serif; }
+  html body .footer_form_container .logo_image_contain img:not(#_z) { width: 100%; height: auto; max-width: 100%; display: block; }
+</style>
+
+<!-- Collabo card backdrop: brand light beams sweeping slowly over a fine dot field, twinkles, and soft rings
+     pulsing out from the logo (a "signal going out" — ads delivered everywhere). -->
+<style is:global>
+  html body .form_map_content:not(#_z) { position: relative; isolation: isolate; overflow: hidden; }
+  .fc-fx { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .fc-fx__dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, .22) 1px, transparent 1.3px); background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%, #000 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 45%, #000 100%);
+  }
+  .fc-fx__beam {
+    position: absolute; left: 50%; top: 120%; width: 220%; aspect-ratio: 1; translate: -50% -50%;
+    background: conic-gradient(from 0deg, transparent 0 8%, rgba(90, 79, 224, .55) 14%, transparent 22% 40%,
+      rgba(237, 102, 115, .45) 47%, transparent 55% 72%, rgba(38, 174, 238, .5) 80%, transparent 88% 100%);
+    filter: blur(28px); mix-blend-mode: screen; animation: fc-spin 22s linear infinite;
+  }
+  .fc-fx__ring {
+    position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .45); opacity: 0; animation: fc-ring 4.5s cubic-bezier(.2, .6, .3, 1) infinite;
+  }
+  .fc-fx__ring:nth-child(4) { animation-delay: 1.5s; }
+  .fc-fx__ring:nth-child(5) { animation-delay: 3s; }
+  .fc-fx__star { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px rgba(255, 255, 255, .8); opacity: .2; animation: fc-tw 4s ease-in-out infinite; }
+  @keyframes fc-spin { to { rotate: 360deg; } }
+  @keyframes fc-ring { 0% { opacity: .55; transform: scale(.6); } 100% { opacity: 0; transform: scale(4.2); } }
+  @keyframes fc-tw { 50% { opacity: .95; } }
+  @media (prefers-reduced-motion: reduce) { .fc-fx__beam, .fc-fx__ring, .fc-fx__star { animation: none; } .fc-fx__ring { display: none; } }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>('.form_map_content').forEach((card) => {
+    if (card.querySelector('.fc-fx')) return;
+    const fx = document.createElement('div');
+    fx.className = 'fc-fx'; fx.setAttribute('aria-hidden', 'true');
+    fx.innerHTML = '<div class="fc-fx__dots"></div><div class="fc-fx__beam"></div><i class="fc-fx__ring"></i><i class="fc-fx__ring"></i><i class="fc-fx__ring"></i>';
+    for (let i = 0; i < 14; i++) {
+      const s = document.createElement('i'); s.className = 'fc-fx__star';
+      s.style.left = (4 + Math.random() * 92) + '%'; s.style.top = (4 + Math.random() * 92) + '%';
+      s.style.animationDelay = (-Math.random() * 4).toFixed(2) + 's'; s.style.animationDuration = (3 + Math.random() * 3).toFixed(2) + 's';
+      fx.appendChild(s);
+    }
+    card.prepend(fx);
+    // centre the rings on the logo
+    const place = () => {
+      const logo = card.querySelector<HTMLElement>('.logo_image_contain');
+      if (!logo) return;
+      const c = card.getBoundingClientRect(), l = logo.getBoundingClientRect();
+      fx.querySelectorAll<HTMLElement>('.fc-fx__ring').forEach((r) => { r.style.left = (l.left - c.left + l.width / 2) + 'px'; r.style.top = (l.top - c.top + l.height / 2) + 'px'; });
+    };
+    place();
+    new ResizeObserver(place).observe(card);
+  });
+</script>

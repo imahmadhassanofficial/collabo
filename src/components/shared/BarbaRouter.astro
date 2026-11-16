@@ -1,0 +1,240 @@
+---
+// Barba.js page transitions for the whole site.
+// Internal links swap only the [data-barba="container"] (header, sections, footer, page scripts) while the
+// transition panel, loader, cookie banner, chat and Lenis stay alive. Because the swapped-in page's scripts
+// would not run on their own, this file re-runs them after every swap so every animation works as on a
+// full page load:
+//   - <head> is synced (title, meta, page CSS); new head scripts are loaded once
+//   - head effect scripts marked data-rerun (globe, stars, shooting stars, footer bg, text reveal) run again
+//   - every script inside the new container runs again in order (classic, inline module and module src);
+//     DOMContentLoaded / load listeners they add are fired right after they run
+//   - ScrollTriggers from the old page are killed; Webflow (IX2/IX3, maps, forms) is restarted for the new page
+// If anything in that fails, the page is reloaded behind the panel so the visitor never sees a broken page.
+// Opt a link out with data-no-barba.
+---
+<script is:inline src="/vendor/barba/barba.umd.js"></script>
+<script is:inline>
+(function () {
+  if (!window.barba || window.__collaboBarba) return;
+  window.__collaboBarba = true;
+  var T = window.collaboTransition || { cover: function () { return Promise.resolve(); }, reveal: function () { return Promise.resolve(); } };
+  var gen = 0;
+  // Lenis is created by the page scripts as a global `const lenis`
+  var L = function () { try { return typeof lenis !== 'undefined' ? lenis : null; } catch (e) { return null; } };
+
+  // ---------- helpers ----------
+  var abs = function (u) { try { return new URL(u, location.href).href; } catch (e) { return u; } };
+  var noBust = function (u) { return abs(u).replace(/[?&]b=\d+$/, ''); };
+  var loaded = new Set();
+  document.querySelectorAll('script[src]').forEach(function (s) { loaded.add(noBust(s.src)); });
+  var isWfBundle = function (src) { return /\/webflow\/js\/webflow\.(?!schunk)[^/]+\.js/.test(src); };
+
+  // Tag the server-rendered <head> so a sync never removes styles injected at runtime by scripts.
+  Array.prototype.forEach.call(document.head.children, function (n) { n.setAttribute('data-ssr', ''); });
+  var key = function (n) { var c = n.cloneNode(true); c.removeAttribute('data-ssr'); return c.outerHTML; };
+
+  function loadScript(src) {
+    return new Promise(function (res) {
+      var s = document.createElement('script');
+      s.src = src; s.async = false;
+      s.onload = s.onerror = function () { res(); };
+      document.body.appendChild(s);
+    });
+  }
+
+  // While page scripts run, DOMContentLoaded/load listeners are collected and fired right after.
+  var ready = null;
+  var wAdd = window.addEventListener, dAdd = document.addEventListener;
+  window.addEventListener = function (t, f, o) {
+    if (ready && t === 'load' && typeof f === 'function') { ready.push(f); return; }
+    return wAdd.call(this, t, f, o);
+  };
+  document.addEventListener = function (t, f, o) {
+    if (ready && (t === 'DOMContentLoaded' || t === 'readystatechange') && typeof f === 'function') { if (t === 'DOMContentLoaded') ready.push(f); return; }
+    return dAdd.call(this, t, f, o);
+  };
+
+  function runInline(code, module) {
+    return new Promise(function (res) {
+      var s = document.createElement('script');
+      if (module) {
+        var id = '__bm' + (++gen);
+        window[id] = function () { delete window[id]; res(); };
+        s.type = 'module';
+        s.textContent = code + '\n;window.' + id + '&&window.' + id + '();';
+        setTimeout(function () { if (window[id]) { delete window[id]; res(); } }, 2500); // module threw: carry on
+      } else {
+        // a block keeps the page's top-level const/let from clashing with the previous run
+        s.textContent = '{\n' + code + '\n}';
+      }
+      document.body.appendChild(s);
+      if (!module) res();
+      s.remove();
+    });
+  }
+
+  async function runScript(s) {
+    var type = (s.getAttribute('type') || '').trim();
+    if (type && type !== 'module' && !/javascript/.test(type)) return; // JSON data blocks etc.
+    var module = type === 'module';
+    if (s.src) {
+      var src = noBust(s.src);
+      if (module) {
+        // dev-server style modules (and anything else that only needs loading once) are imported once
+        if (/[?&]type=style|\.css(\?|$)|\/@vite\/|\/@fs\/|dev-toolbar/.test(src)) {
+          if (!loaded.has(src)) { loaded.add(src); await import(src).catch(function () {}); }
+          return;
+        }
+        // re-import with a fresh query so the module runs again (put it first: the dev server needs lang.ts last)
+        var u = src.indexOf('?') < 0 ? src + '?b=' + (++gen) : src.replace('?', '?b=' + (++gen) + '&');
+        await import(u).catch(function (e) { console.error(e); });
+        return;
+      }
+      if (isWfBundle(src) && loaded.has(src)) return; // Webflow runtime: restarted, not reloaded
+      if (loaded.has(src)) return; // libraries load once
+      loaded.add(src);
+      await loadScript(src);
+      return;
+    }
+    var code = s.textContent;
+    if (!code.trim()) return;
+    if (/new\s+Lenis\s*\(/.test(code)) return; // one Lenis for the whole visit
+    await runInline(code, module);
+  }
+
+  function syncHead(doc) {
+    document.title = doc.title;
+    var next = Array.prototype.slice.call(doc.head.children);
+    var nextKeys = new Set(next.map(function (n) { return n.outerHTML; }));
+    var cur = Array.prototype.filter.call(document.head.children, function (n) { return n.hasAttribute('data-ssr'); });
+    var curKeys = new Set(cur.map(key));
+    var waits = [], scripts = [];
+    // drop page-specific head nodes the next page doesn't have (scripts stay: they already ran)
+    cur.forEach(function (n) { if (n.tagName !== 'SCRIPT' && !nextKeys.has(key(n))) n.remove(); });
+    next.forEach(function (n) {
+      if (curKeys.has(n.outerHTML)) return;
+      if (n.tagName === 'SCRIPT') { scripts.push(n); return; }
+      var c = n.cloneNode(true); c.setAttribute('data-ssr', '');
+      if (c.tagName === 'LINK' && /stylesheet/.test(c.rel)) waits.push(new Promise(function (r) { c.onload = c.onerror = r; setTimeout(r, 3000); }));
+      document.head.appendChild(c);
+    });
+    return { css: Promise.all(waits), scripts: scripts };
+  }
+
+  function dedupeStyles() {
+    var seen = new Set();
+    Array.prototype.forEach.call(document.head.querySelectorAll('style:not([data-ssr])'), function (s) {
+      if (seen.has(s.textContent)) s.remove(); else seen.add(s.textContent);
+    });
+  }
+
+  // Footer/Contact maps: Webflow's maps module would load the Google Maps API a second time, so draw them here.
+  function initMaps(container) {
+    var W = window.Webflow;
+    if (!(window.google && google.maps && google.maps.Map)) { try { W.require('maps').ready(); } catch (e) {} return; }
+    container.querySelectorAll('.w-widget-map').forEach(function (el) {
+      var ll = (el.getAttribute('data-widget-latlng') || '').split(',').map(Number);
+      if (ll.length !== 2 || isNaN(ll[0])) return;
+      var pos = { lat: ll[0], lng: ll[1] };
+      var map = new google.maps.Map(el, {
+        center: pos, zoom: Number(el.getAttribute('data-widget-zoom')) || 12,
+        mapTypeId: el.getAttribute('data-widget-style') || 'roadmap',
+        scrollwheel: el.getAttribute('data-enable-scroll') === 'true',
+        draggable: el.getAttribute('data-enable-touch') !== 'false',
+        mapTypeControl: false, streetViewControl: false
+      });
+      new google.maps.Marker({ position: pos, map: map });
+    });
+  }
+
+  // Webflow interactions for the new page: IX2 + IX3 restart against the new DOM and data-wf-page.
+  async function restartWebflow(container) {
+    var W = window.Webflow;
+    if (!W || !W.require) return;
+    try { var ix2 = W.require('ix2'); if (ix2) { ix2.destroy && ix2.destroy(); ix2.init && ix2.init(); } } catch (e) { console.warn('ix2', e); }
+    try { var ix3 = W.require('ix3'); if (ix3) { ix3.destroy(); await ix3.ready(); } } catch (e) { console.warn('ix3', e); }
+    initMaps(container);
+    try { var links = W.require('links'); links && links.ready && links.ready(); } catch (e) {} // w--current on nav links
+    // Webflow registers the page's IX3 interactions on readystatechange → complete
+    document.dispatchEvent(new Event('readystatechange'));
+  }
+
+  async function bootPage(container, doc) {
+    // 1. head: title/meta/css + any new head scripts
+    var head = syncHead(doc);
+    for (var i = 0; i < head.scripts.length; i++) if (head.scripts[i].src) await runScript(head.scripts[i]); // inline head scripts already ran on first load
+    await head.css;
+    // 2. Webflow interactions + widgets for this page
+    await restartWebflow(container);
+    // 3. the page's own scripts, then the shared head effects, with ready/load fired afterwards
+    ready = [];
+    var list = Array.prototype.slice.call(container.querySelectorAll('script'));
+    for (var j = 0; j < list.length; j++) { try { await runScript(list[j]); } catch (e) { console.error(e); } }
+    var fx = Array.prototype.slice.call(document.head.querySelectorAll('script[data-rerun]'));
+    for (var k = 0; k < fx.length; k++) {
+      var code = await fetch(fx[k].src).then(function (r) { return r.text(); }).catch(function () { return ''; });
+      if (code) await runInline(code, false);
+    }
+    // fire them (a DOMContentLoaded handler that adds a load handler gets that one fired too)
+    var ev = new Event('load'), guard = 0;
+    while (ready.length && guard++ < 500) { var f = ready.shift(); try { f.call(window, ev); } catch (e) { console.error(e); } }
+    ready = null;
+    dedupeStyles();
+  }
+
+  function cleanupPage() {
+    try { window.ScrollTrigger && ScrollTrigger.getAll().forEach(function (t) { t.kill(); }); } catch (e) {}
+    try { window.Draggable && document.querySelectorAll('[data-barba="container"] *').forEach(function (el) { var d = Draggable.get(el); if (d) d.kill(); }); } catch (e) {}
+    document.documentElement.classList.remove('m-menu-open');
+  }
+
+  function scrollTop() {
+    var l = L(); if (l && l.scrollTo) l.scrollTo(0, { immediate: true, force: true });
+    window.scrollTo(0, 0);
+  }
+  function scrollToHash() {
+    var h = location.hash; if (!h || h === '#') return;
+    var t = document.getElementById(decodeURIComponent(h.slice(1))); if (!t) return;
+    var l = L(); if (l && l.scrollTo) l.scrollTo(t, { immediate: true, force: true }); else t.scrollIntoView();
+  }
+
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  barba.init({
+    preventRunning: true,
+    timeout: 8000,
+    prevent: function (d) {
+      var a = d.el;
+      if (!a || a.hasAttribute('data-no-barba') || a.target === '_blank' || a.hasAttribute('download')) return true;
+      var u = new URL(d.href, location.href);
+      if (u.origin !== location.origin || /^\/api\//.test(u.pathname)) return true;
+      // same page with a #section: let the browser/Lenis scroll there
+      if (u.pathname.replace(/\/$/, '') === location.pathname.replace(/\/$/, '') && u.hash) return true;
+      return false;
+    },
+    transitions: [{
+      name: 'collabo-dots',
+      async leave() { await T.cover(); cleanupPage(); },
+      async enter(data) {
+        // take the old page out now so the new page's scripts only ever see the new DOM
+        if (data.current.container && data.current.container.parentNode) data.current.container.parentNode.removeChild(data.current.container);
+        scrollTop();
+        try {
+          var doc = new DOMParser().parseFromString(data.next.html, 'text/html');
+          var page = doc.documentElement.getAttribute('data-wf-page');
+          if (page) document.documentElement.setAttribute('data-wf-page', page);
+          await bootPage(data.next.container, doc);
+        } catch (e) {
+          console.error('Barba page boot failed, reloading', e);
+          location.reload();
+          return new Promise(function () {});
+        }
+        var l = L(); if (l && l.resize) l.resize();
+        try { window.ScrollTrigger && ScrollTrigger.refresh(); } catch (e) {}
+        scrollToHash();
+        await T.reveal();
+      }
+    }]
+  });
+})();
+</script>

@@ -366,13 +366,15 @@
     // Show the bubble only after the intro loader and while the cookie banner is not on screen.
     let loaderDone = !document.documentElement.classList.contains('cl-loading');
     const ck = document.querySelector<HTMLElement>('.ck');
+    const menu = document.getElementById('m-menu'); // phone menu: bubble steps aside while it is open
     const update = () => {
-      const hide = !loaderDone || (!!ck && !ck.hidden);
+      const hide = !loaderDone || (!!ck && !ck.hidden) || (!!menu && !menu.hidden && panel.hidden);
       if (bubble.hidden !== hide) bubble.hidden = hide; // only touch the attribute when it changes
     };
     window.addEventListener('collabo:loader-done', () => { loaderDone = true; update(); }, { once: true });
     setTimeout(() => { loaderDone = true; update(); }, 7000); // safety net if the loader event never fires
     if (ck) new MutationObserver(update).observe(ck, { attributes: true, attributeFilter: ['hidden'] });
+    if (menu) new MutationObserver(update).observe(menu, { attributes: true, attributeFilter: ['hidden'] });
     update();
 
     // Reopen the panel after a page change if it was open.

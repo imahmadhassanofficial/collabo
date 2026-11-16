@@ -1,4 +1,188 @@
 ---
 // Webflow section: .process_inner_container
 ---
-<div class="process_inner_container"><div class="process_container"><div class="content_block"><div class="process_card_container"><div class="card_inner_container _1"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Strategy</div></div><div class="process_inner_description"><div class="_14_p">We collaborate with your team to define the creative and technical requirements.</div></div></div><div class="number_process"><div class="_64_para">01</div></div></div><div class="card_inner_container _2"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Design &amp; Development</div></div><div class="process_inner_description"><div class="_14_p">Our team builds high-performance ads using modern technologies including advanced HTML5 animation and responsive design.</div></div></div><div class="number_process"><div class="_64_para">02</div></div></div><div class="card_inner_container _3"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Integration</div></div><div class="process_inner_description"><div class="_14_p">Ads are integrated into your preferred platforms and DSP environments.</div></div></div><div class="number_process"><div class="_64_para">03</div></div></div><div class="card_inner_container _4"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Testing &amp; Optimization</div></div><div class="process_inner_description"><div class="_14_p">We test across devices, browsers, and platforms to ensure flawless performance.</div></div></div><div class="number_process"><div class="_64_para">04</div></div></div><div class="card_inner_container _5"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Launch &amp; Reporting</div></div><div class="process_inner_description"><div class="_14_p">Campaigns launch with real-time monitoring and reporting.</div></div></div><div class="number_process"><div class="_64_para">05<br/></div></div></div></div><div class="content"><div class="header_bloick"><h2 class="_96_heading-2">Our Process</h2></div><div class="description_block"><div class="description_inner_process"><div class="_24_p">Create on-brand creatives for any channel and network. Bannerwise supports all network specific ad types, so you can publish ads with ease.</div></div></div></div></div></div></div>
+<div id="process" class="process_inner_container"><div class="process_container"><div class="content_block"><div class="process_card_container"><div class="pr-slot" data-pr-i="0"><div class="card_inner_container _1"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Strategy</div></div><div class="process_inner_description"><div class="_14_p">We collaborate with your team to define the creative and technical requirements.</div></div></div><div class="number_process"><div class="_64_para">01</div></div></div></div><div class="pr-slot" data-pr-i="1"><div class="card_inner_container _2"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Design &amp; Development</div></div><div class="process_inner_description"><div class="_14_p">Our team builds high-performance ads using modern technologies including advanced HTML5 animation and responsive design.</div></div></div><div class="number_process"><div class="_64_para">02</div></div></div></div><div class="pr-slot" data-pr-i="2"><div class="card_inner_container _3"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Integration</div></div><div class="process_inner_description"><div class="_14_p">Ads are integrated into your preferred platforms and DSP environments.</div></div></div><div class="number_process"><div class="_64_para">03</div></div></div></div><div class="pr-slot" data-pr-i="3"><div class="card_inner_container _4"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Testing &amp; Optimization</div></div><div class="process_inner_description"><div class="_14_p">We test across devices, browsers, and platforms to ensure flawless performance.</div></div></div><div class="number_process"><div class="_64_para">04</div></div></div></div><div class="pr-slot" data-pr-i="4"><div class="card_inner_container _5"><div class="process_inner_text"><div class="process_inner_heading"><div class="_32_heading">Launch &amp; Reporting</div></div><div class="process_inner_description"><div class="_14_p">Campaigns launch with real-time monitoring and reporting.</div></div></div><div class="number_process"><div class="_64_para">05<br/></div></div></div></div></div><div class="content"><div class="header_bloick"><h2 class="_96_heading-2">Our Process</h2></div><div class="description_block"><div class="description_inner_process"><div class="_24_p">Create on-brand creatives for any channel and network. Bannerwise supports all network specific ad types, so you can publish ads with ease.</div></div></div></div></div></div></div>
+
+
+<style is:global>
+  /* Phones/tablets: the slot is invisible to layout, so the swipe row in mobile.css is unchanged */
+  .pr-slot { display: contents; }
+
+  /* Desktop: fanned, overlapping cards that rise in one by one as you scroll (driven by the script below) */
+  @media (min-width: 900px) {
+    html body .process_container:not(#_z) { overflow: hidden; }
+    html body .process_card_container:not(#_z) { display: flex; justify-content: center; align-items: center; width: auto; gap: 0; }
+    html body .pr-slot:not(#_z) {
+      display: block; flex: none; width: 17.5vw; margin-left: -1vw; position: relative;
+      transform: translate3d(0, var(--pr-y, 0), 0) rotate(var(--pr-r, 0deg));
+      transform-origin: 50% 60%; will-change: transform; transition: z-index 0s .2s;
+    }
+    html body .pr-slot:first-child:not(#_z) { margin-left: 0; }
+    html body .pr-slot .card_inner_container:not(#_z) {
+      height: 23.5vw; padding: 1.6vw 3.2vw 1.6vw 1.6vw; border-radius: 1vw;
+      transform: none !important; rotate: none !important; translate: none !important; scale: none !important;
+      opacity: 1 !important; visibility: visible !important;
+      box-shadow: 0 1.6vw 3vw -1vw rgba(0, 0, 0, .55), inset 0 0 0 1px rgba(255, 255, 255, .22);
+      transition: translate .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s;
+    }
+    html body .pr-slot ._32_heading:not(#_z) { font-size: 1.75vw; }
+    html body .pr-slot ._14_p:not(#_z) { line-height: 1.35; }
+    html body .pr-slot.is-in:hover:not(#_z) { z-index: 5; transition: none; }
+    html body .pr-slot.is-in:hover .card_inner_container:not(#_z) {
+      translate: 0 -1.2vw !important;
+      box-shadow: 0 2.6vw 4vw -1vw rgba(0, 0, 0, .65), inset 0 0 0 1px rgba(255, 255, 255, .4);
+    }
+  }
+</style>
+
+<script>
+  // Scroll-driven card fan for "Our Process" (desktop only). Each card rises from below with a
+  // stagger, tilting into its resting angle, while the section is pinned (300vh tall, sticky inner).
+  const sec = document.querySelector<HTMLElement>('.process_inner_container');
+  const slots = sec ? Array.from(sec.querySelectorAll<HTMLElement>('.pr-slot')) : [];
+  if (sec && slots.length) {
+    const ROT = [-3, 2, 6, -4, 4];        // resting tilt (deg)
+    const OFF = [0.6, -0.9, 1.4, -0.4, 1]; // resting vertical offset (vw)
+    const STAGGER = 0.13, SPAN = 0.42;     // share of the pinned scroll per card
+    const desktop = matchMedia('(min-width: 900px)');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const clamp = (v: number) => Math.max(0, Math.min(1, v));
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+    let cur = 0, target = 0, raf = 0;
+
+    const draw = (p: number) => {
+      const vw = innerWidth / 100;
+      slots.forEach((el, i) => {
+        const t = ease(clamp((p - i * STAGGER) / SPAN));
+        el.style.setProperty('--pr-y', ((1 - t) * innerHeight * 1.05 + OFF[i] * vw * t).toFixed(1) + 'px');
+        el.style.setProperty('--pr-r', (ROT[i] * t).toFixed(2) + 'deg');
+        el.classList.toggle('is-in', t > 0.98);
+      });
+    };
+    const measure = () => {
+      const r = sec.getBoundingClientRect();
+      // starts a little before the section pins so the first card is already rising
+      return clamp((innerHeight * 0.35 - r.top) / (r.height - innerHeight * 0.75));
+    };
+    const tick = () => {
+      cur += (target - cur) * 0.14;
+      if (Math.abs(target - cur) < 0.0005) cur = target;
+      draw(cur);
+      raf = cur === target ? 0 : requestAnimationFrame(tick);
+    };
+    const update = () => {
+      if (!desktop.matches) { slots.forEach((el) => { el.style.removeProperty('--pr-y'); el.style.removeProperty('--pr-r'); }); return; }
+      if (reduce.matches) { draw(1); return; }
+      target = measure();
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    desktop.addEventListener('change', update);
+    cur = measure(); update();
+  }
+</script>
+
+<!-- ---------- Section look: hero-style dark sky with its own dot field, a scroll-drawn brand line, word-by-word reveal ---------- -->
+<style is:global>
+  html body .process_container:not(#_z) {
+    position: sticky; isolation: isolate; overflow: hidden;
+    background:
+      radial-gradient(circle at 85% 18%, rgba(38, 174, 238, .30), rgba(48, 107, 231, .12) 22%, rgba(38, 174, 238, 0) 44%),
+      radial-gradient(circle at 12% 82%, rgba(237, 102, 115, .28), rgba(155, 46, 194, .14) 24%, rgba(237, 102, 115, 0) 46%),
+      radial-gradient(ellipse 60% 50% at 50% 55%, rgba(90, 79, 224, .30), rgba(90, 79, 224, 0) 70%),
+      #07070d;
+  }
+  @media (max-width: 899px) { html body .process_container:not(#_z) { position: relative !important; } }
+  /* the section's own texture: a fine dot field that fades out toward the edges */
+  .pr-dots {
+    position: absolute; inset: 0; z-index: -2; pointer-events: none;
+    background-image: radial-gradient(rgba(201, 205, 245, .22) 1px, transparent 1.3px);
+    background-size: 26px 26px;
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 30%, transparent 75%);
+            mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 30%, transparent 75%);
+  }
+  .pr-line { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .pr-line path { fill: none; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .pr-line .is-glow { stroke-width: 10; opacity: .35; filter: blur(8px); }
+  .pr-line .is-main { stroke-width: 2.5; }
+  .pr-line .is-track { stroke: rgba(255, 255, 255, .06); stroke-width: 1.5; }
+  .pr-tip {
+    position: absolute; z-index: -1; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; pointer-events: none;
+    background: #fff; box-shadow: 0 0 0 4px rgba(249, 134, 112, .35), 0 0 24px 6px rgba(155, 46, 194, .7); opacity: 0; transition: opacity .3s;
+  }
+  .pr-tip.is-on { opacity: 1; }
+
+  /* word-by-word blur + fade for the heading and description */
+  .pr-w { display: inline-block; white-space: pre; opacity: 0; filter: blur(12px); transform: translateY(.35em);
+    transition: opacity .7s ease, filter .7s ease, transform .7s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i) * 45ms + var(--d, 0ms)); }
+  .pr-in .pr-w { opacity: 1; filter: blur(0); transform: none; }
+  @media (prefers-reduced-motion: reduce) { .pr-w { opacity: 1; filter: none; transform: none; transition: none; } }
+</style>
+
+<script>
+  const prSec = document.querySelector<HTMLElement>('.process_inner_container');
+  const prBox = prSec?.querySelector<HTMLElement>('.process_container');
+  if (prSec && prBox) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ---- background layers ----
+    const dots = document.createElement('div'); dots.className = 'pr-dots'; dots.setAttribute('aria-hidden', 'true');
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'pr-line'); svg.setAttribute('viewBox', '0 0 1440 900'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
+    // sweeps from the heading across the top, dips behind the cards, and exits bottom-right
+    const D = 'M -40 250 C 300 110, 720 130, 1010 190 S 1540 380, 1290 520 S 380 660, 300 800 S 1060 960, 1480 820';
+    svg.innerHTML = `<defs><linearGradient id="pr-grad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#26aeee"/><stop offset=".3" stop-color="#306be7"/><stop offset=".5" stop-color="#5a4fe0"/>
+        <stop offset=".7" stop-color="#9b2ec2"/><stop offset=".85" stop-color="#ed6673"/><stop offset="1" stop-color="#f98670"/></linearGradient></defs>
+      <path class="is-track" d="${D}"/><path class="is-glow" d="${D}" stroke="url(#pr-grad)" pathLength="1"/><path class="is-main" d="${D}" stroke="url(#pr-grad)" pathLength="1"/>`;
+    const tip = document.createElement('i'); tip.className = 'pr-tip'; tip.setAttribute('aria-hidden', 'true');
+    prBox.prepend(tip); prBox.prepend(svg); prBox.prepend(dots);
+    const draws = Array.from(svg.querySelectorAll<SVGPathElement>('.is-glow, .is-main'));
+    const main = svg.querySelector<SVGPathElement>('.is-main')!;
+    const total = main.getTotalLength();
+    draws.forEach((p) => { p.style.strokeDasharray = '1'; });
+
+    const clamp = (v: number) => Math.max(0, Math.min(1, v));
+    const progress = () => {
+      const r = prSec.getBoundingClientRect(), vh = innerHeight;
+      if (r.height > vh * 1.5) return clamp((vh * 0.35 - r.top) / (r.height - vh * 0.75)); // desktop: pinned 300vh
+      return clamp((vh * 0.9 - r.top) / (r.height + vh * 0.4));                              // phones: normal scroll
+    };
+    let shown = -1, raf = 0;
+    const render = () => {
+      raf = 0;
+      const p = reduce ? 1 : progress();
+      if (Math.abs(p - shown) < 0.001) return;
+      shown = p;
+      draws.forEach((el) => { el.style.strokeDashoffset = String(1 - p); });
+      const pt = main.getPointAtLength(total * p), b = prBox.getBoundingClientRect();
+      tip.style.left = (pt.x / 1440) * b.width + 'px';
+      tip.style.top = (pt.y / 900) * b.height + 'px';
+      tip.classList.toggle('is-on', p > 0.01 && p < 0.995);
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(render); };
+    addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', () => { shown = -1; queue(); });
+    render();
+
+    // ---- word-by-word reveal ----
+    const targets = [prBox.querySelector<HTMLElement>('._96_heading-2'), prBox.querySelector<HTMLElement>('.description_inner_process ._24_p')].filter(Boolean) as HTMLElement[];
+    targets.forEach((el, ti) => {
+      const words = (el.textContent || '').trim().split(/\s+/);
+      el.setAttribute('aria-label', words.join(' '));
+      el.innerHTML = '';
+      words.forEach((w, i) => {
+        const s = document.createElement('span');
+        s.className = 'pr-w'; s.setAttribute('aria-hidden', 'true');
+        s.style.setProperty('--i', String(i));
+        s.style.setProperty('--d', ti ? '350ms' : '0ms');
+        s.textContent = w + (i < words.length - 1 ? ' ' : '');
+        el.appendChild(s);
+      });
+      const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { el.classList.add('pr-in'); io.disconnect(); } }, { threshold: 0.4 });
+      io.observe(el);
+    });
+  }
+</script>

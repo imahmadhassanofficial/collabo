@@ -1,4 +1,4 @@
-/* Footer shooting star: one shooting star at a time inside .footer_sections (1s fall + 1.5s gap). Self-contained. */
+/* Footer shooting star: 2-3 shooting stars per burst, at random places, inside .footer_sections (1s fall + 1.5s gap). Self-contained. */
 (function () {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var SEL = '.footer_sections', P = 'ss-foot', FOOT = true;
@@ -14,25 +14,31 @@
     if (cs.position === 'static') host.style.position = 'relative';
     if (cs.zIndex === 'auto') host.style.isolation = 'isolate';
     var L = document.createElement('div'); L.className = P; L.setAttribute('aria-hidden', 'true');
-    var s = document.createElement('b'); L.appendChild(s); host.prepend(L);
+    var pool = [0, 1, 2].map(function () { var b = document.createElement('b'); L.appendChild(b); return b; }); host.prepend(L);
     var vis = false, busy = false;
 
     function fall() {
       var W = host.clientWidth, H = host.clientHeight, mob = innerWidth <= 767, vw = innerWidth / 100;
-      var x = (.3 + Math.random() * .6) * W;
-      var y = mob ? 70 + Math.random() * 150 : (6 + Math.random() * 12) * vw;
-      y = Math.min(y, H * .55);
-      var d = FOOT ? 20 * vw : mob ? .45 * W : 26 * vw;
-      s.style.left = x + 'px'; s.style.top = y + 'px';
-      s.animate([
-        { transform: 'rotate(150deg) translateX(0)', opacity: 0 },
-        { opacity: 1, offset: .15 },
-        { transform: 'rotate(150deg) translateX(' + d + 'px)', opacity: 0 }
-      ], { duration: 1000, easing: 'ease-out' });
+      var n = 2 + (Math.random() < .5 ? 1 : 0); // 2 or 3 streaks this burst
+      var d = FOOT ? 20 * vw : mob ? .45 * W : 26 * vw, xs = [];
+      for (var k = 0; k < n; k++) {
+        var x, tries = 0;
+        do { x = (.3 + Math.random() * .6) * W; } while (++tries < 20 && xs.some(function (v) { return Math.abs(v - x) < W * .12; }));
+        xs.push(x);
+        var y = mob ? 70 + Math.random() * 150 : (6 + Math.random() * 12) * vw;
+        y = Math.min(y, H * .55);
+        var s = pool[k];
+        s.style.left = x + 'px'; s.style.top = y + 'px';
+        s.animate([
+          { transform: 'rotate(150deg) translateX(0)', opacity: 0 },
+          { opacity: 1, offset: .15 },
+          { transform: 'rotate(150deg) translateX(' + d * (.8 + Math.random() * .4) + 'px)', opacity: 0 }
+        ], { duration: 1000, delay: k ? Math.random() * 350 : 0, easing: 'ease-out' });
+      }
     }
     async function loop() {
       if (busy) return; busy = true;
-      while (vis && !document.hidden) { fall(); await wait(1000); await wait(1500); }
+      while (vis && !document.hidden) { fall(); await wait(2500); }
       busy = false;
     }
     new IntersectionObserver(function (e) { vis = e[0].isIntersecting; if (vis) loop(); }).observe(host);

@@ -1,0 +1,151 @@
+---
+// Phone/tablet only (under 900px): looping hero cards, "Who we work with" slider arrows,
+// looping "One Ad. Everywhere" carousel with dots. Styles live in src/styles/mobile.css.
+---
+<script>
+  const phone = matchMedia('(max-width: 899px)');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (phone.matches) addEventListener('load', () => setTimeout(init, 300)); // after Webflow/GSAP have built their markup
+
+  function init() {
+    const ARROWS = `<div class="svc-arrows">
+      <button type="button" class="svc-arrow" data-dir="-1" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" class="svc-arrow" data-dir="1" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>`;
+
+    // An endlessly looping horizontal row. `items` must hold 3 identical sets of `n` cards;
+    // the scroll position is kept inside the middle set so it can travel either way forever.
+    function loopRow(scroller: HTMLElement, items: HTMLElement[], n: number) {
+      const span = () => items[n].offsetLeft - items[0].offsetLeft;
+      const step = () => items[1].offsetLeft - items[0].offsetLeft;
+      const wrap = () => {
+        const s = span();
+        if (!s) return;
+        if (scroller.scrollLeft >= 2 * s) scroller.scrollLeft -= s;
+        else if (scroller.scrollLeft < s) scroller.scrollLeft += s;
+      };
+      scroller.scrollLeft = span();
+      let held = false, resume = 0;
+      const hold = () => { held = true; clearTimeout(resume); };
+      const release = () => { clearTimeout(resume); resume = window.setTimeout(() => { held = false; }, 2500); };
+      scroller.addEventListener('touchstart', hold, { passive: true });
+      scroller.addEventListener('touchend', release, { passive: true });
+      scroller.addEventListener('touchcancel', release, { passive: true });
+      let visible = false;
+      new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(scroller);
+      return { span, step, wrap, isIdle: () => !held && visible && !document.hidden, hold, release };
+    }
+
+    // Mouse / trackpad-click dragging for a horizontal scroll row. Touch is left to native scrolling.
+    function dragScroll(el: HTMLElement | null, onStart?: () => void, onEnd?: () => void) {
+      if (!el || el.classList.contains('is-draggable')) return;
+      el.classList.add('is-draggable');
+      let down = false, moved = false, startX = 0, startLeft = 0;
+      el.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        down = true; moved = false; startX = e.clientX; startLeft = el.scrollLeft; onStart?.();
+      });
+      addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (!moved && Math.abs(dx) < 5) return;
+        moved = true; el.classList.add('is-dragging');
+        el.scrollLeft = startLeft - dx;
+      });
+      const end = () => {
+        if (!down) return;
+        down = false; onEnd?.();
+        if (!moved) return;
+        el.classList.remove('is-dragging'); // snap takes over again and settles on the nearest card
+        const stop = (ev: Event) => { ev.preventDefault(); ev.stopPropagation(); };
+        el.addEventListener('click', stop, { capture: true, once: true }); // a drag is not a click
+        setTimeout(() => el.removeEventListener('click', stop, { capture: true } as any), 50);
+      };
+      addEventListener('pointerup', end);
+      addEventListener('pointercancel', end);
+      el.addEventListener('dragstart', (e) => e.preventDefault());
+    }
+
+    // ---- 1. Hero demo cards: slow continuous loop, swipeable ----
+    const heroRow = document.querySelector<HTMLElement>('.radial-cards-marquee');
+    if (heroRow) {
+      const items = Array.from(heroRow.querySelectorAll<HTMLElement>('.radial-cards-marquee__item'));
+      const n = items.length / 3;
+      if (Number.isInteger(n) && n >= 2) {
+        heroRow.classList.add('is-loop');
+        const row = loopRow(heroRow, items, n);
+        heroRow.addEventListener('scroll', row.wrap, { passive: true });
+        dragScroll(heroRow, row.hold, row.release);
+        if (!reduce) {
+          let pos = heroRow.scrollLeft, last = performance.now();
+          const tick = (t: number) => {
+            const dt = Math.min(50, t - last); last = t;
+            if (row.isIdle()) {
+              if (Math.abs(pos - heroRow.scrollLeft) > 2) pos = heroRow.scrollLeft; // user moved it
+              pos += dt * 0.02; // slow drift
+              heroRow.scrollLeft = pos;
+              row.wrap();
+              pos = heroRow.scrollLeft + (pos % 1);
+            } else pos = heroRow.scrollLeft;
+            requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      }
+    }
+
+    // ---- 2. Who we work with: arrows for the swipe slider ----
+    const tiles = document.querySelector<HTMLElement>('.depth-tiles__collection');
+    if (tiles && !tiles.parentElement!.parentElement!.querySelector('.svc-nav')) {
+      const cards = Array.from(tiles.children) as HTMLElement[];
+      const nav = document.createElement('div');
+      nav.className = 'svc-nav is-light';
+      nav.innerHTML = ARROWS;
+      tiles.parentElement!.after(nav);
+      const [prev, next] = Array.from(nav.querySelectorAll<HTMLButtonElement>('.svc-arrow'));
+      const index = () => { let b = 0, d = Infinity; cards.forEach((c, i) => { const x = Math.abs(c.offsetLeft - cards[0].offsetLeft - tiles.scrollLeft); if (x < d) { d = x; b = i; } }); return tiles.scrollLeft + tiles.clientWidth >= tiles.scrollWidth - 2 ? cards.length - 1 : b; };
+      const go = (i: number) => tiles.scrollTo({ left: cards[Math.max(0, Math.min(cards.length - 1, i))].offsetLeft - cards[0].offsetLeft, behavior: reduce ? 'auto' : 'smooth' });
+      const sync = () => { const i = index(); prev.disabled = i === 0; next.disabled = i === cards.length - 1; };
+      prev.addEventListener('click', () => go(index() - 1));
+      next.addEventListener('click', () => go(index() + 1));
+      tiles.addEventListener('scroll', () => requestAnimationFrame(sync), { passive: true });
+      sync();
+      dragScroll(tiles);
+    }
+
+    // ---- Services and Process rows: mouse drag too ----
+    dragScroll(document.querySelector<HTMLElement>('.card-stack'));
+    dragScroll(document.querySelector<HTMLElement>('.process_card_container'));
+
+    // ---- 3. One Ad. Everywhere: looping snap carousel with dots + autoplay ----
+    const adRow = document.querySelector<HTMLElement>('.radial-gsap-slider__collection');
+    const adList = adRow?.querySelector<HTMLElement>('.radial-gsap-slider__list');
+    if (adRow && adList) {
+      const originals = (Array.from(adList.children) as HTMLElement[]).filter((c) => getComputedStyle(c).display !== 'none');
+      const n = originals.length;
+      if (n >= 2) {
+        for (let k = 0; k < 2; k++) originals.forEach((o) => { const c = o.cloneNode(true) as HTMLElement; c.setAttribute('aria-hidden', 'true'); c.querySelectorAll('a,button').forEach((a) => a.setAttribute('tabindex', '-1')); adList.appendChild(c); });
+        adRow.classList.add('is-loop');
+        const items = (Array.from(adList.children) as HTMLElement[]).filter((c) => c.classList.contains('radial-gsap-slider__item')).slice(-3 * n);
+        const row = loopRow(adRow, items, n);
+        // Arrows (no dots), centred under the cards like the other sliders
+        const nav = document.createElement('div');
+        nav.className = 'svc-nav';
+        nav.innerHTML = ARROWS;
+        (adRow.closest('.demo-section-3') || adRow.closest('.radial-gsap-slider') || adRow).after(nav);
+        nav.querySelectorAll<HTMLButtonElement>('.svc-arrow').forEach((btn) => btn.addEventListener('click', () => {
+          row.hold();
+          adRow.scrollBy({ left: Number(btn.dataset.dir) * row.step(), behavior: reduce ? 'auto' : 'smooth' });
+          row.release();
+        }));
+        const sync = () => {};
+        let settle = 0;
+        adRow.addEventListener('scroll', () => { clearTimeout(settle); settle = window.setTimeout(row.wrap, 140); }, { passive: true }); // wrap only once the snap has settled
+        sync();
+        dragScroll(adRow, row.hold, row.release);
+        if (!reduce) setInterval(() => { if (row.isIdle()) adRow.scrollBy({ left: row.step(), behavior: 'smooth' }); }, 4000);
+      }
+    }
+  }
+</script>

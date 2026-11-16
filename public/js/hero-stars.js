@@ -15,7 +15,7 @@
   function boxes(host) { // everything stars must not sit on: text, media, controls, moving cards
     var out = [], w = document.createTreeWalker(host, NodeFilter.SHOW_TEXT), n, r = document.createRange();
     while ((n = w.nextNode())) if (n.nodeValue.trim() && !n.parentElement.closest('.' + P)) { r.selectNodeContents(n); out.push.apply(out, r.getClientRects()); }
-    host.querySelectorAll('img,video,iframe,canvas,svg,input,textarea,select,button,.radial-cards-marquee,[data-stars-avoid]').forEach(function (e) { out.push(e.getBoundingClientRect()); });
+    host.querySelectorAll('img,video,iframe,canvas,svg,input,textarea,select,button,.radial-cards-marquee,[data-stars-avoid]').forEach(function (e) { if (!e.closest('.fb-grid,.fb-glow,.fb-dots,.hg-globe,.hg-orbs,.ss-foot,.ss-hero,.cs-foot,.cs-hero')) out.push(e.getBoundingClientRect()); });
     return out.filter(function (b) { return b.width && b.height; });
   }
   function build(host) {

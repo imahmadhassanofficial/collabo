@@ -8,7 +8,7 @@ export default defineConfig({
   // Pages stay static; only /api/* routes (chat + lead) run as serverless functions.
   output: 'static',
   adapter: vercel(),
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !/\/404\/?$/.test(page) })],
   // Keep markup as close to the Webflow output as possible.
   compressHTML: false,
 });

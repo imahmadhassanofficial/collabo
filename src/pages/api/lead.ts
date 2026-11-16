@@ -36,6 +36,8 @@ export const POST: APIRoute = async ({ request }) => {
   const email = clean(body?.email, 200);
   const note = clean(body?.note, 2000);
   const transcript = clean(body?.transcript, 4000);
+  const details = clean(body?.details, 3000);
+  const source = clean(body?.source, 60) || 'chat';
 
   if (!name || !EMAIL.test(email)) return json({ error: 'Please add your name and a valid email.' }, 400);
 
@@ -46,8 +48,8 @@ export const POST: APIRoute = async ({ request }) => {
       from,
       to: [to],
       reply_to: email,
-      subject: `New website lead: ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nProject note:\n${note || '(none)'}\n\nChat transcript:\n${transcript || '(none)'}`,
+      subject: `New website lead (${source}): ${name}`,
+      text: `Source: ${source}\nName: ${name}\nEmail: ${email}\n${details ? `\n${details}\n` : ''}\nProject note:\n${note || '(none)'}${transcript ? `\n\nChat transcript:\n${transcript}` : ''}`,
     }),
   });
 

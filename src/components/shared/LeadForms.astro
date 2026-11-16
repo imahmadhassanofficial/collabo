@@ -1,0 +1,43 @@
+---
+// Sends the site's forms (footer "Tell us about your goals" + Contact page) to /api/lead (Resend email),
+// instead of Webflow's form service, which only works on Webflow hosting.
+// Listens in the capture phase so Webflow's own submit handler never runs.
+---
+<style is:global>
+  .lf-sending input[type="submit"] { opacity: .6; pointer-events: none; }
+</style>
+<script is:inline>
+  (function () {
+    if (window.__leadForms) return; window.__leadForms = true;
+    var FORMS = '.footer_form_container form, .form_container_contact form';
+    window.addEventListener('submit', function (e) {
+      var form = e.target;
+      if (!form.matches || !form.matches(FORMS)) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      if (!form.reportValidity()) return;
+      var wrap = form.parentElement, done = wrap.querySelector('.w-form-done'), fail = wrap.querySelector('.w-form-fail');
+      var btn = form.querySelector('input[type="submit"]'), label = btn && btn.value;
+      var fd = new FormData(form), name = '', email = '', note = '', details = [];
+      fd.forEach(function (v, k) {
+        v = String(v).trim(); if (!v) return;
+        var key = k.toLowerCase();
+        if (!name && /name/.test(key) && !/company/.test(key)) name = v;
+        else if (!email && /email/.test(key)) email = v;
+        else if (/message|field$|^field/.test(key) && form.querySelector('textarea[name="' + k + '"]')) note = v;
+        else details.push((form.querySelector('[name="' + k + '"]').getAttribute('data-name') || k) + ': ' + v);
+      });
+      form.classList.add('lf-sending'); if (btn) btn.value = 'Sending…';
+      if (fail) fail.style.display = 'none';
+      fetch('/api/lead', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, note: note, details: details.join('\n'),
+          source: form.closest('.form_container_contact') ? 'contact page' : 'footer form' })
+      }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) throw new Error(j.error || 'failed'); }); })
+        .then(function () { form.style.display = 'none'; if (done) done.style.display = 'block'; })
+        .catch(function (err) {
+          if (fail) { fail.firstElementChild.textContent = (err && err.message && err.message !== 'failed' ? err.message + ' ' : 'Something went wrong. ') + 'You can also email info@collaboLLC.com.'; fail.style.display = 'block'; }
+        })
+        .finally(function () { form.classList.remove('lf-sending'); if (btn) btn.value = label; });
+    }, true);
+  })();
+</script>

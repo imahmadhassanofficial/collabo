@@ -1,0 +1,9 @@
+Photos in this folder are from Unsplash (https://unsplash.com/license).
+ad-300x250.jpg  https://unsplash.com/photos/1505740420928-5e560c06d30e  (Unsplash License: free for commercial use, no attribution required)
+ad-728x90.jpg  https://unsplash.com/photos/1498049860654-af1a5c566876  (Unsplash License: free for commercial use, no attribution required)
+ad-160x600.jpg  https://unsplash.com/photos/1771646752380-4b89ecad2418  (Unsplash License: free for commercial use, no attribution required)
+ad-320x50.jpg  https://unsplash.com/photos/1623039405147-547794f92e9e  (Unsplash License: free for commercial use, no attribution required)
+ad-300x600.jpg  https://unsplash.com/photos/1651255122187-d49ae6f41736  (Unsplash License: free for commercial use, no attribution required)
+ad-970x250.jpg  https://unsplash.com/photos/1625592729058-8338198122c1  (Unsplash License: free for commercial use, no attribution required)
+ad-336x280.jpg  https://unsplash.com/photos/1591276151122-987852b6275d  (Unsplash License: free for commercial use, no attribution required)
+ad-1920x1080.jpg  https://unsplash.com/photos/1758862687151-7580b498d335  (Unsplash License: free for commercial use, no attribution required)

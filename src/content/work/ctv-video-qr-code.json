@@ -1,0 +1,22 @@
+{
+  "title": "CTV Video Spot with Shoppable QR Code",
+  "client": "Sample spot",
+  "summary": "A 14-second CTV video with an on-screen QR code and a scannable end card that drives viewers from the TV to their phone.",
+  "description": "A sample of our MP4 video format for CTV and streaming. Built from licensed stock footage to show the format: a QR code appears in the corner mid-spot and the end card turns the full screen into a scan-to-order call to action, so a lean-back TV view becomes a measurable visit. We deliver spots like this as broadcast-ready MP4s with the QR code, tracking and end card built in.",
+  "device": "CTV",
+  "adType": ["Video Ads"],
+  "platform": ["CTV", "OTT"],
+  "industry": ["Food & Beverage"],
+  "features": ["QR Code", "Endcard"],
+  "technology": ["MP4"],
+  "adSize": ["1920x1080"],
+  "tags": ["VIDEO", "CTV", "QR CODE", "MP4"],
+  "thumbnails": ["/work/ctv-video-qr-code/thumb-1.jpg", "/work/ctv-video-qr-code/thumb-2.jpg"],
+  "demo": {
+    "type": "video",
+    "src": "/work/ctv-video-qr-code/demo.mp4",
+    "poster": "/work/ctv-video-qr-code/poster.jpg"
+  },
+  "date": "2026-11-20",
+  "draft": false
+}

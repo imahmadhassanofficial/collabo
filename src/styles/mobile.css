@@ -697,8 +697,8 @@
 
 /* ---------- QA: tap targets + tablet text ---------- */
 /* Work card share button: 25px icon, 45px tap area */
-html body .wk-card__share:not(#_z) { position: relative; }
-html body .wk-card__share:not(#_z)::after { content: ''; position: absolute; inset: -10px; }
+html body .wk-card__share:not(#_z), html body .wk-card__arrow:not(#_z) { position: relative; }
+html body .wk-card__share:not(#_z)::after, html body .wk-card__arrow:not(#_z)::after { content: ''; position: absolute; inset: -10px; }
 /* Contact "Get in touch" details shrink below 10px on small laptops/tablets (vw-based Webflow sizes) */
 @media (min-width: 900px) and (max-width: 1279px) {
   html body .getintouch_container ._18_p:not(#_z) { font-size: 14px; }

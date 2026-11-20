@@ -30,7 +30,8 @@
   var isWfBundle = function (src) { return /\/webflow\/js\/webflow\.(?!schunk)[^/]+\.js/.test(src); };
 
   // Tag the server-rendered <head> so a sync never removes styles injected at runtime by scripts.
-  Array.prototype.forEach.call(document.head.children, function (n) { n.setAttribute('data-ssr', ''); });
+  // (styles that page scripts added before this point are marked data-keep so a sync never removes them)
+  Array.prototype.forEach.call(document.head.children, function (n) { if (!n.hasAttribute('data-keep') && !n.hasAttribute('data-cd')) n.setAttribute('data-ssr', ''); });
   var key = function (n) { var c = n.cloneNode(true); c.removeAttribute('data-ssr'); return c.outerHTML; };
 
   function loadScript(src) {

@@ -1,0 +1,54 @@
+{
+  "title": "Discover Newport – Fall Swell 300x600",
+  "client": "Discover Newport",
+  "summary": "A scroll-driven 300x600 swell that unfolds into a swipeable fall guide: food, foliage and events.",
+  "description": "Built in Celtra for Discover Newport's fall campaign. The 300x600 unit starts as a story stack and swells as the reader scrolls, revealing panels for fall dining, foliage drives and events, each with its own call to action and a \"Plan your visit\" end frame. Switch between phone and desktop to see it in place on a publisher page.",
+  "device": "Mobile",
+  "adType": [
+    "Rich Media Ads",
+    "Interactive Ads"
+  ],
+  "platform": [
+    "Mobile Web",
+    "Desktop"
+  ],
+  "industry": [
+    "Travel & Tourism"
+  ],
+  "features": [
+    "Swell",
+    "Scroll Reveal",
+    "Multi-Panel"
+  ],
+  "technology": [
+    "HTML5",
+    "Celtra"
+  ],
+  "adSize": [
+    "300x600"
+  ],
+  "tags": [
+    "CELTRA",
+    "RICH MEDIA",
+    "300x600",
+    "Mobile"
+  ],
+  "thumbnails": [
+    "/work/discover-newport-fall-swell/thumb-1.jpg",
+    "/work/discover-newport-fall-swell/thumb-2.jpg"
+  ],
+  "demo": {
+    "type": "tag",
+    "tag": "<div class=\"celtra-ad-v3\"> <img src=\"data:image/png,celtra\" style=\"display: none\" onerror=\" (function(img) { var params = {'accountId':'861e70a0','clickUrl':'','widthBreakpoint':'','expandDirection':'undefined','preferredClickThroughWindow':'new','clickEvent':'advertiser','externalAdServer':'Custom','tagVersion':'html-standard-10'}; var req = document.createElement('script'); req.id = params.scriptId = 'celtra-script-' + (window.celtraScriptIndex = (window.celtraScriptIndex||0)+1); params.clientTimestamp = new Date/1000; params.clientTimeZoneOffsetInMinutes = new Date().getTimezoneOffset(); params.hostPageLoadId=window.celtraHostPageLoadId=window.celtraHostPageLoadId||(Math.random()+'').slice(2); var qs = ''; for (var k in params) { qs += '&amp;' + encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); } var src = 'https://cdn.celtra.com/ads/5dbbeb64/web.js?' + qs; if (src.length >= 8192) { src = 'https://ads.celtra.com/5dbbeb64/web.js?' + qs; } req.src = src; img.parentNode.insertBefore(req, img.nextSibling); })(this); \"/> </div>",
+    "width": 300,
+    "height": 600,
+    "devices": [
+      "Mobile",
+      "Tablet",
+      "Desktop"
+    ],
+    "previewUrl": "https://digital-remedy.celtra.com/preview/3380884c#overrides.deviceInfo.deviceType=Phone&placementWidth=300&placementHeight=600"
+  },
+  "date": "2025-10-01",
+  "draft": false
+}

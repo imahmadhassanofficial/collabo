@@ -1,0 +1,45 @@
+{
+  "title": "Florida Lottery – Scratch-to-Reveal Interstitial",
+  "client": "Florida Lottery",
+  "summary": "A holiday mobile interstitial where users scratch the card on screen to reveal the gift.",
+  "description": "A Spanish-language holiday interstitial for the Florida Lottery: \"Encuentra el regalo perfecto\". Users scratch the gift card with a finger (or the mouse) to reveal the prize, turning a full-screen placement into a moment of play. Built in HTML5 and hosted on Collabo's demo server.",
+  "device": "Mobile",
+  "adType": [
+    "Gamified Ads",
+    "Interactive Ads"
+  ],
+  "platform": [
+    "Mobile Web"
+  ],
+  "industry": [
+    "Lottery & Gaming"
+  ],
+  "features": [
+    "Scratch to Reveal",
+    "Interstitial"
+  ],
+  "technology": [
+    "HTML5"
+  ],
+  "adSize": [
+    "Full Screen"
+  ],
+  "tags": [
+    "HTML5",
+    "GAMIFIED",
+    "INTERSTITIAL",
+    "Mobile"
+  ],
+  "thumbnails": [
+    "/work/florida-lottery-scratch-interstitial/thumb-1.jpg"
+  ],
+  "demo": {
+    "type": "url",
+    "src": "https://clients.collabollc.com/FloridaLottery/oct_2018/build/MobileInterstitialDemo/index.html",
+    "frame": "browser",
+    "width": 1280,
+    "height": 808
+  },
+  "date": "2018-10-15",
+  "draft": false
+}

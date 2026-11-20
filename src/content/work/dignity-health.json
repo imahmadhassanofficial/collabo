@@ -29,5 +29,9 @@
     "/work/dignity-health/thumb-1.jpg"
   ],
   "date": "2026-11-01",
-  "draft": false
+  "draft": false,
+  "demo": {
+    "type": "image",
+    "src": "/work/dignity-health/thumb-1.jpg"
+  }
 }

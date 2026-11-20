@@ -1,13 +1,17 @@
 {
-  "title": "DMV – Overlay + Endcard",
-  "client": "DMV",
-  "summary": "A brief overview describing the campaign, its goals, interaction model, and supported environments.",
+  "title": "California DMV – Video Overlay + Endcard",
+  "client": "California DMV",
+  "summary": "In-stream video with a clickable brand overlay and an interactive endcard linking to DMV online services.",
+  "description": "Served from Collabo's ad server. The video runs with a persistent \"DMV online: Ready when you are\" overlay and Learn More button, then hands off to an interactive endcard with four service shortcuts: vehicle registration, license renewal, change of address and paperless opt-in. Press play in the preview to watch the full flow.",
   "device": "Desktop",
   "adType": [
-    "Rich Media Ads"
+    "Video Ads",
+    "Interactive Ads"
   ],
   "platform": [
-    "Desktop"
+    "Desktop",
+    "Mobile Web",
+    "CTV"
   ],
   "industry": [
     "Government"
@@ -17,17 +21,29 @@
     "Endcard"
   ],
   "technology": [
-    "HTML5"
-  ],
-  "adSize": [],
-  "tags": [
     "HTML5",
-    "INTERACTIVE",
-    "VAST",
-    "Mobile",
-    "CTV"
+    "VAST"
   ],
-  "thumbnails": [],
-  "date": "2026-10-28",
-  "draft": true
+  "adSize": [
+    "800x450"
+  ],
+  "tags": [
+    "VIDEO",
+    "OVERLAY",
+    "ENDCARD",
+    "VAST"
+  ],
+  "thumbnails": [
+    "/work/dmv-overlay-endcard/thumb-1.jpg",
+    "/work/dmv-overlay-endcard/thumb-2.jpg"
+  ],
+  "demo": {
+    "type": "url",
+    "src": "https://sdk.collabollc.com/servlet/testing?id=965&auth=a65002ef7120b651ff0de406acc2d8ed",
+    "frame": "browser",
+    "width": 1280,
+    "height": 960
+  },
+  "date": "2026-05-06",
+  "draft": false
 }

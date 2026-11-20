@@ -46,7 +46,18 @@ const graph: any[] = [
   org,
   { '@type': 'WebSite', '@id': `${site}/#website`, url: `${site}/`, name: 'Collabo', publisher: { '@id': `${site}/#organization` }, inLanguage: 'en-US' },
 ];
-if (NAMES[path]) {
+const workItem = path.match(/^\/work\/([^/]+)$/);
+if (workItem) {
+  const name = workItem[1].replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${site}/` },
+      { '@type': 'ListItem', position: 2, name: 'Our Work', item: `${site}/work/` },
+      { '@type': 'ListItem', position: 3, name, item: `${site}${path}/` },
+    ],
+  });
+} else if (NAMES[path]) {
   graph.push({
     '@type': 'BreadcrumbList',
     itemListElement: [

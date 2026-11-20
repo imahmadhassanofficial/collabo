@@ -1,0 +1,247 @@
+---
+// Full preview page for one Work demo: /work/<slug>. One page per JSON file in src/content/work/.
+// The demo plays live in its real format (public/js/demo-player.js) in a big device stage, with a phone/tablet/desktop
+// switcher for ad tags and banners, then the details, and a big "Next demo" block (wraps from the last demo to the first).
+import { getCollection } from 'astro:content';
+import WebflowLayout from '../../layouts/WebflowLayout.astro';
+import WorkDetailHead from '../../components/heads/WorkDetailHead.astro';
+import PageScripts from '../../components/scripts/PageScripts.astro';
+import Header from '../../components/shared/Header.astro';
+import FooterWithForm from '../../components/shared/FooterWithForm.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('work', ({ data }) => import.meta.env.DEV || !data.draft);
+  const items = all
+    .map(({ id, data }) => ({ slug: id, ...data, date: data.date.toISOString() }))
+    .sort((a, b) => b.date.localeCompare(a.date));
+  return items.map((item, i) => ({
+    params: { slug: item.slug },
+    props: { item, next: items.length > 1 ? items[(i + 1) % items.length] : null, nextNo: ((i + 1) % items.length) + 1 },
+  }));
+}
+
+const { item, next, nextNo } = Astro.props;
+const wfPage = '6a0aac72b53390297518fb4b';
+const d = item.demo;
+const original = d && (d.previewUrl || (d.type === 'url' || d.type === 'html5' ? d.src : ''));
+const specs = [
+  ['Device', [item.device]],
+  ['Ad Type', item.adType],
+  ['Platform', item.platform],
+  ['Industry', item.industry],
+  ['Features', item.features],
+  ['Technology', item.technology],
+  ['Ad Size', item.adSize],
+].filter(([, v]) => v && v.length);
+const formatLabel = d
+  ? { tag: 'Live ad tag', html5: 'HTML5 banner', url: 'Live demo page', video: 'Video', image: 'Static mockup' }[d.type]
+  : 'Preview coming soon';
+const metaTitle = `${item.title} | Collabo Work`;
+const metaDesc = (item.description || item.summary).slice(0, 158);
+// the demo data the player needs (keeps the full ad tag out of attributes)
+const payload = JSON.stringify({ slug: item.slug, title: item.title, client: item.client, device: item.device, demo: item.demo, thumbnails: item.thumbnails }).replace(/</g, '\\u003c');
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: item.title,
+  description: item.description || item.summary,
+  image: item.thumbnails[0] ? new URL(item.thumbnails[0], Astro.site).href : undefined,
+  creator: { '@type': 'Organization', name: 'Collabo', url: Astro.site?.href },
+  about: item.client,
+  keywords: [...item.adType, ...item.features, ...item.technology].join(', '),
+  dateCreated: item.date.slice(0, 10),
+});
+---
+<WebflowLayout wfPage={wfPage}>
+  <WorkDetailHead slot="head" title={metaTitle} description={metaDesc} image={item.thumbnails[0]} />
+  <Header current="work" />
+
+  <section class="head_block wd-hero" aria-labelledby="wd-title">
+    <div class="wd-wrap">
+      <nav class="wd-crumbs" aria-label="Breadcrumb">
+        <a href="/work">Our Work</a><span aria-hidden="true">/</span><span aria-current="page">{item.title}</span>
+      </nav>
+      <div class="wd-top">
+        <div class="wd-titles">
+          <div class="wd-meta">
+            <span class="wd-pill">{item.device}</span>
+            <span class="wd-format">{formatLabel}</span>
+            {item.client && item.client !== item.title && <span class="wd-client">{item.client}</span>}
+          </div>
+          <h1 class="wd-title" id="wd-title">{item.title}</h1>
+          <p class="wd-summary">{item.summary}</p>
+        </div>
+        <div class="wd-ctrl" aria-label="Preview controls"></div>
+      </div>
+
+      <div class="wd-stage" data-wd-stage>
+        {!d && <p class="wd-note">Live demo coming soon</p>}
+      </div>
+      <p class="wd-hint">
+        {d && (d.type === 'tag' || d.type === 'html5') && 'This is the live ad on a sample site. Scroll and tap it like you would on a real page. Switch device above.'}
+        {d && d.type === 'url' && 'This is the live demo. Click, tap and play it right here.'}
+        {d && d.type === 'url' && original && <a class="wd-hint__open" href={original} target="_blank" rel="noopener">Open it full screen ↗</a>}
+        {d && d.type === 'video' && 'Press play, and turn the sound on with the speaker button.'}
+      </p>
+    </div>
+  </section>
+
+  <section class="wd-body">
+    <div class="wd-wrap wd-grid">
+      <div class="wd-about">
+        <h2 class="wd-h2">About this demo</h2>
+        <p class="wd-desc">{item.description || item.summary}</p>
+        {item.tags.length > 0 && <ul class="wd-tags">{item.tags.map((t) => <li>{t}</li>)}</ul>}
+        <dl class="wd-specs">
+          {specs.map(([k, v]) => <div><dt>{k}</dt><dd>{(v as string[]).join(', ')}</dd></div>)}
+        </dl>
+      </div>
+      <aside class="wd-card">
+        <p class="wd-card__eyebrow">Like what you see?</p>
+        <p class="wd-card__title">Let's build an ad like this for your brand.</p>
+        <a href="/contact" class="wd-btn is-primary">Start a Conversation</a>
+        {original && <a href={original} target="_blank" rel="noopener" class="wd-btn">Open original preview ↗</a>}
+        <a href="/work" class="wd-btn is-ghost">← Back to all work</a>
+      </aside>
+    </div>
+
+    {next && (
+      <a class="wd-next" href={`/work/${next.slug}`} aria-label={`Next demo: ${next.title}`}>
+        <div class="wd-wrap wd-next__head">
+          <div class="wd-next__label">
+            <span class="wd-next__no">({String(nextNo).padStart(2, '0')})</span>
+            <span class="wd-next__kicker">Next Demo</span>
+          </div>
+          <div class="wd-next__info">
+            <p class="wd-next__title">{next.title}</p>
+            <p class="wd-next__summary">{next.summary}</p>
+            <span class="wd-next__cta">
+              <span class="wd-next__arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="wd-next__btn">View Demo</span>
+            </span>
+          </div>
+        </div>
+        <div class="wd-wrap">
+          <div class="wd-next__media">
+            {next.thumbnails[0] && <img class="wd-next__bg" src={next.thumbnails[0]} alt="" loading="lazy" decoding="async" aria-hidden="true" />}
+            {next.thumbnails[0] && <img class="wd-next__img" src={next.thumbnails[0]} alt="" loading="lazy" decoding="async" />}
+            <span class="wd-next__tags">{[next.device, ...next.adType.slice(0, 2)].join(' · ')}</span>
+          </div>
+        </div>
+      </a>
+    )}
+  </section>
+
+  <FooterWithForm wfPage={wfPage} />
+
+  <script type="application/json" id="wd-data" set:html={payload} />
+  <script type="application/ld+json" set:html={schema} />
+  <script is:inline src="/js/demo-player.js?v=4"></script>
+  <script is:inline>
+  (() => {
+    const stage = document.querySelector('[data-wd-stage]');
+    const data = document.getElementById('wd-data');
+    if (!stage || !data || !window.CollaboDemo) return;
+    const item = JSON.parse(data.textContent);
+    if (!item.demo) return;
+    const maxHeight = () => Math.min(innerHeight * (innerWidth < 900 ? 0.72 : 0.8), 940);
+    window.CollaboDemo.mount(stage, item, { controls: document.querySelector('.wd-ctrl'), dark: true, pad: innerWidth < 900 ? 14 : 28, maxHeight });
+  })();
+  </script>
+  <PageScripts slot="scripts" />
+</WebflowLayout>
+
+<style is:global>
+  .wd-hero { position: relative; z-index: 2; padding-bottom: clamp(40px, 4vw, 80px) !important; color: #fff; }
+  .wd-wrap { width: min(94.792vw, 1820px); margin: 0 auto; }
+  .wd-crumbs { display: flex; align-items: center; gap: 10px; padding-top: clamp(24px, 2.4vw, 44px); font: 400 14px/1.3 'Be Vietnam Pro', sans-serif; color: rgba(255,255,255,.6); }
+  .wd-crumbs a { color: rgba(255,255,255,.85); text-decoration: none; white-space: nowrap; padding: 12px 0; margin: -12px 0; } .wd-crumbs a:hover { color: #fff; text-decoration: underline; }
+  .wd-crumbs [aria-current] { color: rgba(255,255,255,.55); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wd-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin: clamp(18px, 1.6vw, 30px) 0 clamp(20px, 1.8vw, 34px); }
+  .wd-titles { max-width: 980px; min-width: 0; }
+  .wd-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .wd-pill { background: #fff; color: #04091a; border-radius: 99px; padding: 6px 14px; font: 500 13px/1.2 'Be Vietnam Pro', sans-serif; }
+  .wd-format { border: 1px solid rgba(255,255,255,.3); border-radius: 99px; padding: 5px 13px; font: 400 13px/1.2 'Be Vietnam Pro', sans-serif; color: rgba(255,255,255,.85); }
+  .wd-client { font: 400 15px/1.2 'Be Vietnam Pro', sans-serif; color: rgba(255,255,255,.65); }
+  .wd-title { margin: 0; font: 400 clamp(34px, 3.6vw, 72px)/1.05 Zodiak, Arial, sans-serif; color: #fff; }
+  .wd-summary { margin: 14px 0 0; max-width: 760px; font: 400 clamp(15px, 1vw, 19px)/1.55 'Be Vietnam Pro', sans-serif; color: rgba(255,255,255,.75); }
+  .wd-stage {
+    position: relative; height: min(78vh, 920px); min-height: 420px; border-radius: clamp(18px, 1.6vw, 30px); overflow: hidden;
+    background: radial-gradient(90% 80% at 50% 100%, rgba(90,79,224,.55) 0%, rgba(29,21,86,.6) 45%, rgba(6,11,30,.85) 100%);
+    border: 1px solid rgba(255,255,255,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .wd-note { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; margin: 0; font: 400 28px/1.2 Zodiak, Arial, sans-serif; color: #fff; }
+  .wd-hint { margin: 14px 0 0; text-align: center; font: 400 14px/1.4 'Be Vietnam Pro', sans-serif; color: rgba(255,255,255,.6); }
+  .wd-hint:empty { display: none; }
+  .wd-hint__open { display: inline-block; margin-left: 8px; padding: 12px 0; margin-block: -12px; color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
+  .wd-body { background: #fff; padding: clamp(56px, 5vw, 110px) 0 clamp(40px, 4vw, 80px); }
+  .wd-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 420px); gap: clamp(32px, 4vw, 80px); align-items: start; }
+  .wd-h2 { margin: 0 0 18px; font: 400 clamp(28px, 2.4vw, 46px)/1.1 Zodiak, Arial, sans-serif; color: #04091a; }
+  .wd-desc { margin: 0; max-width: 820px; font: 400 clamp(15px, 1.05vw, 19px)/1.65 'Be Vietnam Pro', sans-serif; color: #3b4a5f; }
+  .wd-tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 24px 0 0; }
+  .wd-tags li { border: 1px solid #d5dbe5; border-radius: 99px; padding: 6px 12px; font: 500 12px/1 'Be Vietnam Pro', sans-serif; color: #1c3a60; letter-spacing: .04em; }
+  .wd-specs { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0; margin: 34px 0 0; border-top: 1px solid #e6e9ef; }
+  .wd-specs div { padding: 18px 16px 18px 0; border-bottom: 1px solid #e6e9ef; }
+  .wd-specs dt { font: 500 12px/1.4 'Be Vietnam Pro', sans-serif; color: #677b94; text-transform: uppercase; letter-spacing: .06em; }
+  .wd-specs dd { margin: 6px 0 0; font: 400 17px/1.4 Zodiak, Arial, sans-serif; color: #04091a; }
+  .wd-card { position: sticky; top: 110px; display: flex; flex-direction: column; gap: 12px; padding: clamp(24px, 2vw, 36px); border-radius: 24px; color: #fff;
+    background: radial-gradient(circle at 10% 0%, rgba(48,107,231,.45), transparent 55%), radial-gradient(circle at 100% 100%, rgba(155,46,194,.5), transparent 55%), #07070d; }
+  .wd-card__eyebrow { margin: 0; font: 500 13px/1.3 'Be Vietnam Pro', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #f98670; }
+  .wd-card__title { margin: 0 0 10px; font: 400 clamp(22px, 1.7vw, 32px)/1.15 Zodiak, Arial, sans-serif; }
+  .wd-btn { display: inline-flex; align-items: center; justify-content: center; height: 50px; padding: 0 22px; border-radius: 99px; text-decoration: none; font: 500 15px/1 'Be Vietnam Pro', sans-serif; color: #fff; border: 1.5px solid rgba(255,255,255,.35); transition: background-color .2s, border-color .2s, transform .2s; }
+  .wd-btn:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+  .wd-btn.is-primary { background: #ed6673; border-color: #ed6673; color: #04091a; } .wd-btn.is-primary:hover { background: #f98670; border-color: #f98670; transform: translateY(-1px); }
+  .wd-btn.is-ghost { border-color: transparent; color: rgba(255,255,255,.75); } .wd-btn.is-ghost:hover { color: #fff; background: transparent; }
+
+  /* Next demo: label left, big title + summary + arrow button right, then a wide preview banner */
+  .wd-next { display: block; margin-top: clamp(64px, 6vw, 120px); padding-top: clamp(48px, 5vw, 96px); border-top: 1px dashed #d9dee7; color: #04091a; text-decoration: none; }
+  .wd-next__head { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  .wd-next__label { display: flex; flex-direction: column; gap: 6px; }
+  .wd-next__no { font: 500 15px/1 'Be Vietnam Pro', sans-serif; color: #677b94; }
+  .wd-next__kicker { font: 400 clamp(20px, 1.5vw, 28px)/1.2 'Be Vietnam Pro', sans-serif; color: #04091a; }
+  .wd-next__title { margin: 0; font: 400 clamp(34px, 3.4vw, 66px)/1.05 Zodiak, Arial, sans-serif; color: #04091a; transition: color .3s; }
+  .wd-next__summary { margin: 18px 0 0; max-width: 520px; font: 400 clamp(15px, 1vw, 18px)/1.5 'Be Vietnam Pro', sans-serif; color: #3b4a5f; }
+  .wd-next__cta { display: inline-flex; gap: 6px; margin-top: clamp(28px, 3vw, 56px); }
+  .wd-next__arrow, .wd-next__btn { display: inline-flex; align-items: center; justify-content: center; height: 46px; border: 1px solid #cfd6e1; border-radius: 12px; background: #fff; color: #04091a; transition: background-color .3s, border-color .3s, color .3s; }
+  .wd-next__arrow { width: 46px; }
+  .wd-next__arrow svg { transition: transform .3s; }
+  .wd-next__btn { padding: 0 24px; font: 500 14px/1 'Be Vietnam Pro', sans-serif; letter-spacing: .16em; text-transform: uppercase; }
+  .wd-next__media {
+    position: relative; margin-top: clamp(40px, 4vw, 72px); height: clamp(260px, 30vw, 560px); border-radius: clamp(18px, 1.6vw, 30px); overflow: hidden;
+    background:
+      radial-gradient(circle at 12% 30%, rgba(48,107,231,.45), transparent 45%),
+      radial-gradient(circle at 88% 70%, rgba(155,46,194,.45), transparent 45%),
+      linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px) 0 0/80px 80px,
+      linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px) 0 0/80px 80px,
+      #07070d;
+  }
+  /* the same image, blurred, fills the banner so the sharp one in the middle blends in */
+  .wd-next__bg { position: absolute; inset: -10%; width: 120%; height: 120%; object-fit: cover; filter: blur(48px) saturate(1.2) brightness(.65); }
+  .wd-next__img { position: absolute; left: 50%; top: 50%; height: 100%; width: auto; max-width: none; translate: -50% -50%; transition: transform .8s cubic-bezier(.2,.8,.2,1);
+    -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent); mask-image: radial-gradient(closest-side, #000 72%, transparent);
+    -webkit-mask-size: 100% 140%; mask-size: 100% 140%; -webkit-mask-position: center; mask-position: center; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+  .wd-next__tags { position: absolute; left: 24px; bottom: 22px; padding: 8px 14px; border-radius: 99px; background: rgba(255,255,255,.12); backdrop-filter: blur(8px); color: #fff; font: 500 12px/1 'Be Vietnam Pro', sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+  .wd-next:hover .wd-next__title { color: #5a4fe0; }
+  .wd-next:hover .wd-next__arrow { background: #ed6673; border-color: #ed6673; color: #04091a; }
+  .wd-next:hover .wd-next__arrow svg { transform: translateX(3px); }
+  .wd-next:hover .wd-next__btn { background: #04091a; border-color: #04091a; color: #fff; }
+  .wd-next:hover .wd-next__img { transform: scale(1.05); }
+  .wd-next:focus-visible { outline: none; } .wd-next:focus-visible .wd-next__btn { outline: 2px solid #5a4fe0; outline-offset: 3px; }
+
+  @media (max-width: 899px) {
+    .wd-crumbs { padding-top: 16px; }
+    .wd-top { align-items: stretch; }
+    .wd-ctrl, .wd-ctrl .cd-ctrl { width: 100%; } .wd-ctrl .cd-seg { flex: 1; } .wd-ctrl .cd-seg .cd-btn { flex: 1; justify-content: center; }
+    .wd-stage { height: 60vh; min-height: 0; border-radius: 18px; }
+    .wd-body { padding: 56px 0; }
+    .wd-grid { grid-template-columns: 1fr; }
+    .wd-card { position: static; }
+    .wd-next { margin-top: 56px; padding-top: 48px; }
+    .wd-next__head { grid-template-columns: 1fr; gap: 18px; }
+    .wd-next__label { flex-direction: row; align-items: baseline; gap: 10px; }
+    .wd-next__media { height: 240px; margin-top: 32px; }
+    .wd-next__img { height: 112%; }
+    .wd-next__tags { left: 14px; top: 14px; bottom: auto; font-size: 10px; padding: 7px 11px; }
+  }
+</style>

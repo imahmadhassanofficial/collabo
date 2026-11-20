@@ -1,44 +1,25 @@
 {
   "title": "Brand – Format",
   "client": "Brand name",
-  "summary": "One or two lines shown on the card.",
-  "description": "Longer text shown in the popup: the brief, what we built, results.",
+  "summary": "One or two lines shown on the card and at the top of the full preview page.",
+  "description": "A longer paragraph for the popup and the full preview page: the brief, what we built, how it works, results.",
   "device": "Mobile",
-  "adType": [
-    "Interactive Ads"
-  ],
-  "platform": [
-    "Mobile"
-  ],
-  "industry": [
-    "Retail"
-  ],
-  "features": [
-    "Overlay",
-    "Endcard"
-  ],
-  "technology": [
-    "HTML5",
-    "VAST"
-  ],
-  "adSize": [
-    "300x250"
-  ],
-  "tags": [
-    "HTML5",
-    "INTERACTIVE",
-    "VAST",
-    "Mobile"
-  ],
-  "thumbnails": [
-    "/work/brand-format/thumb-1.jpg"
-  ],
+  "adType": ["Interactive Ads"],
+  "platform": ["Mobile Web"],
+  "industry": ["Retail"],
+  "features": ["Swipe", "Endcard"],
+  "technology": ["HTML5", "Celtra"],
+  "adSize": ["300x600"],
+  "tags": ["HTML5", "INTERACTIVE", "Mobile"],
+  "thumbnails": ["/work/brand-format/thumb-1.jpg"],
   "demo": {
-    "type": "video",
-    "src": "https://your-ad-server-cdn.com/brand-format.mp4",
-    "poster": "/work/brand-format/thumb-1.jpg",
-    "audio": true
+    "type": "tag",
+    "tag": "<div class=\"celtra-ad-v3\"> …paste the full tag here… </div>",
+    "width": 300,
+    "height": 600,
+    "devices": ["Mobile", "Tablet", "Desktop"],
+    "previewUrl": "https://your-account.celtra.com/preview/xxxxxxxx"
   },
-  "date": "2026-11-13",
-  "draft": false
+  "date": "2026-11-20",
+  "draft": true
 }

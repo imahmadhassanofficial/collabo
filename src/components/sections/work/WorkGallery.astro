@@ -1,6 +1,7 @@
 ---
 // Work page: purple filter hero + grid of demo cards. Data comes from src/content/work/*.json.
-// Clicking a card opens <WorkModal /> (same page). Filtering/sorting/search run in the browser.
+// Clicking a card opens <WorkModal /> (same page); each card also links to its full preview page /work/<slug>.
+// Filtering/sorting/search run in the browser.
 import { getCollection } from 'astro:content';
 
 const all = await getCollection('work', ({ data }) => import.meta.env.DEV || !data.draft);
@@ -123,7 +124,7 @@ const sorts = [
                 <button type="button" class="wk-card__share" aria-label={`Share ${it.title}`}><img src="/work/_icons/share.svg" alt="" width="13.5908" height="13.5908" /></button>
               </div>
               <h2 class="wk-card__title">
-                <button type="button" class="wk-card__open">{it.title}</button>
+                <a class="wk-card__open" href={`/work/${it.slug}`} data-no-barba>{it.title}</a>
               </h2>
             </div>
           </div>
@@ -143,7 +144,7 @@ const sorts = [
   <div class="wk-toast" role="status" hidden>Link copied</div>
 </section>
 
-<script type="application/json" id="wk-data" set:html={JSON.stringify(items)}></script>
+<script type="application/json" id="wk-data" set:html={JSON.stringify(items).replace(/</g, '\\u003c')}></script>
 
 <style is:global>
   .wk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -414,7 +415,7 @@ const sorts = [
   $$('.wk-card__share').forEach((b) => b.addEventListener('click', async (e) => {
     e.stopPropagation();
     const card = b.closest('.wk-card');
-    const url = `${location.origin}${location.pathname}#${card.dataset.slug}`;
+    const url = `${location.origin}/work/${card.dataset.slug}`;
     try {
       if (navigator.share && matchMedia('(hover: none)').matches) { await navigator.share({ title: card.dataset.title, url }); return; }
       await navigator.clipboard.writeText(url);
@@ -423,10 +424,15 @@ const sorts = [
   }));
 
   // open popup (handled by WorkModal)
+  // (the card title is a real link to /work/<slug> for search engines and new-tab clicks; a plain click opens the popup)
   grid.addEventListener('click', (e) => {
     if (e.target.closest('.wk-card__share, .wk-card__arrow')) return;
+    const link = e.target.closest('a.wk-card__open');
+    if (link && (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0)) return;
     const card = e.target.closest('.wk-card');
-    if (card) window.dispatchEvent(new CustomEvent('work:open', { detail: { slug: card.dataset.slug } }));
+    if (!card) return;
+    if (link) e.preventDefault();
+    window.dispatchEvent(new CustomEvent('work:open', { detail: { slug: card.dataset.slug } }));
   });
 
   apply();

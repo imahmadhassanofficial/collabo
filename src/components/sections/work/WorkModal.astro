@@ -16,7 +16,7 @@
       </button>
     </header>
 
-    <div class="wk-m__stage">
+    <div class="wk-m__stage" data-ai-bg="stage">
       <p class="wk-m__note" hidden></p>
     </div>
     <div class="wk-m__bar">
@@ -112,11 +112,13 @@
   }
 </style>
 
-<script is:inline src="/js/demo-player.js?v=4"></script>
+<script is:inline src="/js/demo-player.js?v=7"></script>
+<script is:inline src="/js/ai-bg.js?v=1"></script>
 <script is:inline>
 (() => {
   const dlg = document.querySelector('.wk-modal');
   const dataEl = document.getElementById('wk-data');
+  if (window.CollaboAiBg) window.CollaboAiBg.init();
   if (!dlg || !dataEl) return;
   const items = JSON.parse(dataEl.textContent);
   const bySlug = new Map(items.map((i) => [i.slug, i]));
@@ -144,7 +146,7 @@
     if (player) { player.destroy(); player = null; }
     note.hidden = true;
     const d = it.demo;
-    if (window.CollaboDemo) player = window.CollaboDemo.mount(stage, it, { controls: $('.wk-m__ctrl'), pad: 20 });
+    if (window.CollaboDemo) player = window.CollaboDemo.mount(stage, it, { controls: $('.wk-m__ctrl'), pad: 20, fullscreen: true });
     if (!d) { note.textContent = 'Live demo coming soon'; note.hidden = false; }
     const live = $('.wk-m__live');
     const orig = d && (d.previewUrl || (d.type === 'url' || d.type === 'html5' ? d.src : ''));

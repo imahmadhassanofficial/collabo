@@ -34,7 +34,7 @@ const specs = [
   ['Ad Size', item.adSize],
 ].filter(([, v]) => v && v.length);
 const formatLabel = d
-  ? { tag: 'Live ad tag', html5: 'HTML5 banner', url: 'Live demo page', video: 'Video', image: 'Static mockup' }[d.type]
+  ? { tag: 'Live ad tag', html5: 'HTML5 banner', url: 'Live demo page', vast: 'VAST / VPAID tag', video: 'Video', image: 'Static mockup' }[d.type]
   : 'Preview coming soon';
 const metaTitle = `${item.title} | Collabo Work`;
 const metaDesc = (item.description || item.summary).slice(0, 158);
@@ -74,7 +74,7 @@ const schema = JSON.stringify({
         <div class="wd-ctrl" aria-label="Preview controls"></div>
       </div>
 
-      <div class="wd-stage" data-wd-stage>
+      <div class="wd-stage" data-wd-stage data-ai-bg="stage">
         {!d && <p class="wd-note">Live demo coming soon</p>}
       </div>
       <p class="wd-hint">
@@ -82,6 +82,7 @@ const schema = JSON.stringify({
         {d && d.type === 'url' && 'This is the live demo. Click, tap and play it right here.'}
         {d && d.type === 'url' && original && <a class="wd-hint__open" href={original} target="_blank" rel="noopener">Open it full screen ↗</a>}
         {d && d.type === 'video' && 'Press play, and turn the sound on with the speaker button.'}
+        {d && d.type === 'vast' && 'This is the real ad tag from our ad server, playing in a VAST / VPAID video player. Press play, then try the overlay and endcard.'}
       </p>
     </div>
   </section>
@@ -136,11 +137,13 @@ const schema = JSON.stringify({
 
   <script type="application/json" id="wd-data" set:html={payload} />
   <script type="application/ld+json" set:html={schema} />
-  <script is:inline src="/js/demo-player.js?v=4"></script>
+  <script is:inline src="/js/demo-player.js?v=7"></script>
+  <script is:inline src="/js/ai-bg.js?v=1"></script>
   <script is:inline>
   (() => {
     const stage = document.querySelector('[data-wd-stage]');
     const data = document.getElementById('wd-data');
+    if (window.CollaboAiBg) window.CollaboAiBg.init();
     if (!stage || !data || !window.CollaboDemo) return;
     const item = JSON.parse(data.textContent);
     if (!item.demo) return;

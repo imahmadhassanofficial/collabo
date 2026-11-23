@@ -9,7 +9,9 @@ Read `src/content/work/README.md` first. In short:
   - an ad tag (`<div class="celtra-ad-v3">…`, `<script src=…>`) → `"type": "tag"`, paste the tag into `"tag"`, set `width`/`height` from the ad size,
     and put any platform preview link in `previewUrl`
   - a link to a hosted banner `…/index.html` → `"type": "html5"` with its size
-  - a link to a whole demo or ad-server test page → `"type": "url"`, `"frame": "browser"`, `width`/`height` = the page's size
+  - a Collabo ad-server test link (`sdk.collabollc.com/servlet/testing?id=965…`) or a VAST tag → `"type": "vast"` with
+    `"mid": 965` (or `"src"`: the VAST tag URL); keep the test link as `previewUrl` and add a 16:9 `poster`
+  - a link to any other whole demo page → `"type": "url"`, `"frame": "browser"`, `width`/`height` = the page's size
   - an MP4 → `"type": "video"`; a JPG/PNG → `"type": "image"` (put files in `public/work/<slug>/`)
 - Write `title` ("Brand – Format"), `summary` (1–2 lines), `description` (what it is and how to interact), and fill the filter
   fields from what the demo shows. Ask if the brand or year isn't clear.

@@ -30,11 +30,14 @@ const work = defineCollection({
         // tag   – an ad tag (Celtra, Collabo ad server, …): paste it in "tag"; shown on a mock site in phone/tablet/desktop
         // html5 – a hosted HTML5 banner: "src" = its index.html (yours in /public/work/<slug>/ or on clients.collabollc.com)
         // url   – a whole demo page (hosted demo page, ad-server test page): shown in a browser/device frame
+        // vast  – a VAST / VPAID video ad tag played in a real VAST 4 / VPAID 2 JS player (Google IMA). For the Collabo
+        //         ad server just set "mid" (the media id); any other ad server: put the VAST tag URL in "src"
         // video – MP4 (ad-server CDN or /work/<slug>/demo.mp4)
         // image – JPG/PNG mockup
-        type: z.enum(['tag', 'html5', 'url', 'video', 'image']),
+        type: z.enum(['tag', 'html5', 'url', 'vast', 'video', 'image']),
         src: z.string().optional(),         // html5 / url / video / image source
         tag: z.string().optional(),         // type "tag": the full ad tag HTML exactly as the platform gives it
+        mid: z.number().optional(),         // type "vast": Collabo ad-server media id → https://sdk.collabollc.com/servlet/vast4/media?mid=<mid>
         width: z.number().optional(),       // tag/html5: ad size (e.g. 300 x 600). url: the page's viewport if not the device default
         height: z.number().optional(),
         devices: z.array(z.enum(['Mobile', 'Tablet', 'Desktop'])).optional(), // tag/html5: which device previews to offer (default Mobile + Desktop)
@@ -43,7 +46,7 @@ const work = defineCollection({
         audio: z.boolean().default(false),  // video has sound → show the sound button
         previewUrl: z.string().optional(),  // the platform's own preview link (e.g. Celtra) → "Open original preview" button
       })
-      .refine((d) => (d.type === 'tag' ? !!d.tag : !!d.src), { message: 'demo needs "tag" for type tag, otherwise "src"' })
+      .refine((d) => (d.type === 'tag' ? !!d.tag : d.type === 'vast' ? !!(d.src || d.mid) : !!d.src), { message: 'demo needs "tag" (type tag), "mid" or "src" (type vast), otherwise "src"' })
       .optional(),
     date: z.coerce.date(),                   // used by "Sort By: Newest"
     draft: z.boolean().default(false),       // true = only visible in `npm run dev`, never on the live site

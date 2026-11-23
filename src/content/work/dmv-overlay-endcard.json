@@ -2,7 +2,7 @@
   "title": "California DMV – Video Overlay + Endcard",
   "client": "California DMV",
   "summary": "In-stream video with a clickable brand overlay and an interactive endcard linking to DMV online services.",
-  "description": "Served from Collabo's ad server. The video runs with a persistent \"DMV online: Ready when you are\" overlay and Learn More button, then hands off to an interactive endcard with four service shortcuts: vehicle registration, license renewal, change of address and paperless opt-in. Press play in the preview to watch the full flow.",
+  "description": "Served from Collabo's ad server as a VAST 4 tag with a VPAID 2.0 JS creative. The video runs with a persistent \"DMV online: Ready when you are\" overlay and Learn More button, then hands off to an interactive endcard with four service shortcuts: vehicle registration, license renewal, change of address and paperless opt-in. The preview plays the real tag in a VAST/VPAID video player, the same way a publisher's player would. Press play to watch the full flow.",
   "device": "Desktop",
   "adType": [
     "Video Ads",
@@ -21,28 +21,28 @@
     "Endcard"
   ],
   "technology": [
-    "HTML5",
-    "VAST"
+    "VAST 4",
+    "VPAID 2.0",
+    "HTML5"
   ],
   "adSize": [
     "800x450"
   ],
   "tags": [
-    "VIDEO",
+    "VAST",
+    "VPAID",
     "OVERLAY",
-    "ENDCARD",
-    "VAST"
+    "ENDCARD"
   ],
   "thumbnails": [
     "/work/dmv-overlay-endcard/thumb-1.jpg",
     "/work/dmv-overlay-endcard/thumb-2.jpg"
   ],
   "demo": {
-    "type": "url",
-    "src": "https://sdk.collabollc.com/servlet/testing?id=965&auth=a65002ef7120b651ff0de406acc2d8ed",
-    "frame": "browser",
-    "width": 1280,
-    "height": 960
+    "type": "vast",
+    "mid": 965,
+    "previewUrl": "https://sdk.collabollc.com/servlet/testing?id=965&auth=a65002ef7120b651ff0de406acc2d8ed",
+    "poster": "/work/dmv-overlay-endcard/poster.jpg"
   },
   "date": "2026-05-06",
   "draft": false

@@ -21,6 +21,8 @@ const filters = [
 ].map((f) => ({ ...f, options: uniq(f.key) }));
 
 const quickPicks = ['Interactive Ads', 'Video Ads', 'Rich Media Ads', 'Gamified Ads'];
+// badge on each card: how the demo plays
+const FORMAT = { tag: 'Live ad tag', html5: 'HTML5', url: 'Live demo', vast: 'VAST / VPAID', video: 'Video', image: 'Mockup' };
 const sorts = [
   { value: 'newest', label: 'Newest' },
   { value: 'oldest', label: 'Oldest' },
@@ -28,7 +30,7 @@ const sorts = [
   { value: 'za', label: 'Z–A' },
 ];
 ---
-<section class="head_block wk-hero" aria-label="Filter work">
+<section class="head_block wk-hero" aria-label="Filter work" data-ai-bg="hero">
   <div class="wk-wrap">
     <h1 class="wk-sr">Our Work</h1>
     <div class="wk-search-row">
@@ -69,6 +71,7 @@ const sorts = [
     <div class="wk-bar">
       <button type="button" class="wk-clear">Clear All Filters</button>
       <span class="wk-count" aria-live="polite"></span>
+      <div class="wk-chips" aria-label="Active filters"></div>
       <div class="wk-sort">
         <button type="button" class="wk-sort__btn" aria-expanded="false">Sort By<span class="wk-sort__cur"></span><img src="/work/_icons/chevron-white.svg" alt="" width="15" height="9" /></button>
         <div class="wk-sort__panel" hidden>
@@ -115,6 +118,7 @@ const sorts = [
                 <button type="button" class="wk-card__arrow is-next" aria-label="Next image"><img src="/work/_icons/arrow.svg" alt="" width="25.1143" height="25.1143" /></button>
               </div>
             )}
+            {it.demo && <span class="wk-card__format"><i></i>{FORMAT[it.demo.type]}</span>}
             {it.draft && !it.slug.startsWith('sample-') && <span class="wk-card__draft">Draft</span>}
           </div>
           <div class="wk-card__head">
@@ -207,7 +211,12 @@ const sorts = [
   .wk-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: clamp(40px, 5vw, 96px); padding-top: 12px; }
   .wk-clear { background: none; border: 0; padding: 0; cursor: pointer; font: italic 400 clamp(16px, 1.04vw, 20px)/1.4 'Be Vietnam Pro', sans-serif; color: rgba(255, 255, 255, 0.6); }
   .wk-clear:hover { color: #fff; }
-  .wk-count { margin-right: auto; font: 400 14px/1.4 'Be Vietnam Pro', sans-serif; color: rgba(255, 255, 255, 0.6); }
+  .wk-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-right: auto; }
+  .wk-chip { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px 0 13px; border: 1px solid rgba(255,255,255,.28); border-radius: 99px; background: rgba(255,255,255,.08); color: #fff; font: 400 13px/1 'Be Vietnam Pro', sans-serif; cursor: pointer; animation: wk-chip-in .35s cubic-bezier(.2,.9,.3,1.2) both; transition: background-color .2s, border-color .2s; }
+  .wk-chip:hover { background: rgba(237,102,115,.25); border-color: #ed6673; }
+  .wk-chip b { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: rgba(255,255,255,.16); font-weight: 400; font-size: 13px; line-height: 1; }
+  @keyframes wk-chip-in { from { opacity: 0; transform: scale(.7); } }
+  .wk-count { margin-right: 4px; font: 400 14px/1.4 'Be Vietnam Pro', sans-serif; color: rgba(255, 255, 255, 0.6); }
   .wk-sort { position: relative; }
   .wk-sort__btn { display: flex; align-items: center; gap: 18px; background: none; border: 0; padding: 0; cursor: pointer; font: 700 clamp(17px, 1.04vw, 20px)/30px Zodiak, Arial, sans-serif; color: #fff; }
   .wk-sort__cur { font-weight: 400; opacity: .7; margin-left: -10px; }
@@ -235,7 +244,10 @@ const sorts = [
   .wk-card__placeholder { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 16px; text-align: center; color: #fff; background: linear-gradient(160deg, #5a4fe0, #131313); }
   .wk-card__placeholder span { font: 400 clamp(20px, 1.4vw, 26px)/1.15 Zodiak, Arial, sans-serif; }
   .wk-card__placeholder small { font: 400 12px/1.3 'Be Vietnam Pro', sans-serif; opacity: .7; letter-spacing: .04em; text-transform: uppercase; }
-  .wk-card__draft { position: absolute; top: 10px; left: 10px; background: #f78071; color: #000; font: 600 11px/1 'Be Vietnam Pro', sans-serif; padding: 5px 8px; border-radius: 99px; }
+  .wk-card__format { position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px; border-radius: 99px; background: rgba(4, 9, 26, .62); backdrop-filter: blur(8px); color: #fff; font: 500 11.5px/1 'Be Vietnam Pro', sans-serif; letter-spacing: .02em; }
+  .wk-card__format i { width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 0 0 rgba(61, 220, 132, .6); animation: wk-live 2s infinite; }
+  @keyframes wk-live { 70% { box-shadow: 0 0 0 7px rgba(61, 220, 132, 0); } 100% { box-shadow: 0 0 0 0 rgba(61, 220, 132, 0); } }
+  .wk-card__draft { position: absolute; top: 12px; right: 12px; background: #f78071; color: #000; font: 600 11px/1 'Be Vietnam Pro', sans-serif; padding: 5px 8px; border-radius: 99px; }
   .wk-card__nav { position: absolute; left: 12.5px; right: 12.5px; bottom: 12.5px; display: flex; align-items: center; justify-content: space-between; opacity: 0; transition: opacity .25s; }
   .wk-card:hover .wk-card__nav, .wk-card:focus-within .wk-card__nav { opacity: 1; }
   @media (hover: none) { .wk-card__nav { opacity: 1; } }
@@ -321,15 +333,41 @@ const sorts = [
   keys.forEach((k) => (state.sel[k] = new Set()));
   const parsed = new Map(cards.map((c) => [c, Object.fromEntries(keys.map((k) => [k, JSON.parse(c.dataset[k] || c.getAttribute('data-' + k.toLowerCase()) || '[]')]))]));
 
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const EASE = 'cubic-bezier(.2,.8,.2,1)';
+  let shownNow = cards.length, runId = 0;
+
+  // count ticks up/down to the new number
+  function setCount(to) {
+    const el = $('.wk-count'); if (!cards.length) { el.textContent = ''; return; }
+    const from = shownNow; shownNow = to;
+    const label = (n) => `${n} of ${cards.length} ${cards.length === 1 ? 'demo' : 'demos'}`;
+    if (reduceMotion || from === to) { el.textContent = label(to); return; }
+    const t0 = performance.now(), dur = 420;
+    const tick = (t) => { const k = Math.min(1, (t - t0) / dur); el.textContent = label(Math.round(from + (to - from) * k)); if (k < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  }
+
+  // chips for every active filter / search; click to remove
+  const LABELS = { adType: 'Ad Type', platform: 'Platform', industry: 'Industry', features: 'Features', technology: 'Technology', device: 'Device', adSize: 'Ad Size' };
+  function renderChips() {
+    const box = $('.wk-chips'); if (!box) return;
+    const chips = [];
+    if (state.q.trim()) chips.push({ k: 'q', v: state.q.trim(), t: `“${state.q.trim()}”` });
+    keys.forEach((k) => state.sel[k].forEach((v) => chips.push({ k, v, t: v })));
+    box.innerHTML = chips.map((c) => `<button type="button" class="wk-chip" data-k="${c.k}" data-v="${c.v.replace(/"/g, '&quot;')}" title="Remove ${LABELS[c.k] || 'search'} filter">${c.t.replace(/</g, '&lt;')}<b aria-hidden="true">×</b></button>`).join('');
+  }
+
   function apply() {
     const q = state.q.trim().toLowerCase();
+    const next = new Map();
     let shown = 0;
     cards.forEach((c) => {
       const d = parsed.get(c);
       const okQ = !q || q.split(/\s+/).every((w) => c.dataset.search.includes(w));
       const okF = keys.every((k) => state.sel[k].size === 0 || d[k].some((v) => state.sel[k].has(v)));
-      c.hidden = !(okQ && okF);
-      if (!c.hidden) shown++;
+      next.set(c, okQ && okF);
+      if (okQ && okF) shown++;
     });
     const sorted = cards.slice().sort((a, b) => {
       if (state.sort === 'az') return a.dataset.title.localeCompare(b.dataset.title);
@@ -337,9 +375,40 @@ const sorts = [
       if (state.sort === 'oldest') return a.dataset.date.localeCompare(b.dataset.date);
       return b.dataset.date.localeCompare(a.dataset.date);
     });
-    sorted.forEach((c) => grid.appendChild(c));
-    $('.wk-empty').hidden = shown > 0 || cards.length === 0;
-    $('.wk-count').textContent = cards.length ? `${shown} of ${cards.length} ${cards.length === 1 ? 'demo' : 'demos'}` : '';
+
+    const id = ++runId;
+    const commit = () => {
+      // FLIP: remember where the staying cards are, change the layout, then glide them from old to new spots
+      const first = new Map(); cards.forEach((c) => { if (!c.hidden) first.set(c, c.getBoundingClientRect()); });
+      cards.forEach((c) => { c.getAnimations().forEach((a) => a.cancel()); c.hidden = !next.get(c); });
+      sorted.forEach((c) => grid.appendChild(c));
+      if (!reduceMotion) {
+        let enter = 0;
+        sorted.forEach((c) => {
+          if (c.hidden) return;
+          const r = c.getBoundingClientRect(), f = first.get(c);
+          if (f) {
+            const dx = f.left - r.left, dy = f.top - r.top;
+            if (Math.abs(dx) > 1 || Math.abs(dy) > 1) c.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: 560, easing: EASE });
+          } else {
+            c.classList.add('is-seen');
+            c.animate([{ opacity: 0, transform: 'translateY(26px) scale(.94)', filter: 'blur(6px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }],
+              { duration: 560, delay: Math.min(enter++, 8) * 60, easing: EASE, fill: 'backwards' });
+          }
+        });
+      }
+      $('.wk-empty').hidden = shown > 0 || cards.length === 0;
+      window.dispatchEvent(new CustomEvent('work:filtered', { detail: { visible: sorted.filter((c) => !c.hidden).map((c) => c.dataset.slug), animated: !reduceMotion } }));
+    };
+    // cards on their way out shrink and fade first, then the grid closes up
+    const leaving = cards.filter((c) => !c.hidden && !next.get(c));
+    if (leaving.length && !reduceMotion) {
+      leaving.forEach((c) => c.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.92)', filter: 'blur(4px)' }], { duration: 220, easing: 'ease-in', fill: 'forwards' }));
+      setTimeout(() => { if (id === runId) commit(); }, 210);
+    } else commit();
+
+    setCount(shown);
+    renderChips();
     // counts on dropdowns + quick picks
     let total = 0;
     $$('.wk-dd').forEach((dd) => {
@@ -349,8 +418,14 @@ const sorts = [
     });
     const tc = $('.wk-filters-toggle__count'); tc.hidden = !total; tc.textContent = total;
     $$('.wk-pill').forEach((p) => p.setAttribute('aria-pressed', String(state.sel.adType.has(p.dataset.pick))));
-    window.dispatchEvent(new CustomEvent('work:filtered', { detail: { visible: sorted.filter((c) => !c.hidden).map((c) => c.dataset.slug) } }));
   }
+
+  // remove one filter from its chip
+  $('.wk-chips')?.addEventListener('click', (e) => {
+    const b = e.target.closest('.wk-chip'); if (!b) return;
+    if (b.dataset.k === 'q') { state.q = ''; qEl.value = ''; } else state.sel[b.dataset.k].delete(b.dataset.v);
+    apply();
+  });
 
   // search
   const qEl = $('#wk-q');
@@ -525,7 +600,8 @@ const sorts = [
     const observeAll = () => cards.forEach((c) => { if (!c.hidden && !c.classList.contains('is-seen')) io.observe(c); });
     observeAll();
     // filters / search / sort: replay the reveal for whatever is now showing
-    window.addEventListener('work:filtered', () => {
+    window.addEventListener('work:filtered', (e) => {
+      if ((e as CustomEvent).detail?.animated) return; // the grid animates its own changes (FLIP)
       cards.forEach((c) => { io.unobserve(c); c.classList.remove('is-seen'); });
       requestAnimationFrame(() => requestAnimationFrame(observeAll));
     });

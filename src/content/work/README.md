@@ -35,7 +35,16 @@ Shown live on the sample website like a tag.
 "demo": { "type": "html5", "src": "https://clients.collabollc.com/…/index.html", "width": 300, "height": 250 }
 ```
 
-### 3. Demo page / ad-server test page (a whole page)
+### 3. VAST / VPAID video ad (Collabo ad server or any VAST tag)
+Plays only the ad itself in a real VAST 4 / VPAID 2.0 JS video player (Google IMA SDK, the same player as
+googleads.github.io/googleads-ima-html5/vsi). For our ad server you only need the media id (`mid`) — the tag is
+`https://sdk.collabollc.com/servlet/vast4/media?mid=<mid>`. For another ad server put its VAST tag URL in `src`.
+```json
+"demo": { "type": "vast", "mid": 965, "poster": "/work/<slug>/poster.jpg", "previewUrl": "https://sdk.collabollc.com/servlet/testing?id=965&auth=…" }
+```
+`poster` = the still shown before Play (a 16:9 frame of the ad). `previewUrl` = the ad-server test page, for the "Open original preview" button.
+
+### 3b. Demo page (a whole page)
 For pages that already include their own layout or player, e.g. hosted interstitial demos or `sdk.collabollc.com/servlet/testing?id=…`.
 Shown live in a browser window (`"frame": "browser"`) or a device (`"frame": "device"`, uses the card's `device`).
 `width`/`height` = the page size it was built for.
